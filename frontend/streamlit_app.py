@@ -288,39 +288,38 @@ def main():
 def show_settings_page(config, db):
     """Show settings page for API configuration"""
     
-    try:
-        st.markdown("### ⚙️ API & Model Configuration")
-        
-        st.info("💡 Configure your API keys and model preferences here. Settings will be saved for your session.")
-        
-        # Provider selection
-        st.markdown("#### 1️⃣ Select LLM Provider")
-        
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            if st.button("🚀 Groq", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "groq" else "secondary"):
-                st.session_state.selected_provider = "groq"
-                st.rerun()
-        
-        with col2:
-            if st.button("🔮 Gemini", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "gemini" else "secondary"):
-                st.session_state.selected_provider = "gemini"
-                st.rerun()
-        
-        with col3:
-            if st.button("🤖 OpenAI", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "openai" else "secondary"):
-                st.session_state.selected_provider = "openai"
-                st.rerun()
-        
-        if not st.session_state.get('selected_provider'):
-            st.warning("⬆️ Please select a provider above")
-            return
-        
-        st.markdown("---")
-        
-        # Provider-specific configuration
-        provider = st.session_state.selected_provider
+    st.markdown("### ⚙️ API & Model Configuration")
+    
+    st.info("💡 Configure your API keys and model preferences here. Settings will be saved for your session.")
+    
+    # Provider selection
+    st.markdown("#### 1️⃣ Select LLM Provider")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("🚀 Groq", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "groq" else "secondary"):
+            st.session_state.selected_provider = "groq"
+            st.rerun()
+    
+    with col2:
+        if st.button("🔮 Gemini", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "gemini" else "secondary"):
+            st.session_state.selected_provider = "gemini"
+            st.rerun()
+    
+    with col3:
+        if st.button("🤖 OpenAI", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "openai" else "secondary"):
+            st.session_state.selected_provider = "openai"
+            st.rerun()
+    
+    if not st.session_state.get('selected_provider'):
+        st.warning("⬆️ Please select a provider above")
+        return
+    
+    st.markdown("---")
+    
+    # Provider-specific configuration
+    provider = st.session_state.selected_provider
     
     st.markdown(f"#### 2️⃣ Configure {provider.upper()}")
     
@@ -337,7 +336,7 @@ def show_settings_page(config, db):
             "Model",
             options=list(models.keys()),
             format_func=lambda x: models[x],
-            index=0 if not st.session_state.selected_model else list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0
+            index=0 if not st.session_state.get('selected_model') else (list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0)
         )
         
         api_help = "Get your API key at: https://console.groq.com/keys"
@@ -353,7 +352,7 @@ def show_settings_page(config, db):
             "Model",
             options=list(models.keys()),
             format_func=lambda x: models[x],
-            index=0 if not st.session_state.selected_model else list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0
+            index=0 if not st.session_state.get('selected_model') else (list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0)
         )
         
         api_help = "Get your API key at: https://makersuite.google.com/app/apikey"
@@ -369,7 +368,7 @@ def show_settings_page(config, db):
             "Model",
             options=list(models.keys()),
             format_func=lambda x: models[x],
-            index=0 if not st.session_state.selected_model else list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0
+            index=0 if not st.session_state.get('selected_model') else (list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0)
         )
         
         api_help = "Get your API key at: https://platform.openai.com/api-keys"
@@ -439,7 +438,7 @@ def show_settings_page(config, db):
                 st.session_state.batch_size = batch_size
                 st.session_state.max_concurrent = max_concurrent
                 
-                st.success(f"✅ Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
+                st.success(f"✅ Configuration saved! Provider: {provider.UPPER()}, Model: {selected_model}")
                 st.balloons()
     
     with col2:
@@ -504,11 +503,6 @@ def show_settings_page(config, db):
     - **Temperature**: 0.1-0.3 recommended for evaluation tasks
     - **Batch Size**: Increase for faster processing (watch rate limits)
     """)
-    
-    except Exception as e:
-        st.error(f"❌ Error in settings page: {str(e)}")
-        import traceback
-        st.code(traceback.format_exc())
 
 
 def show_evaluation_page(config, db):
