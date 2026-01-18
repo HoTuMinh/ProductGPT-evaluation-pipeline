@@ -323,12 +323,34 @@ class ReportGenerator:
             
             worst_samples = results_df.nsmallest(min(3, len(results_df)), 'score')
             for idx, (row_idx, row) in enumerate(worst_samples.iterrows(), 1):
+                # Get original data if available (assuming they're in the dataframe)
+                question = row.get('question', 'N/A')
+                response = row.get('response', 'N/A')
+                benchmark = row.get('benchmark', row.get('benchmark_answer', 'N/A'))
+                reasoning = row.get('reasoning', 'N/A')
+                
                 sample_text = f"""
                 <b>Sample #{idx}</b> (Score: {row['score']:.3f})<br/>
-                <i>Reasoning:</i> {str(row.get('reasoning', 'N/A'))[:200]}{'...' if len(str(row.get('reasoning', ''))) > 200 else ''}<br/>
+                <br/>
+                <b>Question:</b><br/>
+                {str(question)[:300]}{'...' if len(str(question)) > 300 else ''}<br/>
+                <br/>
+                <b>Model Response:</b><br/>
+                {str(response)[:300]}{'...' if len(str(response)) > 300 else ''}<br/>
+                <br/>
+                <b>Expected Answer:</b><br/>
+                {str(benchmark)[:300]}{'...' if len(str(benchmark)) > 300 else ''}<br/>
+                <br/>
+                <b>Evaluation Reasoning:</b><br/>
+                {str(reasoning)[:200]}{'...' if len(str(reasoning)) > 200 else ''}<br/>
                 """
                 story.append(Paragraph(sample_text, self.styles['Normal']))
-                story.append(Spacer(1, 0.12*inch))
+                story.append(Spacer(1, 0.15*inch))
+                
+                # Add separator line between samples
+                if idx < len(worst_samples):
+                    story.append(Paragraph("─" * 80, self.styles['Normal']))
+                    story.append(Spacer(1, 0.1*inch))
             
             if metric_idx < len(all_results) - 1:  # Not last metric
                 story.append(PageBreak())
