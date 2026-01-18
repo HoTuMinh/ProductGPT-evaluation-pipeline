@@ -1,0 +1,74 @@
+# Application Configuration
+app:
+  name: "ProductGPT Evaluation Pipeline"
+  version: "1.0.0"
+  debug: false
+
+# Server Configuration
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 2
+
+# Streamlit Configuration
+streamlit:
+  port: 8501
+  theme: "light"
+
+# Database Configuration
+database:
+  path: "data/logs.db"
+  echo: false
+
+# LLM Configuration
+llm:
+  provider: "groq"
+  model: "llama-3.3-70b-versatile"  # Model mới thay thế
+  temperature: 0.2
+  max_tokens: 2048
+  timeout: 60
+
+# Batch Processing
+batch:
+  size: 5  # Process 5 rows at a time
+  max_concurrent: 3  # Max 3 concurrent API calls
+  retry_attempts: 3
+  retry_delay: 2
+
+# Metrics Configuration
+metrics:
+  accuracy:
+    enabled: true
+    threshold: 0.7
+  comprehensiveness:
+    enabled: true
+    threshold: 0.6
+  faithfulness:
+    enabled: true
+    threshold: 0.7
+
+# Report Configuration
+report:
+  format: "pdf"
+  include_visualizations: true
+  charts:
+    - "confusion_matrix"
+    - "score_distribution"
+    - "metric_comparison"
+    - "error_analysis"
+  
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "data/app.log"
+
+# File Upload
+upload:
+  max_size_mb: 50
+  allowed_extensions: [".csv"]
+  
+# Authentication
+auth:
+  enabled: true
+  session_timeout_hours: 24

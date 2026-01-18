@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  evaluation-tool:
+    build: .
+    container_name: productgpt-evaluation
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - evaluation-network
+
+networks:
+  evaluation-network:
+    driver: bridge
+
+volumes:
+  data:
