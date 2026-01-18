@@ -239,6 +239,14 @@ def main():
     config = load_config()
     db = get_database()
     
+    # Initialize settings in session state if not exists
+    if 'api_keys' not in st.session_state:
+        st.session_state.api_keys = {}
+    if 'selected_provider' not in st.session_state:
+        st.session_state.selected_provider = None
+    if 'selected_model' not in st.session_state:
+        st.session_state.selected_model = None
+    
     # Sidebar
     with st.sidebar:
         st.markdown("### 👤 User Information")
@@ -249,25 +257,258 @@ def main():
             st.rerun()
         
         st.markdown("---")
+        
+        # Show API status
+        if st.session_state.selected_provider:
+            st.markdown("### 🔑 API Configuration")
+            provider_icon = {"groq": "🚀", "gemini": "🔮", "openai": "🤖"}
+            st.success(f"{provider_icon.get(st.session_state.selected_provider, '✅')} {st.session_state.selected_provider.upper()} - {st.session_state.selected_model}")
+        else:
+            st.markdown("### ⚠️ API Not Configured")
+            st.warning("Please configure API in Settings")
+        
+        st.markdown("---")
         st.markdown("### 📊 Navigation")
         page = st.radio(
             "Select Page",
-            ["🔍 New Evaluation", "📈 Evaluation History", "⚙️ Settings"],
+            ["⚙️ Settings", "🔍 New Evaluation", "📈 Evaluation History"],
             label_visibility="collapsed"
         )
     
     # Main content
     st.markdown('<div class="main-header">🤖 ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
     
-    if page == "🔍 New Evaluation":
+    if page == "⚙️ Settings":
+        show_settings_page(config, db)
+    elif page == "🔍 New Evaluation":
         show_evaluation_page(config, db)
     elif page == "📈 Evaluation History":
         show_history_page(db)
-    elif page == "⚙️ Settings":
-        show_settings_page(config)
+
+def show_settings_page(config, db):
+    """Show settings page for API configuration"""
+    
+    st.markdown("### ⚙️ API & Model Configuration")
+    
+    st.info("💡 Configure your API keys and model preferences here. Settings will be saved for your session.")
+    
+    # Provider selection
+    st.markdown("#### 1️⃣ Select LLM Provider")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("🚀 Groq", use_container_width=True, type="primary" if st.session_state.selected_provider == "groq" else "secondary"):
+            st.session_state.selected_provider = "groq"
+            st.rerun()
+    
+    with col2:
+        if st.button("🔮 Gemini", use_container_width=True, type="primary" if st.session_state.selected_provider == "gemini" else "secondary"):
+            st.session_state.selected_provider = "gemini"
+            st.rerun()
+    
+    with col3:
+        if st.button("🤖 OpenAI", use_container_width=True, type="primary" if st.session_state.selected_provider == "openai" else "secondary"):
+            st.session_state.selected_provider = "openai"
+            st.rerun()
+    
+    if not st.session_state.selected_provider:
+        st.warning("⬆️ Please select a provider above")
+        return
+    
+    st.markdown("---")
+    
+    # Provider-specific configuration
+    provider = st.session_state.selected_provider
+    
+    st.markdown(f"#### 2️⃣ Configure {provider.upper()}")
+    
+    # Model selection based on provider
+    if provider == "groq":
+        st.markdown("**Available Models:**")
+        models = {
+            "llama-3.3-70b-versatile": "Llama 3.3 70B - Best quality, balanced speed",
+            "llama-3.1-8b-instant": "Llama 3.1 8B - Fastest, good quality",
+            "mixtral-8x7b-32768": "Mixtral 8x7B - Large context window",
+            "gemma2-9b-it": "Gemma 2 9B - Efficient"
+        }
+        selected_model = st.selectbox(
+            "Model",
+            options=list(models.keys()),
+            format_func=lambda x: models[x],
+            index=0 if not st.session_state.selected_model else list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0
+        )
+        
+        api_help = "Get your API key at: https://console.groq.com/keys"
+        
+    elif provider == "gemini":
+        st.markdown("**Available Models:**")
+        models = {
+            "gemini-1.5-flash": "Gemini 1.5 Flash - Fast & efficient",
+            "gemini-1.5-pro": "Gemini 1.5 Pro - Best quality",
+            "gemini-2.0-flash-exp": "Gemini 2.0 Flash (Experimental)"
+        }
+        selected_model = st.selectbox(
+            "Model",
+            options=list(models.keys()),
+            format_func=lambda x: models[x],
+            index=0 if not st.session_state.selected_model else list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0
+        )
+        
+        api_help = "Get your API key at: https://makersuite.google.com/app/apikey"
+        
+    else:  # openai
+        st.markdown("**Available Models:**")
+        models = {
+            "gpt-4o": "GPT-4o - Latest, best quality",
+            "gpt-4o-mini": "GPT-4o Mini - Fast & affordable",
+            "gpt-4-turbo": "GPT-4 Turbo - Previous gen"
+        }
+        selected_model = st.selectbox(
+            "Model",
+            options=list(models.keys()),
+            format_func=lambda x: models[x],
+            index=0 if not st.session_state.selected_model else list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0
+        )
+        
+        api_help = "Get your API key at: https://platform.openai.com/api-keys"
+    
+    st.caption(f"ℹ️ {api_help}")
+    
+    # API Key input
+    current_key = st.session_state.api_keys.get(provider, "")
+    
+    api_key = st.text_input(
+        f"🔑 {provider.upper()} API Key",
+        value=current_key,
+        type="password",
+        help="Your API key is stored only in your session and never saved to disk"
+    )
+    
+    # Advanced settings
+    with st.expander("🔧 Advanced Settings"):
+        temperature = st.slider(
+            "Temperature",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.2,
+            step=0.1,
+            help="Lower = more deterministic, Higher = more creative"
+        )
+        
+        max_tokens = st.number_input(
+            "Max Tokens",
+            min_value=256,
+            max_value=4096,
+            value=2048,
+            step=256,
+            help="Maximum length of model response"
+        )
+        
+        batch_size = st.slider(
+            "Batch Size",
+            min_value=1,
+            max_value=20,
+            value=5,
+            help="Number of rows to process in parallel"
+        )
+        
+        max_concurrent = st.slider(
+            "Max Concurrent Calls",
+            min_value=1,
+            max_value=10,
+            value=3,
+            help="Maximum simultaneous API calls"
+        )
+    
+    # Save button
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        if st.button("💾 Save Configuration", type="primary", use_container_width=True):
+            if not api_key:
+                st.error("⚠️ Please enter an API key")
+            else:
+                # Save to session state
+                st.session_state.api_keys[provider] = api_key
+                st.session_state.selected_provider = provider
+                st.session_state.selected_model = selected_model
+                st.session_state.temperature = temperature
+                st.session_state.max_tokens = max_tokens
+                st.session_state.batch_size = batch_size
+                st.session_state.max_concurrent = max_concurrent
+                
+                st.success(f"✅ Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
+                st.balloons()
+    
+    with col2:
+        if st.button("🧪 Test", use_container_width=True):
+            if not api_key:
+                st.error("⚠️ Please enter an API key")
+            else:
+                with st.spinner("Testing connection..."):
+                    try:
+                        # Simple test
+                        if provider == "groq":
+                            from groq import Groq
+                            client = Groq(api_key=api_key)
+                            response = client.chat.completions.create(
+                                model=selected_model,
+                                messages=[{"role": "user", "content": "Say 'test'"}],
+                                max_tokens=10
+                            )
+                            st.success("✅ Connection successful!")
+                        elif provider == "gemini":
+                            import google.generativeai as genai
+                            genai.configure(api_key=api_key)
+                            model = genai.GenerativeModel(selected_model)
+                            response = model.generate_content("Say 'test'")
+                            st.success("✅ Connection successful!")
+                        else:
+                            st.info("OpenAI test not implemented yet")
+                    except Exception as e:
+                        st.error(f"❌ Connection failed: {str(e)}")
+    
+    # Show current configuration
+    if st.session_state.api_keys.get(provider):
+        st.markdown("---")
+        st.markdown("#### ✅ Current Configuration")
+        
+        config_data = {
+            "Provider": provider.upper(),
+            "Model": st.session_state.get('selected_model', selected_model),
+            "API Key": "•" * 20 + st.session_state.api_keys[provider][-4:] if len(st.session_state.api_keys[provider]) > 4 else "Set",
+            "Temperature": st.session_state.get('temperature', 0.2),
+            "Max Tokens": st.session_state.get('max_tokens', 2048),
+            "Batch Size": st.session_state.get('batch_size', 5),
+            "Max Concurrent": st.session_state.get('max_concurrent', 3)
+        }
+        
+        for key, value in config_data.items():
+            st.text(f"{key}: {value}")
+    
+    # Tips
+    st.markdown("---")
+    st.markdown("#### 💡 Tips")
+    st.markdown("""
+    - **Groq**: Best for speed & cost (free tier is generous)
+    - **Gemini**: Good balance of quality & speed
+    - **OpenAI**: Highest quality but more expensive
+    - **Temperature**: 0.1-0.3 recommended for evaluation tasks
+    - **Batch Size**: Increase for faster processing (watch rate limits)
+    """)
+
 
 def show_evaluation_page(config, db):
     """Show the main evaluation page"""
+    
+    # Check if API is configured
+    if not st.session_state.selected_provider or not st.session_state.api_keys.get(st.session_state.selected_provider):
+        st.warning("⚠️ API not configured. Please go to Settings first.")
+        if st.button("⚙️ Go to Settings"):
+            st.session_state.page = "⚙️ Settings"
+            st.rerun()
+        return
     
     # Check if we have results to display
     if 'last_evaluation' in st.session_state and 'show_results' in st.session_state and st.session_state.show_results:
@@ -284,29 +525,11 @@ def show_evaluation_page(config, db):
     # Otherwise show upload form
     st.markdown("### Upload CSV Data File")
     
-    # API Key input
-    config = load_config()
-    provider = config.get('llm', {}).get('provider', 'gemini')
-    model = config.get('llm', {}).get('model', 'unknown')
+    # Show current API configuration
+    provider = st.session_state.selected_provider
+    model = st.session_state.selected_model
     
-    if provider == "groq":
-        api_label = "🔑 Enter your Groq API Key"
-        api_help = "Your API key will not be stored. Get one at https://console.groq.com/keys"
-    else:
-        api_label = "🔑 Enter your Gemini API Key"
-        api_help = "Your API key will not be stored. Get one at https://makersuite.google.com/app/apikey"
-    
-    st.info(f"**Current Configuration**: {provider.upper()} - {model}")
-    
-    api_key = st.text_input(
-        api_label,
-        type="password",
-        help=api_help
-    )
-    
-    if not api_key:
-        st.warning("⚠️ Please enter your API key to continue.")
-        return
+    st.info(f"**Using**: {provider.upper()} - {model}")
     
     # File upload
     uploaded_file = st.file_uploader(
@@ -374,30 +597,42 @@ def show_evaluation_page(config, db):
                 
                 run_evaluation(
                     df=df,
-                    api_key=api_key,
+                    api_key=st.session_state.api_keys[st.session_state.selected_provider],
                     config=config,
                     db=db,
                     question_col=question_col,
                     response_col=response_col,
                     benchmark_col=benchmark_col,
                     selected_metrics=selected_metrics,
-                    batch_size=batch_size,
-                    max_concurrent=max_concurrent,
-                    uploaded_file=uploaded_file
+                    batch_size=st.session_state.get('batch_size', batch_size),
+                    max_concurrent=st.session_state.get('max_concurrent', max_concurrent),
+                    uploaded_file=uploaded_file,
+                    provider=st.session_state.selected_provider,
+                    model=st.session_state.selected_model
                 )
         
         except Exception as e:
             st.error(f"❌ Error reading file: {str(e)}")
 
 def run_evaluation(df, api_key, config, db, question_col, response_col, benchmark_col, 
-                   selected_metrics, batch_size, max_concurrent, uploaded_file):
+                   selected_metrics, batch_size, max_concurrent, uploaded_file, provider=None, model=None):
     """Run the evaluation pipeline"""
     
     start_time = time.time()
     
-    # Update config with user settings
+    # Update config with user settings and session state
     config['batch']['size'] = batch_size
     config['batch']['max_concurrent'] = max_concurrent
+    
+    # Update LLM config from session state
+    if provider:
+        config['llm']['provider'] = provider
+    if model:
+        config['llm']['model'] = model
+    if 'temperature' in st.session_state:
+        config['llm']['temperature'] = st.session_state.temperature
+    if 'max_tokens' in st.session_state:
+        config['llm']['max_tokens'] = st.session_state.max_tokens
     
     # Create evaluation run in database
     run_id = db.create_evaluation_run(
