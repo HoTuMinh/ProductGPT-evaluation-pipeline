@@ -197,10 +197,19 @@ def display_evaluation_results(config, db, eval_data):
                         # Ensure directory exists
                         os.makedirs("data/results", exist_ok=True)
                         
+                        # Add original data to results for PDF
+                        enriched_results = {}
+                        for metric, results_df in eval_data['all_results'].items():
+                            df_copy = results_df.copy()
+                            df_copy['question'] = eval_data['questions']
+                            df_copy['response'] = eval_data['responses']
+                            df_copy['benchmark'] = eval_data['benchmarks']
+                            enriched_results[metric] = df_copy
+                        
                         report_gen.generate_pdf_report(
                             output_path=output_path,
                             run_info=run_info,
-                            all_results=eval_data['all_results'],
+                            all_results=enriched_results,
                             api_stats=api_stats
                         )
                         
