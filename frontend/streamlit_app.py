@@ -89,15 +89,14 @@ def check_authentication():
             password = st.text_input("Password", type="password", key="login_password")
             
             if st.button("Login", use_container_width=True):
-                # Simple auth - in production, use proper authentication
-                if password == "covergo2024":  # Change this!
+                # Simple auth with test account
+                if (username == "123" and password == "123") or password == "covergo2024":
                     st.session_state.authenticated = True
                     st.session_state.username = username if username else "anonymous"
                     st.rerun()
                 else:
                     st.error("Invalid credentials")
         
-        st.info("💡 Default password: covergo2024 (Please change this in production!)")
         return False
     
     return True
