@@ -438,7 +438,8 @@ def show_settings_page(config, db):
                 st.session_state.batch_size = batch_size
                 st.session_state.max_concurrent = max_concurrent
                 
-                st.success(f"✅ Configuration saved! Provider: {provider.UPPER()}, Model: {selected_model}")
+                # FIX: Changed provider.UPPER() to provider.upper()
+                st.success(f"✅ Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
                 st.balloons()
     
     with col2:
@@ -788,29 +789,6 @@ def show_history_page(db):
             
             st.markdown(f"#### Results for Run #{run_id}")
             st.dataframe(results_df, use_container_width=True, height=400)
-
-def show_settings_page(config):
-    """Show settings page"""
-    
-    st.markdown("### ⚙️ Application Settings")
-    
-    st.info("Settings are configured in `config.yaml`. Changes here are for current session only.")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.markdown("#### LLM Configuration")
-        st.json(config.get('llm', {}))
-        
-        st.markdown("#### Batch Processing")
-        st.json(config.get('batch', {}))
-    
-    with col2:
-        st.markdown("#### Metrics Configuration")
-        st.json(config.get('metrics', {}))
-        
-        st.markdown("#### Report Configuration")
-        st.json(config.get('report', {}))
 
 if __name__ == "__main__":
     main()
