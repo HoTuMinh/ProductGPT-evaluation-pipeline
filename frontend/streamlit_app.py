@@ -104,6 +104,18 @@ def check_authentication():
 def display_evaluation_results(config, db, eval_data):
     """Display evaluation results with report generation"""
     
+    # Check if in review mode
+    if 'review_mode' in st.session_state and st.session_state.review_mode:
+        if st.session_state.review_mode == 'config':
+            show_review_config(config, db, eval_data)
+            return
+        elif st.session_state.review_mode == 'reviewing':
+            show_review_interface(config, db, eval_data)
+            return
+        elif st.session_state.review_mode == 'summary':
+            show_review_summary(config, db, eval_data)
+            return
+    
     st.markdown("### 📊 Evaluation Results")
     
     all_results = eval_data['all_results']
@@ -125,6 +137,17 @@ def display_evaluation_results(config, db, eval_data):
                 value=f"{avg_score:.3f}",
                 delta=f"{pass_rate:.1f}% pass rate"
             )
+    
+    # Review button
+    st.markdown("---")
+    col1, col2, col3 = st.columns([2, 1, 2])
+    with col2:
+        if st.button("👁️ Review Samples", type="primary", use_container_width=True):
+            st.session_state.review_mode = 'config'
+            st.session_state.review_metric = list(selected_metrics)[0]  # Default to first metric
+            st.rerun()
+    
+    st.markdown("---")
     
     # Detailed results tabs
     tabs = st.tabs([f"📋 {m.capitalize()}" for m in selected_metrics] + ["📄 Generate Report"])
@@ -234,6 +257,351 @@ def display_evaluation_results(config, db, eval_data):
                     mime="application/pdf",
                     key=f"download_pdf_{st.session_state.last_pdf_path}"
                 )
+
+
+def show_review_config(config, db, eval_data):
+    """Show review configuration page"""
+    
+    st.markdown("### 👁️ Review Configuration")
+    st.markdown("Configure your review settings before starting.")
+    
+    st.markdown("---")
+    
+    # Metric selection
+    selected_metrics = eval_data['selected_metrics']
+    if len(selected_metrics) > 1:
+        review_metric = st.selectbox(
+            "Select Metric to Review",
+            options=selected_metrics,
+            format_func=lambda x: x.capitalize(),
+            index=selected_metrics.index(st.session_state.review_metric) if st.session_state.review_metric in selected_metrics else 0
+        )
+        st.session_state.review_metric = review_metric
+    else:
+        review_metric = selected_metrics[0]
+        st.info(f"**Reviewing Metric:** {review_metric.capitalize()}")
+    
+    st.markdown("---")
+    
+    # Get results for selected metric
+    results_df = eval_data['all_results'][review_metric].copy()
+    results_df['question'] = eval_data['questions']
+    results_df['response'] = eval_data['responses']
+    results_df['benchmark'] = eval_data['benchmarks']
+    
+    # Threshold slider
+    st.markdown("#### Set Threshold")
+    threshold = st.slider(
+        "Pass/Fail Threshold",
+        min_value=0.0,
+        max_value=1.0,
+        value=0.7,
+        step=0.1,
+        help="Samples with score ≥ threshold are considered Pass"
+    )
+    
+    # Calculate counts dynamically
+    below_threshold = results_df[results_df['score'] < threshold]
+    above_threshold = results_df[results_df['score'] >= threshold]
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Below Threshold", f"{len(below_threshold)} samples", delta="Fail", delta_color="inverse")
+    with col2:
+        st.metric("Above Threshold", f"{len(above_threshold)} samples", delta="Pass", delta_color="normal")
+    
+    st.markdown("---")
+    
+    # Filter selection
+    st.markdown("#### Select Samples to Review")
+    filter_option = st.radio(
+        "Review",
+        options=["Below threshold", "All samples"],
+        help="Choose which samples you want to review"
+    )
+    
+    if filter_option == "Below threshold":
+        samples_to_review = below_threshold
+    else:
+        samples_to_review = results_df
+    
+    st.info(f"📝 You will review **{len(samples_to_review)}** samples")
+    
+    # Current pass rate
+    current_pass_rate = (len(above_threshold) / len(results_df) * 100) if len(results_df) > 0 else 0
+    st.markdown(f"**Current Pass Rate:** {current_pass_rate:.1f}% ({len(above_threshold)}/{len(results_df)})")
+    
+    st.markdown("---")
+    
+    # Action buttons
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        if st.button("❌ Cancel", use_container_width=True):
+            st.session_state.review_mode = None
+            st.rerun()
+    
+    with col2:
+        if st.button("▶️ Start Review", type="primary", use_container_width=True):
+            # Store review config in session state
+            st.session_state.review_threshold = threshold
+            st.session_state.review_samples = samples_to_review.reset_index(drop=True)
+            st.session_state.review_current_index = 0
+            st.session_state.review_changes = {}  # Track changes: {row_index: {score, label, comment}}
+            st.session_state.review_mode = 'reviewing'
+            st.rerun()
+
+
+def show_review_interface(config, db, eval_data):
+    """Show interface to review individual samples"""
+    
+    samples = st.session_state.review_samples
+    current_index = st.session_state.review_current_index
+    threshold = st.session_state.review_threshold
+    metric = st.session_state.review_metric
+    
+    if current_index >= len(samples):
+        # All samples reviewed, show summary
+        st.session_state.review_mode = 'summary'
+        st.rerun()
+        return
+    
+    # Get current sample
+    sample = samples.iloc[current_index]
+    
+    # Progress
+    st.progress((current_index) / len(samples))
+    st.markdown(f"### Review Sample {current_index + 1}/{len(samples)}")
+    
+    st.markdown("---")
+    
+    # LLM Judgment section
+    st.markdown("#### 🤖 LLM Judgment")
+    
+    llm_score = sample['score']
+    llm_label = "Pass" if llm_score >= threshold else "Fail"
+    
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        if llm_score >= threshold:
+            st.success(f"✅ **{llm_label}** (Score: {llm_score:.3f} ≥ Threshold: {threshold})")
+        else:
+            st.error(f"❌ **{llm_label}** (Score: {llm_score:.3f} < Threshold: {threshold})")
+    with col2:
+        st.metric("LLM Score", f"{llm_score:.3f}")
+    
+    st.markdown("---")
+    
+    # Sample content
+    st.markdown("#### 📝 Sample Content")
+    
+    with st.expander("📋 Question", expanded=True):
+        st.write(sample['question'])
+    
+    with st.expander("💬 Response", expanded=True):
+        st.write(sample['response'])
+    
+    with st.expander("✅ Benchmark Answer", expanded=True):
+        st.write(sample['benchmark'])
+    
+    with st.expander("🧠 LLM Reasoning", expanded=False):
+        st.write(sample.get('reasoning', 'N/A'))
+    
+    st.markdown("---")
+    
+    # Human review section
+    st.markdown("#### 👤 Your Review")
+    
+    # Check if already reviewed (in current session)
+    row_index = sample.get('row_index', current_index)
+    existing_review = st.session_state.review_changes.get(row_index, {})
+    
+    # Score slider
+    st.markdown("**Score:**")
+    human_score = st.slider(
+        "Your score for this sample",
+        min_value=0.0,
+        max_value=1.0,
+        value=existing_review.get('score', llm_score),
+        step=0.05,
+        key=f"score_slider_{current_index}",
+        label_visibility="collapsed"
+    )
+    
+    st.caption(f"Current: {human_score:.2f} | Threshold: {threshold}")
+    
+    # Label radio
+    st.markdown("**Label:**")
+    human_label_pass = human_score >= threshold
+    human_label = st.radio(
+        "Pass or Fail",
+        options=["Pass", "Fail"],
+        index=0 if human_label_pass else 1,
+        horizontal=True,
+        key=f"label_radio_{current_index}",
+        label_visibility="collapsed"
+    )
+    
+    # Comment
+    st.markdown("**Comment (Optional):**")
+    human_comment = st.text_area(
+        "Add your feedback or notes",
+        value=existing_review.get('comment', ''),
+        height=100,
+        key=f"comment_{current_index}",
+        label_visibility="collapsed",
+        placeholder="Why did you adjust the score? Any observations?"
+    )
+    
+    st.markdown("---")
+    
+    # Navigation buttons
+    col1, col2, col3 = st.columns([1, 1, 1])
+    
+    with col1:
+        if st.button("◀️ Previous", disabled=(current_index == 0), use_container_width=True):
+            st.session_state.review_current_index -= 1
+            st.rerun()
+    
+    with col2:
+        if st.button("⏭️ Skip", use_container_width=True):
+            st.session_state.review_current_index += 1
+            st.rerun()
+    
+    with col3:
+        if st.button("💾 Save & Next", type="primary", use_container_width=True):
+            # Save review
+            st.session_state.review_changes[row_index] = {
+                'score': human_score,
+                'label': human_label,
+                'comment': human_comment
+            }
+            
+            # Save to database if we have result_id
+            if 'id' in sample:
+                db.update_human_review(
+                    result_id=int(sample['id']),
+                    human_score=human_score,
+                    human_label=human_label.lower(),
+                    human_comment=human_comment if human_comment else None
+                )
+            
+            # Move to next
+            st.session_state.review_current_index += 1
+            st.rerun()
+
+
+def show_review_summary(config, db, eval_data):
+    """Show review summary and statistics"""
+    
+    st.markdown("### ✅ Review Complete!")
+    st.success("You have finished reviewing the selected samples.")
+    
+    st.markdown("---")
+    
+    # Get review stats
+    threshold = st.session_state.review_threshold
+    metric = st.session_state.review_metric
+    samples = st.session_state.review_samples
+    changes = st.session_state.review_changes
+    
+    # Calculate statistics
+    total_samples = len(samples)
+    reviewed_count = len(changes)
+    
+    # Original LLM pass rate
+    llm_passes = sum(1 for _, row in samples.iterrows() if row['score'] >= threshold)
+    llm_pass_rate = (llm_passes / total_samples * 100) if total_samples > 0 else 0
+    
+    # Human pass rate (combining human reviews + unchanged LLM scores)
+    human_passes = 0
+    agreements = 0
+    
+    for idx, row in samples.iterrows():
+        row_index = row.get('row_index', idx)
+        if row_index in changes:
+            # Use human score
+            if changes[row_index]['score'] >= threshold:
+                human_passes += 1
+            # Check agreement
+            llm_pass = row['score'] >= threshold
+            human_pass = changes[row_index]['score'] >= threshold
+            if llm_pass == human_pass:
+                agreements += 1
+        else:
+            # Use LLM score
+            if row['score'] >= threshold:
+                human_passes += 1
+    
+    human_pass_rate = (human_passes / total_samples * 100) if total_samples > 0 else 0
+    agreement_rate = (agreements / reviewed_count * 100) if reviewed_count > 0 else 0
+    pass_rate_change = human_pass_rate - llm_pass_rate
+    
+    # Display statistics
+    st.markdown("### 📊 Review Statistics")
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Samples Reviewed", f"{reviewed_count}/{total_samples}")
+    with col2:
+        st.metric("Changes Made", len([c for c in changes.values() if c['score'] != samples.iloc[0]['score']]))
+    with col3:
+        st.metric("Agreement Rate", f"{agreement_rate:.1f}%", help="% of reviewed samples where human agrees with LLM")
+    
+    st.markdown("---")
+    
+    # Pass rate comparison
+    st.markdown("### 📈 Pass Rate Comparison")
+    st.markdown(f"**Threshold:** {threshold}")
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Original (LLM)", f"{llm_pass_rate:.1f}%", help=f"{llm_passes}/{total_samples} samples passed")
+    with col2:
+        st.metric("After Review", f"{human_pass_rate:.1f}%", help=f"{human_passes}/{total_samples} samples passed")
+    with col3:
+        delta_color = "normal" if pass_rate_change >= 0 else "inverse"
+        st.metric("Change", f"{pass_rate_change:+.1f}%", delta=f"{pass_rate_change:+.1f}%", delta_color=delta_color)
+    
+    st.markdown("---")
+    
+    # Review details table
+    if reviewed_count > 0:
+        st.markdown("### 📝 Review Details")
+        
+        review_data = []
+        for row_index, change in changes.items():
+            # Find original sample
+            original = samples[samples.get('row_index', samples.index) == row_index].iloc[0] if row_index in samples.get('row_index', samples.index).values else None
+            if original is not None:
+                review_data.append({
+                    'Sample': row_index + 1,
+                    'LLM Score': f"{original['score']:.3f}",
+                    'Human Score': f"{change['score']:.3f}",
+                    'LLM Label': 'Pass' if original['score'] >= threshold else 'Fail',
+                    'Human Label': change['label'],
+                    'Comment': change['comment'][:50] + '...' if change['comment'] and len(change['comment']) > 50 else change['comment'] or '-'
+                })
+        
+        if review_data:
+            review_df = pd.DataFrame(review_data)
+            st.dataframe(review_df, use_container_width=True, height=300)
+    
+    st.markdown("---")
+    
+    # Action buttons
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        if st.button("🔙 Back to Results", type="primary", use_container_width=True):
+            # Clear review state
+            st.session_state.review_mode = None
+            for key in ['review_threshold', 'review_samples', 'review_current_index', 'review_changes', 'review_metric']:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.rerun()
+    
+    with col2:
+        if st.button("📊 View Updated Stats", use_container_width=True):
+            st.info("💡 Updated statistics are now reflected in the database. Refresh the evaluation history to see changes.")
 
 
 def main():
@@ -391,6 +759,8 @@ def show_getting_started_page(config, db):
         st.markdown("""
         - **Format**: CSV (comma-separated values)
         - **Encoding**: UTF-8
+        - **Size**: Up to 10,000 rows recommended
+        - **File size**: No hard limit, but larger files take longer to process
         """)
         
         st.markdown("---")
