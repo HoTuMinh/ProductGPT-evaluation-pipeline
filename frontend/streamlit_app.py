@@ -320,15 +320,13 @@ def show_getting_started_page(config, db):
         st.markdown("#### Step 1: Configure API")
         st.markdown("""
         1. Go to **⚙️ Settings** tab
-        2. Click on a provider button (🚀 Groq recommended for beginners)
+        2. Click on a provider button (currently only Groq is available)
         3. Select a model
         4. Enter your API key
         5. Click **Save Configuration**
         
-        💡 **Getting API Keys:**
+        💡 **Getting API Key:**
         - **Groq**: https://console.groq.com/keys (Free tier available)
-        - **Gemini**: https://makersuite.google.com/app/apikey
-        - **OpenAI**: https://platform.openai.com/api-keys
         """)
         
         st.markdown("---")
@@ -446,14 +444,6 @@ def show_getting_started_page(config, db):
         - `0.7-0.9` = Mostly correct, minor differences
         - `0.4-0.6` = Partially correct
         - `0.0-0.3` = Incorrect or missing key information
-        
-        **Use when:** Checking if the AI gives factually correct answers
-        
-        **Example:**
-        - Q: "What's the price?"
-        - Response: "$149/month"
-        - Benchmark: "$149 per month"
-        - Score: `0.95` (correct content, slightly different wording)
         """)
         
         st.markdown("---")
@@ -467,14 +457,6 @@ def show_getting_started_page(config, db):
         - `0.7-0.9` = Covers most key points
         - `0.4-0.6` = Missing some important details
         - `0.0-0.3` = Incomplete or superficial
-        
-        **Use when:** Checking if the AI provides complete answers
-        
-        **Example:**
-        - Q: "What features are included?"
-        - Benchmark: "SSO, API access, and custom domains"
-        - Response: "Includes SSO and API access"
-        - Score: `0.7` (missing custom domains)
         """)
         
         st.markdown("---")
@@ -488,28 +470,6 @@ def show_getting_started_page(config, db):
         - `0.7-0.9` = Mostly faithful, minor extra details
         - `0.4-0.6` = Some contradictions or wrong info
         - `0.0-0.3` = Contains significant misinformation
-        
-        **Use when:** Checking if the AI hallucinates or adds false information
-        
-        **Example:**
-        - Benchmark: "Available in US only"
-        - Response: "Available in US and Canada"
-        - Score: `0.3` (added false information about Canada)
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("### Choosing Metrics")
-        st.markdown("""
-        **Start simple:**
-        - Begin with just **Accuracy** to verify correctness
-        - Add **Comprehensiveness** if answers seem too brief
-        - Add **Faithfulness** if concerned about hallucinations
-        
-        **All three metrics:**
-        - Use when doing comprehensive quality checks
-        - Takes 3x longer but gives complete picture
-        - Recommended for production releases
         """)
     
     # Tab 4: Reading Reports
@@ -541,11 +501,6 @@ def show_getting_started_page(config, db):
         - **Score**: Individual score (0-1)
         - **Label**: Positive (≥0.7) or Negative (<0.7)
         - **Reasoning**: Why the LLM gave this score
-        
-        **Tips:**
-        - Sort by score to see best/worst
-        - Read reasoning for failed samples
-        - Download CSV for further analysis
         """)
         
         st.markdown("---")
@@ -563,28 +518,6 @@ def show_getting_started_page(config, db):
         - Score distribution
         - Label distribution (positive/negative)
         - Top 3 lowest scoring samples with full details
-        
-        **Use reports for:**
-        - Sharing with team members
-        - Documenting evaluation results
-        - Comparing different model versions
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("### What's a \"Good\" Score?")
-        st.markdown("""
-        | Score Range | Interpretation | Action |
-        |------------|----------------|--------|
-        | 0.9 - 1.0 | Excellent | Production ready |
-        | 0.7 - 0.9 | Good | Minor improvements |
-        | 0.5 - 0.7 | Fair | Needs work |
-        | 0.0 - 0.5 | Poor | Major issues |
-        
-        **Context matters:**
-        - Critical systems (finance, healthcare): aim for 0.9+
-        - General chatbots: 0.7+ acceptable
-        - Experimental features: 0.5+ to start
         """)
     
     # Tab 5: Sample Dataset
