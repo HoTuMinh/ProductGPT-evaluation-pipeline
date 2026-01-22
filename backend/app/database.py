@@ -237,6 +237,23 @@ class Database:
         finally:
             session.close()
     
+    def clear_human_review(self, result_id: int):
+        """Clear human review for a specific result"""
+        session = self.get_session()
+        try:
+            result = session.query(EvaluationResult).filter_by(id=result_id).first()
+            if result:
+                result.human_reviewed = 0
+                result.human_score = None
+                result.human_label = None
+                result.human_comment = None
+                result.review_timestamp = None
+                session.commit()
+                return True
+            return False
+        finally:
+            session.close()
+    
     def get_review_statistics(self, run_id: int, metric_name: str, threshold: float = 0.7):
         """Get review statistics for a run and metric"""
         session = self.get_session()
