@@ -572,7 +572,7 @@ def show_getting_started_page(config, db):
         
         st.markdown("---")
         
-        st.markdown("### What's a "Good" Score?")
+        st.markdown("### What's a \"Good\" Score?")
         st.markdown("""
         | Score Range | Interpretation | Action |
         |------------|----------------|--------|
