@@ -68,7 +68,7 @@ class EvaluationResult(Base):
     # Evaluation results
     metric_name = Column(String(50))
     score = Column(Float)
-    label = Column(String(50))  # positive, negative, etc.
+    label = Column(String(50))  # pass, fail, etc.
     reasoning = Column(Text)
     
     # Human review
