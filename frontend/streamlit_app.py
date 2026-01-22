@@ -405,9 +405,10 @@ def show_review_config(config, db, eval_data):
         if st.button("▶️ Start Review", type="primary", use_container_width=True):
             # Store review config in session state
             st.session_state.review_threshold = threshold
-            st.session_state.review_samples = samples_to_review.reset_index(drop=True)
+            # IMPORTANT: Keep original index so we can map back to full results_df
+            st.session_state.review_samples = samples_to_review.reset_index()  # Keep 'index' column
             st.session_state.review_current_index = 0
-            st.session_state.review_changes = {}  # Track changes: {row_index: {score, label, comment}}
+            st.session_state.review_changes = {}  # Track changes: {original_row_index: {score, label, comment}}
             st.session_state.review_mode = 'reviewing'
             st.rerun()
 
@@ -428,6 +429,9 @@ def show_review_interface(config, db, eval_data):
     
     # Get current sample
     sample = samples.iloc[current_index]
+    
+    # Get ORIGINAL index from full dataframe (preserved in 'index' column)
+    original_row_index = sample['index'] if 'index' in sample else current_index
     
     # Progress
     st.progress((current_index) / len(samples))
@@ -472,9 +476,8 @@ def show_review_interface(config, db, eval_data):
     # Human review section
     st.markdown("#### 👤 Your Review")
     
-    # Check if already reviewed (in current session)
-    row_index = sample.get('row_index', current_index)
-    existing_review = st.session_state.review_changes.get(row_index, {})
+    # Check if already reviewed (in current session) - use ORIGINAL index
+    existing_review = st.session_state.review_changes.get(original_row_index, {})
     
     # Score slider
     st.markdown("**Score:**")
@@ -530,8 +533,8 @@ def show_review_interface(config, db, eval_data):
     
     with col3:
         if st.button("💾 Save & Next", type="primary", use_container_width=True):
-            # Save review
-            st.session_state.review_changes[row_index] = {
+            # Save review using ORIGINAL row index
+            st.session_state.review_changes[original_row_index] = {
                 'score': human_score,
                 'label': human_label,
                 'comment': human_comment
@@ -631,9 +634,11 @@ def show_review_summary(config, db, eval_data):
         
         review_data = []
         for row_index, change in changes.items():
-            # Find original sample
-            original = samples[samples.get('row_index', samples.index) == row_index].iloc[0] if row_index in samples.get('row_index', samples.index).values else None
-            if original is not None:
+            # Find original sample using the 'index' column (which preserves original index)
+            matching_samples = samples[samples['index'] == row_index] if 'index' in samples.columns else samples[samples.index == row_index]
+            
+            if not matching_samples.empty:
+                original = matching_samples.iloc[0]
                 review_data.append({
                     'Sample': row_index + 1,
                     'LLM Score': f"{original['score']:.3f}",
@@ -655,10 +660,11 @@ def show_review_summary(config, db, eval_data):
         if st.button("❌ Discard All Changes", use_container_width=True):
             # Clear all human reviews from database
             for row_index in changes.keys():
-                # Find sample with this row_index
-                sample = samples[samples.get('row_index', samples.index) == row_index]
-                if not sample.empty and 'id' in sample.iloc[0]:
-                    db.clear_human_review(int(sample.iloc[0]['id']))
+                # Find sample with this row_index using 'index' column
+                matching_samples = samples[samples['index'] == row_index] if 'index' in samples.columns else samples[samples.index == row_index]
+                
+                if not matching_samples.empty and 'id' in matching_samples.iloc[0]:
+                    db.clear_human_review(int(matching_samples.iloc[0]['id']))
             
             # Clear session state
             st.session_state.review_mode = None
