@@ -134,37 +134,29 @@ def display_evaluation_results(config, db, eval_data):
     cols = st.columns(len(selected_metrics))
     for idx, (metric, results_df) in enumerate(all_results.items()):
         with cols[idx]:
-            # Check if this metric has human reviews
-            has_human_reviews = 'human_score' in results_df.columns and results_df.get('human_reviewed', False).any()
+            # Score column already contains human overrides if applied
+            avg_score = results_df['score'].mean()
             
-            if has_human_reviews and review_applied and metric == review_metric:
-                # Use human scores where available, LLM scores otherwise
-                effective_scores = results_df.apply(
-                    lambda row: row['human_score'] if row.get('human_reviewed', False) else row['score'],
-                    axis=1
-                )
-                avg_score = effective_scores.mean()
-                
-                # Calculate pass rate using effective scores
-                pass_count = sum(1 for score in effective_scores if score >= review_threshold)
-                pass_rate = pass_count / len(results_df) * 100
-                
-                # Show original for comparison
-                original_avg = results_df['score'].mean()
-                original_pass_rate = (results_df['score'] >= review_threshold).sum() / len(results_df) * 100
+            # Calculate pass rate using threshold
+            pass_count = sum(1 for score in results_df['score'] if score >= review_threshold)
+            pass_rate = pass_count / len(results_df) * 100
+            
+            # Check if this metric has been reviewed
+            has_reviews = review_applied and metric == review_metric
+            
+            if has_reviews and 'llm_score' in results_df.columns:
+                # Show comparison with original LLM scores
+                original_avg = results_df['llm_score'].mean()
+                original_pass_rate = (results_df['llm_score'] >= review_threshold).sum() / len(results_df) * 100
                 
                 st.metric(
-                    label=f"{metric.capitalize()} (Reviewed)",
+                    label=f"{metric.capitalize()} ✓",
                     value=f"{avg_score:.3f}",
                     delta=f"{pass_rate:.1f}% pass rate",
-                    help=f"Original: {original_avg:.3f} avg, {original_pass_rate:.1f}% pass rate"
+                    help=f"Original LLM: {original_avg:.3f} avg, {original_pass_rate:.1f}% pass rate"
                 )
             else:
-                # Standard LLM-only display
-                avg_score = results_df['score'].mean()
-                pass_count = (results_df['label'] == 'positive').sum()
-                pass_rate = pass_count / len(results_df) * 100
-                
+                # Standard display
                 st.metric(
                     label=f"{metric.capitalize()}",
                     value=f"{avg_score:.3f}",
@@ -195,17 +187,27 @@ def display_evaluation_results(config, db, eval_data):
             results_df['benchmark'] = benchmarks
             
             # Check if has human reviews
-            has_reviews = 'human_score' in results_df.columns and results_df.get('human_reviewed', False).any()
+            has_reviews = 'llm_score' in results_df.columns and 'human_reviewed' in results_df.columns
             
             if has_reviews:
-                # Show both LLM and Human columns
-                display_cols = ['question', 'score', 'human_score', 'label', 'human_label', 'reasoning', 'human_comment']
+                # Show LLM score, final score (overridden), LLM reasoning, human reasoning
+                display_cols = ['question', 'llm_score', 'score', 'llm_reasoning', 'human_reasoning']
                 # Only include columns that exist
                 display_cols = [col for col in display_cols if col in results_df.columns]
                 
-                st.info("🔍 This metric has been reviewed. Human scores and labels are shown alongside LLM results.")
+                st.info("🔍 This metric has been reviewed. 'score' column shows final scores (human overrides where reviewed).")
+                
+                # Rename columns for clarity in display
+                display_df = results_df[display_cols].copy()
+                display_df = display_df.rename(columns={
+                    'llm_score': 'LLM Score',
+                    'score': 'Final Score',
+                    'llm_reasoning': 'LLM Reasoning',
+                    'human_reasoning': 'Human Review'
+                })
+                
                 st.dataframe(
-                    results_df[display_cols],
+                    display_df,
                     use_container_width=True,
                     height=400
                 )
@@ -217,7 +219,7 @@ def display_evaluation_results(config, db, eval_data):
                     height=400
                 )
             
-            # Download button - include all columns
+            # Download button - CSV will have all columns including llm_score, score, human_reasoning
             csv = results_df.to_csv(index=False)
             download_label = f"📥 Download {metric} Results" + (" (with Human Reviews)" if has_reviews else " (CSV)")
             st.download_button(
@@ -689,13 +691,22 @@ def show_review_summary(config, db, eval_data):
             if 'last_evaluation' in st.session_state:
                 results_df = st.session_state.last_evaluation['all_results'][metric].copy()
                 
-                # Apply human reviews to the dataframe
+                # Save original LLM scores if not already saved
+                if 'llm_score' not in results_df.columns:
+                    results_df['llm_score'] = results_df['score'].copy()
+                    results_df['llm_label'] = results_df['label'].copy()
+                    results_df['llm_reasoning'] = results_df['reasoning'].copy()
+                
+                # Apply human reviews - OVERRIDE the score/label, add human reasoning
                 for row_idx, update in st.session_state.review_updated_samples.items():
                     if row_idx < len(results_df):
-                        results_df.at[row_idx, 'human_score'] = update['human_score']
-                        results_df.at[row_idx, 'human_label'] = update['human_label']
-                        results_df.at[row_idx, 'human_comment'] = update['human_comment']
+                        # Override main score/label with human values
+                        results_df.at[row_idx, 'score'] = update['human_score']
+                        results_df.at[row_idx, 'label'] = update['human_label'].lower()
+                        
+                        # Add human review info
                         results_df.at[row_idx, 'human_reviewed'] = True
+                        results_df.at[row_idx, 'human_reasoning'] = update['human_comment'] if update['human_comment'] else 'Reviewed by human'
                 
                 # Update in session state so it persists
                 st.session_state.last_evaluation['all_results'][metric] = results_df
