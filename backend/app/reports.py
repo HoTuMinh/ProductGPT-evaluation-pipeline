@@ -204,6 +204,10 @@ class ReportGenerator:
             run_data.append(['Total API Calls', str(api_stats.get('total_calls', 0))])
             run_data.append(['Total Tokens', str(api_stats.get('total_tokens', 0))])
         
+        # Add human review info if present
+        if 'human_reviews' in run_info:
+            run_data.append(['Human Reviews', run_info['human_reviews']])
+        
         run_table = Table(run_data, colWidths=[2*inch, 4.5*inch])
         run_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
@@ -329,8 +333,17 @@ class ReportGenerator:
                 benchmark = row.get('benchmark', row.get('benchmark_answer', 'N/A'))
                 reasoning = row.get('reasoning', 'N/A')
                 
+                # Check for human review
+                has_human_review = row.get('human_reviewed', False) or row.get('human_score') is not None
+                
+                # Build header with score info
+                if has_human_review:
+                    header = f"<b>Sample #{idx}</b> (LLM Score: {row['score']:.3f} → Human Score: {row.get('human_score', 'N/A'):.3f})<br/>"
+                else:
+                    header = f"<b>Sample #{idx}</b> (Score: {row['score']:.3f})<br/>"
+                
                 sample_text = f"""
-                <b>Sample #{idx}</b> (Score: {row['score']:.3f})<br/>
+                {header}
                 <br/>
                 <b>Question:</b><br/>
                 {str(question)[:300]}{'...' if len(str(question)) > 300 else ''}<br/>
@@ -341,9 +354,22 @@ class ReportGenerator:
                 <b>Expected Answer:</b><br/>
                 {str(benchmark)[:300]}{'...' if len(str(benchmark)) > 300 else ''}<br/>
                 <br/>
-                <b>Evaluation Reasoning:</b><br/>
+                <b>LLM Evaluation:</b><br/>
                 {str(reasoning)[:200]}{'...' if len(str(reasoning)) > 200 else ''}<br/>
                 """
+                
+                # Add human review section if available
+                if has_human_review:
+                    human_label = row.get('human_label', 'N/A')
+                    human_comment = row.get('human_comment', '')
+                    sample_text += f"""
+                    <br/>
+                    <b>Human Review:</b><br/>
+                    Label: {human_label}<br/>
+                    """
+                    if human_comment:
+                        sample_text += f"Comment: {str(human_comment)[:200]}{'...' if len(str(human_comment)) > 200 else ''}<br/>"
+                
                 story.append(Paragraph(sample_text, self.styles['Normal']))
                 story.append(Spacer(1, 0.15*inch))
                 
