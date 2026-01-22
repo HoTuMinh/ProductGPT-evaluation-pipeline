@@ -1006,7 +1006,7 @@ def show_getting_started_page(config, db):
         
         **Page 2+: Per Metric**
         - Score distribution
-        - Label distribution (positive/negative)
+        - Label distribution (pass/fail)
         - Top 3 lowest scoring samples with full details
         """)
     
