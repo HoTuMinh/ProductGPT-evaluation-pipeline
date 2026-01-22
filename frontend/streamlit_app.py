@@ -391,8 +391,6 @@ def show_getting_started_page(config, db):
         st.markdown("""
         - **Format**: CSV (comma-separated values)
         - **Encoding**: UTF-8
-        - **Size**: Up to 10,000 rows recommended
-        - **File size**: No hard limit, but larger files take longer to process
         """)
         
         st.markdown("---")
