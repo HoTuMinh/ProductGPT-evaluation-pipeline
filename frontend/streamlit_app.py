@@ -118,7 +118,8 @@ def display_evaluation_results(config, db, eval_data):
     
     st.markdown("### 📊 Evaluation Results")
     
-    all_results = eval_data['all_results']
+    # Use session state data which gets updated by Apply Changes
+    all_results = st.session_state.last_evaluation['all_results']
     selected_metrics = eval_data['selected_metrics']
     questions = eval_data['questions']
     responses = eval_data['responses']
@@ -128,21 +129,6 @@ def display_evaluation_results(config, db, eval_data):
     review_applied = st.session_state.get('review_applied', False)
     review_metric = st.session_state.get('review_metric_updated', None)
     review_threshold = st.session_state.get('review_threshold_used', 0.7)
-    review_updates = st.session_state.get('review_updated_samples', {})
-    
-    # Apply human reviews to results if available
-    if review_applied and review_metric and review_updates:
-        # Update the results dataframe for reviewed metric
-        results_df = all_results[review_metric].copy()
-        
-        for row_idx, update in review_updates.items():
-            if row_idx < len(results_df):
-                results_df.at[row_idx, 'human_score'] = update['human_score']
-                results_df.at[row_idx, 'human_label'] = update['human_label']
-                results_df.at[row_idx, 'human_reviewed'] = True
-        
-        # Replace in all_results
-        all_results[review_metric] = results_df
     
     # Summary metrics
     cols = st.columns(len(selected_metrics))
@@ -698,6 +684,21 @@ def show_review_summary(config, db, eval_data):
                 }
                 for row_index, change in changes.items()
             }
+            
+            # IMPORTANT: Update eval_data directly so PDF generation uses updated data
+            if 'last_evaluation' in st.session_state:
+                results_df = st.session_state.last_evaluation['all_results'][metric].copy()
+                
+                # Apply human reviews to the dataframe
+                for row_idx, update in st.session_state.review_updated_samples.items():
+                    if row_idx < len(results_df):
+                        results_df.at[row_idx, 'human_score'] = update['human_score']
+                        results_df.at[row_idx, 'human_label'] = update['human_label']
+                        results_df.at[row_idx, 'human_comment'] = update['human_comment']
+                        results_df.at[row_idx, 'human_reviewed'] = True
+                
+                # Update in session state so it persists
+                st.session_state.last_evaluation['all_results'][metric] = results_df
             
             # Clear review mode
             st.session_state.review_mode = None
