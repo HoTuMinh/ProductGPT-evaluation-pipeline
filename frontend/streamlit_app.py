@@ -279,19 +279,377 @@ def main():
         st.markdown("### 📊 Navigation")
         page = st.radio(
             "Select Page",
-            ["⚙️ Settings", "🔍 New Evaluation", "📈 Evaluation History"],
+            ["📖 Getting Started", "⚙️ Settings", "🔍 New Evaluation", "📈 Evaluation History"],
             label_visibility="collapsed"
         )
     
     # Main content
     st.markdown('<div class="main-header">🤖 ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
     
-    if page == "⚙️ Settings":
+    if page == "📖 Getting Started":
+        show_getting_started_page(config, db)
+    elif page == "⚙️ Settings":
         show_settings_page(config, db)
     elif page == "🔍 New Evaluation":
         show_evaluation_page(config, db)
     elif page == "📈 Evaluation History":
         show_history_page(db)
+
+def show_getting_started_page(config, db):
+    """Show getting started guide for first-time users"""
+    
+    st.markdown("### 📖 Getting Started Guide")
+    st.markdown("Welcome! This guide will help you get started with the ProductGPT Evaluation Pipeline.")
+    
+    # Create tabs for different sections
+    tabs = st.tabs([
+        "🚀 Quick Start",
+        "📄 CSV Format", 
+        "📊 Understanding Metrics",
+        "📑 Reading Reports",
+        "💾 Sample Dataset"
+    ])
+    
+    # Tab 1: Quick Start
+    with tabs[0]:
+        st.markdown("## 🚀 Quick Start")
+        st.markdown("""
+        Follow these 5 simple steps to run your first evaluation:
+        """)
+        
+        st.markdown("#### Step 1: Configure API")
+        st.markdown("""
+        1. Go to **⚙️ Settings** tab
+        2. Click on a provider button (🚀 Groq recommended for beginners)
+        3. Select a model
+        4. Enter your API key
+        5. Click **Save Configuration**
+        
+        💡 **Getting API Keys:**
+        - **Groq**: https://console.groq.com/keys (Free tier available)
+        - **Gemini**: https://makersuite.google.com/app/apikey
+        - **OpenAI**: https://platform.openai.com/api-keys
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("#### Step 2: Prepare Your Data")
+        st.markdown("""
+        Your CSV file must have these 3 columns:
+        - `question` - The question asked
+        - `response` - The AI's response
+        - `benchmark_answer` - The expected/correct answer
+        
+        📥 Download our sample CSV below to see the format!
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("#### Step 3: Upload & Configure")
+        st.markdown("""
+        1. Go to **🔍 New Evaluation** tab
+        2. Upload your CSV file
+        3. Verify column mappings are correct
+        4. Select which metrics to evaluate (start with **Accuracy**)
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("#### Step 4: Run Evaluation")
+        st.markdown("""
+        1. Click **🚀 Run Evaluation**
+        2. Wait for processing (typically 1-2 seconds per sample)
+        3. View results in the tabs
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("#### Step 5: Review & Export")
+        st.markdown("""
+        1. Check the **Summary** metrics
+        2. Review individual results in each metric tab
+        3. Generate a **PDF Report** for sharing
+        4. Download results as **CSV** for further analysis
+        """)
+    
+    # Tab 2: CSV Format
+    with tabs[1]:
+        st.markdown("## 📄 CSV Format Requirements")
+        
+        st.markdown("### Required Columns")
+        st.markdown("""
+        Your CSV file **must** contain these 3 columns:
+        
+        | Column Name | Description | Example |
+        |------------|-------------|---------|
+        | `question` | The question asked to the AI | "What is the premium plan price?" |
+        | `response` | The AI's actual response | "$99 per month" |
+        | `benchmark_answer` | The correct/expected answer | "$149 per month" |
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("### File Requirements")
+        st.markdown("""
+        - **Format**: CSV (comma-separated values)
+        - **Encoding**: UTF-8
+        - **Size**: Up to 10,000 rows recommended
+        - **File size**: No hard limit, but larger files take longer to process
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("### Example CSV Structure")
+        
+        # Show sample data preview
+        sample_path = Path(__file__).parent.parent / "data" / "uploads" / "productgpt_accuracy.csv"
+        
+        if sample_path.exists():
+            try:
+                df_sample = pd.read_csv(sample_path)
+                st.markdown("**Preview of sample file:**")
+                st.dataframe(df_sample.head(3), use_container_width=True)
+                
+                st.info(f"📊 This sample contains {len(df_sample)} rows")
+            except Exception as e:
+                st.warning(f"Could not load sample file: {e}")
+        
+        st.markdown("---")
+        
+        st.markdown("### Common Issues")
+        st.markdown("""
+        ❌ **Column names don't match**
+        - Make sure columns are named exactly: `question`, `response`, `benchmark_answer`
+        - Column names are case-sensitive
+        
+        ❌ **Wrong file format**
+        - Save as CSV, not Excel (.xlsx) or Google Sheets
+        - Use "Save As" → "CSV (Comma delimited)"
+        
+        ❌ **Encoding issues**
+        - Save with UTF-8 encoding
+        - Avoid special characters or use Unicode properly
+        """)
+    
+    # Tab 3: Understanding Metrics
+    with tabs[2]:
+        st.markdown("## 📊 Understanding Metrics")
+        
+        st.markdown("### Available Metrics")
+        
+        st.markdown("#### 1. Accuracy")
+        st.markdown("""
+        **What it measures:** Does the response correctly answer the question compared to the benchmark?
+        
+        **Scoring:**
+        - `1.0` = Perfect match, completely correct
+        - `0.7-0.9` = Mostly correct, minor differences
+        - `0.4-0.6` = Partially correct
+        - `0.0-0.3` = Incorrect or missing key information
+        
+        **Use when:** Checking if the AI gives factually correct answers
+        
+        **Example:**
+        - Q: "What's the price?"
+        - Response: "$149/month"
+        - Benchmark: "$149 per month"
+        - Score: `0.95` (correct content, slightly different wording)
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("#### 2. Comprehensiveness")
+        st.markdown("""
+        **What it measures:** Does the response cover all important points from the benchmark?
+        
+        **Scoring:**
+        - `1.0` = Covers all key points thoroughly
+        - `0.7-0.9` = Covers most key points
+        - `0.4-0.6` = Missing some important details
+        - `0.0-0.3` = Incomplete or superficial
+        
+        **Use when:** Checking if the AI provides complete answers
+        
+        **Example:**
+        - Q: "What features are included?"
+        - Benchmark: "SSO, API access, and custom domains"
+        - Response: "Includes SSO and API access"
+        - Score: `0.7` (missing custom domains)
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("#### 3. Faithfulness")
+        st.markdown("""
+        **What it measures:** Is the response consistent with the benchmark (no added/wrong info)?
+        
+        **Scoring:**
+        - `1.0` = Fully faithful, no incorrect additions
+        - `0.7-0.9` = Mostly faithful, minor extra details
+        - `0.4-0.6` = Some contradictions or wrong info
+        - `0.0-0.3` = Contains significant misinformation
+        
+        **Use when:** Checking if the AI hallucinates or adds false information
+        
+        **Example:**
+        - Benchmark: "Available in US only"
+        - Response: "Available in US and Canada"
+        - Score: `0.3` (added false information about Canada)
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("### Choosing Metrics")
+        st.markdown("""
+        **Start simple:**
+        - Begin with just **Accuracy** to verify correctness
+        - Add **Comprehensiveness** if answers seem too brief
+        - Add **Faithfulness** if concerned about hallucinations
+        
+        **All three metrics:**
+        - Use when doing comprehensive quality checks
+        - Takes 3x longer but gives complete picture
+        - Recommended for production releases
+        """)
+    
+    # Tab 4: Reading Reports
+    with tabs[3]:
+        st.markdown("## 📑 Reading Reports")
+        
+        st.markdown("### Summary Metrics")
+        st.markdown("""
+        At the top of your results, you'll see summary cards:
+        
+        ```
+        Accuracy          Comprehensiveness
+        0.550            0.780
+        ▲ 60% pass rate  ▲ 80% pass rate
+        ```
+        
+        **How to interpret:**
+        - **Score (0-1)**: Average across all samples
+        - **Pass Rate**: % of samples scoring ≥ 0.7
+        - Higher is better for both
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("### Detailed Results Tables")
+        st.markdown("""
+        Each metric tab shows a table with:
+        - **Question**: Original question
+        - **Score**: Individual score (0-1)
+        - **Label**: Positive (≥0.7) or Negative (<0.7)
+        - **Reasoning**: Why the LLM gave this score
+        
+        **Tips:**
+        - Sort by score to see best/worst
+        - Read reasoning for failed samples
+        - Download CSV for further analysis
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("### PDF Reports")
+        st.markdown("""
+        Generated reports include:
+        
+        **Page 1: Overview**
+        - Run information (date, user, file)
+        - Results summary table
+        - Metric comparison chart
+        
+        **Page 2+: Per Metric**
+        - Score distribution
+        - Label distribution (positive/negative)
+        - Top 3 lowest scoring samples with full details
+        
+        **Use reports for:**
+        - Sharing with team members
+        - Documenting evaluation results
+        - Comparing different model versions
+        """)
+        
+        st.markdown("---")
+        
+        st.markdown("### What's a "Good" Score?")
+        st.markdown("""
+        | Score Range | Interpretation | Action |
+        |------------|----------------|--------|
+        | 0.9 - 1.0 | Excellent | Production ready |
+        | 0.7 - 0.9 | Good | Minor improvements |
+        | 0.5 - 0.7 | Fair | Needs work |
+        | 0.0 - 0.5 | Poor | Major issues |
+        
+        **Context matters:**
+        - Critical systems (finance, healthcare): aim for 0.9+
+        - General chatbots: 0.7+ acceptable
+        - Experimental features: 0.5+ to start
+        """)
+    
+    # Tab 5: Sample Dataset
+    with tabs[4]:
+        st.markdown("## 💾 Sample Dataset")
+        
+        st.markdown("""
+        Download our sample CSV to see the correct format and try your first evaluation!
+        
+        This sample contains 5 questions about a product (ProductGPT) with responses and benchmark answers.
+        """)
+        
+        # Load and show sample
+        sample_path = Path(__file__).parent.parent / "data" / "uploads" / "productgpt_accuracy.csv"
+        
+        if sample_path.exists():
+            try:
+                df_sample = pd.read_csv(sample_path)
+                
+                # Preview
+                st.markdown("### Preview")
+                st.dataframe(df_sample, use_container_width=True)
+                
+                st.markdown("---")
+                
+                # Download button
+                st.markdown("### Download")
+                
+                csv_data = df_sample.to_csv(index=False).encode('utf-8')
+                
+                st.download_button(
+                    label="📥 Download Sample CSV",
+                    data=csv_data,
+                    file_name="sample_evaluation.csv",
+                    mime="text/csv",
+                    type="primary",
+                    use_container_width=True
+                )
+                
+                st.success("✅ Click the button above to download the sample file")
+                
+                st.markdown("---")
+                
+                st.markdown("### Next Steps")
+                st.markdown("""
+                1. Download the sample CSV
+                2. Go to **⚙️ Settings** and configure your API
+                3. Go to **🔍 New Evaluation** and upload the sample
+                4. Select **Accuracy** metric
+                5. Click **Run Evaluation**
+                6. Review your first results!
+                """)
+                
+            except Exception as e:
+                st.error(f"Error loading sample file: {e}")
+                st.info("Please make sure the file exists at: data/uploads/productgpt_accuracy.csv")
+        else:
+            st.warning("⚠️ Sample file not found")
+            st.info(f"Expected location: {sample_path}")
+            st.markdown("""
+            To add the sample file:
+            1. Place your CSV at: `data/uploads/productgpt_accuracy.csv`
+            2. Commit to GitHub
+            3. Redeploy the app
+            """)
 
 def show_settings_page(config, db):
     """Show settings page for API configuration"""
