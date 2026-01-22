@@ -331,16 +331,18 @@ class ReportGenerator:
                 question = row.get('question', 'N/A')
                 response = row.get('response', 'N/A')
                 benchmark = row.get('benchmark', row.get('benchmark_answer', 'N/A'))
-                reasoning = row.get('reasoning', 'N/A')
+                reasoning = row.get('reasoning', row.get('llm_reasoning', 'N/A'))
                 
                 # Check for human review
-                has_human_review = row.get('human_reviewed', False) or row.get('human_score') is not None
+                has_human_review = row.get('human_reviewed', False)
+                llm_score = row.get('llm_score', row.get('score'))
+                final_score = row.get('score')
                 
                 # Build header with score info
-                if has_human_review:
-                    header = f"<b>Sample #{idx}</b> (LLM Score: {row['score']:.3f} → Human Score: {row.get('human_score', 'N/A'):.3f})<br/>"
+                if has_human_review and 'llm_score' in row:
+                    header = f"<b>Sample #{idx}</b> (LLM: {llm_score:.3f} → Final: {final_score:.3f} ✓)<br/>"
                 else:
-                    header = f"<b>Sample #{idx}</b> (Score: {row['score']:.3f})<br/>"
+                    header = f"<b>Sample #{idx}</b> (Score: {final_score:.3f})<br/>"
                 
                 sample_text = f"""
                 {header}
@@ -360,15 +362,13 @@ class ReportGenerator:
                 
                 # Add human review section if available
                 if has_human_review:
-                    human_label = row.get('human_label', 'N/A')
-                    human_comment = row.get('human_comment', '')
-                    sample_text += f"""
-                    <br/>
-                    <b>Human Review:</b><br/>
-                    Label: {human_label}<br/>
-                    """
-                    if human_comment:
-                        sample_text += f"Comment: {str(human_comment)[:200]}{'...' if len(str(human_comment)) > 200 else ''}<br/>"
+                    human_reasoning = row.get('human_reasoning', '')
+                    if human_reasoning:
+                        sample_text += f"""
+                        <br/>
+                        <b>Human Review:</b><br/>
+                        {str(human_reasoning)[:200]}{'...' if len(str(human_reasoning)) > 200 else ''}<br/>
+                        """
                 
                 story.append(Paragraph(sample_text, self.styles['Normal']))
                 story.append(Spacer(1, 0.15*inch))
