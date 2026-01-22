@@ -95,13 +95,13 @@ class LLMJudge:
    - 0.1-0.3: Largely inaccurate
    - 0.0: Completely inaccurate
 
-3. Provide a label: "positive" (score >= 0.7) or "negative" (score < 0.7)
+3. Provide a label: "pass" (score >= 0.7) or "fail" (score < 0.7)
 4. Give detailed reasoning explaining your evaluation
 
 **Output Format** (JSON only, no markdown):
 {{
     "score": 0.85,
-    "label": "positive",
+    "label": "pass",
     "reasoning": "The response accurately provides... However, there is a minor discrepancy..."
 }}"""
 
@@ -141,13 +141,13 @@ class LLMJudge:
    - 0.1-0.3: Incomplete, many missing points
    - 0.0: Not comprehensive at all
 
-4. Provide a label: "positive" (score >= 0.6) or "negative" (score < 0.6)
+4. Provide a label: "pass" (score >= 0.6) or "fail" (score < 0.6)
 5. Give detailed reasoning explaining what is covered and what is missing
 
 **Output Format** (JSON only, no markdown):
 {{
     "score": 0.75,
-    "label": "positive",
+    "label": "pass",
     "reasoning": "The response covers key points A, B, and C comprehensively. However, it lacks detail on..."
 }}"""
 
@@ -187,13 +187,13 @@ class LLMJudge:
    - 0.1-0.3: Largely unfaithful, many unsupported claims
    - 0.0: Completely unfaithful, mostly hallucinated
 
-4. Provide a label: "positive" (score >= 0.7) or "negative" (score < 0.7)
+4. Provide a label: "pass" (score >= 0.7) or "fail" (score < 0.7)
 5. Give detailed reasoning explaining which parts are faithful and which are not
 
 **Output Format** (JSON only, no markdown):
 {{
     "score": 0.90,
-    "label": "positive",
+    "label": "pass",
     "reasoning": "The response is faithful to the source. All claims about X, Y are verifiable. The only minor issue is..."
 }}"""
 
@@ -216,7 +216,7 @@ class LLMJudge:
             # Return default structure if parsing fails
             return {
                 "score": 0.0,
-                "label": "negative",
+                "label": "fail",
                 "reasoning": f"Error parsing LLM response: {str(e)}"
             }
     
