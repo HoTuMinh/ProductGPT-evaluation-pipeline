@@ -230,7 +230,7 @@ class ReportGenerator:
         summary_data = [['Metric', 'Score', 'Pass Rate', 'Samples']]
         for metric, results_df in all_results.items():
             avg_score = results_df['score'].mean()
-            pass_count = (results_df['label'] == 'positive').sum()
+            pass_count = (results_df['label'] == 'pass').sum()
             pass_rate = pass_count / len(results_df) * 100
             summary_data.append([
                 metric.capitalize(),
@@ -269,7 +269,7 @@ class ReportGenerator:
             story.append(Paragraph(f"Detailed Results: {metric.capitalize()}", self.heading_style))
             
             # Basic statistics
-            pass_count = (results_df['label'] == 'positive').sum()
+            pass_count = (results_df['label'] == 'pass').sum()
             pass_rate = pass_count / len(results_df) * 100
             
             stats_text = f"""
