@@ -124,19 +124,66 @@ def display_evaluation_results(config, db, eval_data):
     responses = eval_data['responses']
     benchmarks = eval_data['benchmarks']
     
+    # Check if human reviews have been applied
+    review_applied = st.session_state.get('review_applied', False)
+    review_metric = st.session_state.get('review_metric_updated', None)
+    review_threshold = st.session_state.get('review_threshold_used', 0.7)
+    review_updates = st.session_state.get('review_updated_samples', {})
+    
+    # Apply human reviews to results if available
+    if review_applied and review_metric and review_updates:
+        # Update the results dataframe for reviewed metric
+        results_df = all_results[review_metric].copy()
+        
+        for row_idx, update in review_updates.items():
+            if row_idx < len(results_df):
+                results_df.at[row_idx, 'human_score'] = update['human_score']
+                results_df.at[row_idx, 'human_label'] = update['human_label']
+                results_df.at[row_idx, 'human_reviewed'] = True
+        
+        # Replace in all_results
+        all_results[review_metric] = results_df
+    
     # Summary metrics
     cols = st.columns(len(selected_metrics))
     for idx, (metric, results_df) in enumerate(all_results.items()):
         with cols[idx]:
-            avg_score = results_df['score'].mean()
-            pass_count = (results_df['label'] == 'positive').sum()
-            pass_rate = pass_count / len(results_df) * 100
+            # Check if this metric has human reviews
+            has_human_reviews = 'human_score' in results_df.columns and results_df.get('human_reviewed', False).any()
             
-            st.metric(
-                label=f"{metric.capitalize()}",
-                value=f"{avg_score:.3f}",
-                delta=f"{pass_rate:.1f}% pass rate"
-            )
+            if has_human_reviews and review_applied and metric == review_metric:
+                # Use human scores where available, LLM scores otherwise
+                effective_scores = results_df.apply(
+                    lambda row: row['human_score'] if row.get('human_reviewed', False) else row['score'],
+                    axis=1
+                )
+                avg_score = effective_scores.mean()
+                
+                # Calculate pass rate using effective scores
+                pass_count = sum(1 for score in effective_scores if score >= review_threshold)
+                pass_rate = pass_count / len(results_df) * 100
+                
+                # Show original for comparison
+                original_avg = results_df['score'].mean()
+                original_pass_rate = (results_df['score'] >= review_threshold).sum() / len(results_df) * 100
+                
+                st.metric(
+                    label=f"{metric.capitalize()} (Reviewed)",
+                    value=f"{avg_score:.3f}",
+                    delta=f"{pass_rate:.1f}% pass rate",
+                    help=f"Original: {original_avg:.3f} avg, {original_pass_rate:.1f}% pass rate"
+                )
+            else:
+                # Standard LLM-only display
+                avg_score = results_df['score'].mean()
+                pass_count = (results_df['label'] == 'positive').sum()
+                pass_rate = pass_count / len(results_df) * 100
+                
+                st.metric(
+                    label=f"{metric.capitalize()}",
+                    value=f"{avg_score:.3f}",
+                    delta=f"{pass_rate:.1f}% pass rate"
+                )
     
     # Review button
     st.markdown("---")
@@ -161,16 +208,34 @@ def display_evaluation_results(config, db, eval_data):
             results_df['response'] = responses
             results_df['benchmark'] = benchmarks
             
-            st.dataframe(
-                results_df[['question', 'score', 'label', 'reasoning']],
-                use_container_width=True,
-                height=400
-            )
+            # Check if has human reviews
+            has_reviews = 'human_score' in results_df.columns and results_df.get('human_reviewed', False).any()
             
-            # Download button
+            if has_reviews:
+                # Show both LLM and Human columns
+                display_cols = ['question', 'score', 'human_score', 'label', 'human_label', 'reasoning', 'human_comment']
+                # Only include columns that exist
+                display_cols = [col for col in display_cols if col in results_df.columns]
+                
+                st.info("🔍 This metric has been reviewed. Human scores and labels are shown alongside LLM results.")
+                st.dataframe(
+                    results_df[display_cols],
+                    use_container_width=True,
+                    height=400
+                )
+            else:
+                # Standard display
+                st.dataframe(
+                    results_df[['question', 'score', 'label', 'reasoning']],
+                    use_container_width=True,
+                    height=400
+                )
+            
+            # Download button - include all columns
             csv = results_df.to_csv(index=False)
+            download_label = f"📥 Download {metric} Results" + (" (with Human Reviews)" if has_reviews else " (CSV)")
             st.download_button(
-                label=f"📥 Download {metric} Results (CSV)",
+                label=download_label,
                 data=csv,
                 file_name=f"{metric}_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                 mime="text/csv",
@@ -219,14 +284,22 @@ def display_evaluation_results(config, db, eval_data):
                         # Ensure directory exists
                         os.makedirs("data/results", exist_ok=True)
                         
-                        # Add original data to results for PDF
+                        # Add original data to results for PDF (use updated all_results which may have human reviews)
                         enriched_results = {}
-                        for metric, results_df in eval_data['all_results'].items():
+                        for metric, results_df in all_results.items():  # Use all_results from above (already has human reviews if applied)
                             df_copy = results_df.copy()
-                            df_copy['question'] = eval_data['questions']
-                            df_copy['response'] = eval_data['responses']
-                            df_copy['benchmark'] = eval_data['benchmarks']
+                            # Ensure question/response/benchmark are included
+                            if 'question' not in df_copy.columns:
+                                df_copy['question'] = eval_data['questions']
+                            if 'response' not in df_copy.columns:
+                                df_copy['response'] = eval_data['responses']
+                            if 'benchmark' not in df_copy.columns:
+                                df_copy['benchmark'] = eval_data['benchmarks']
                             enriched_results[metric] = df_copy
+                        
+                        # Add note about human reviews if present
+                        if review_applied and review_metric:
+                            run_info['human_reviews'] = f"Human reviews applied to {review_metric} (threshold: {review_threshold})"
                         
                         report_gen.generate_pdf_report(
                             output_path=output_path,
@@ -591,17 +664,48 @@ def show_review_summary(config, db, eval_data):
     # Action buttons
     col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button("🔙 Back to Results", type="primary", use_container_width=True):
-            # Clear review state
+        if st.button("❌ Discard All Changes", use_container_width=True):
+            # Clear all human reviews from database
+            for row_index in changes.keys():
+                # Find sample with this row_index
+                sample = samples[samples.get('row_index', samples.index) == row_index]
+                if not sample.empty and 'id' in sample.iloc[0]:
+                    db.clear_human_review(int(sample.iloc[0]['id']))
+            
+            # Clear session state
             st.session_state.review_mode = None
-            for key in ['review_threshold', 'review_samples', 'review_current_index', 'review_changes', 'review_metric']:
+            for key in ['review_threshold', 'review_samples', 'review_current_index', 'review_changes', 'review_metric', 'review_applied']:
                 if key in st.session_state:
                     del st.session_state[key]
+            
+            st.warning("⚠️ All changes discarded")
+            time.sleep(1)
             st.rerun()
     
     with col2:
-        if st.button("📊 View Updated Stats", use_container_width=True):
-            st.info("💡 Updated statistics are now reflected in the database. Refresh the evaluation history to see changes.")
+        if st.button("💾 Apply Changes", type="primary", use_container_width=True):
+            # Mark as applied - this will update results display
+            st.session_state.review_applied = True
+            st.session_state.review_metric_updated = metric
+            st.session_state.review_threshold_used = threshold
+            
+            # Store which samples were updated for results merging
+            st.session_state.review_updated_samples = {
+                row_index: {
+                    'human_score': change['score'],
+                    'human_label': change['label'],
+                    'human_comment': change['comment']
+                }
+                for row_index, change in changes.items()
+            }
+            
+            # Clear review mode
+            st.session_state.review_mode = None
+            
+            st.success(f"✅ Applied {reviewed_count} reviews to {metric} results!")
+            st.balloons()
+            time.sleep(1.5)
+            st.rerun()
 
 
 def main():
