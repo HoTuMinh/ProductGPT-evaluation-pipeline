@@ -219,3 +219,69 @@ class Database:
             return [result.to_dict() for result in results]
         finally:
             session.close()
+    
+    def update_human_review(self, result_id: int, human_score: float, human_label: str, human_comment: str = None):
+        """Update human review for a specific result"""
+        session = self.get_session()
+        try:
+            result = session.query(EvaluationResult).filter_by(id=result_id).first()
+            if result:
+                result.human_reviewed = 1
+                result.human_score = human_score
+                result.human_label = human_label
+                result.human_comment = human_comment
+                result.review_timestamp = datetime.utcnow()
+                session.commit()
+                return True
+            return False
+        finally:
+            session.close()
+    
+    def get_review_statistics(self, run_id: int, metric_name: str, threshold: float = 0.7):
+        """Get review statistics for a run and metric"""
+        session = self.get_session()
+        try:
+            results = session.query(EvaluationResult).filter_by(
+                run_id=run_id,
+                metric_name=metric_name
+            ).all()
+            
+            total = len(results)
+            reviewed = sum(1 for r in results if r.human_reviewed)
+            
+            # Original stats (LLM)
+            llm_passes = sum(1 for r in results if r.score >= threshold)
+            llm_pass_rate = (llm_passes / total * 100) if total > 0 else 0
+            
+            # Human review stats
+            human_passes = 0
+            agreements = 0
+            
+            for r in results:
+                if r.human_reviewed:
+                    # Use human score if reviewed
+                    if r.human_score >= threshold:
+                        human_passes += 1
+                    # Check agreement
+                    llm_pass = r.score >= threshold
+                    human_pass = r.human_score >= threshold
+                    if llm_pass == human_pass:
+                        agreements += 1
+                else:
+                    # Use LLM score if not reviewed
+                    if r.score >= threshold:
+                        human_passes += 1
+            
+            human_pass_rate = (human_passes / total * 100) if total > 0 else 0
+            agreement_rate = (agreements / reviewed * 100) if reviewed > 0 else 0
+            
+            return {
+                'total_samples': total,
+                'reviewed_count': reviewed,
+                'llm_pass_rate': llm_pass_rate,
+                'human_pass_rate': human_pass_rate,
+                'agreement_rate': agreement_rate,
+                'pass_rate_change': human_pass_rate - llm_pass_rate
+            }
+        finally:
+            session.close()
