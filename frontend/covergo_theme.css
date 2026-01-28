@@ -568,6 +568,11 @@ div[data-testid="stAlert"],
 
 /* ===== Selectbox / Multiselect ===== */
 /* Main selectbox container */
+.stSelectbox,
+.stMultiSelect {
+    color: var(--covergo-white) !important;
+}
+
 .stSelectbox > div > div,
 .stMultiSelect > div > div {
     background-color: var(--covergo-primary) !important;
@@ -577,45 +582,41 @@ div[data-testid="stAlert"],
     color: var(--covergo-white) !important;
 }
 
-/* Selected value display */
+/* FORCE WHITE TEXT on selected value - use wildcard */
+.stSelectbox *,
+.stMultiSelect * {
+    color: var(--covergo-white) !important;
+}
+
+/* Selected value display container */
 .stSelectbox > div > div > div,
 .stMultiSelect > div > div > div,
-.stSelectbox div[data-baseweb="select"] > div,
-.stSelectbox div[data-baseweb="select"] span,
-.stSelectbox div[data-baseweb="select"] p {
+.stSelectbox div[data-baseweb="select"],
+.stSelectbox div[data-baseweb="select"] > div {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
 }
 
 /* Dropdown popover container */
 div[data-baseweb="popover"],
+div[data-baseweb="popover"] *,
 ul[role="listbox"],
-div[data-baseweb="menu"] {
+ul[role="listbox"] *,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] * {
     background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
 }
 
 /* Dropdown options */
 li[role="option"],
-div[data-baseweb="menu"] li,
-ul[role="listbox"] li {
+li[role="option"]:hover {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
 }
 
-/* Dropdown option hover */
-li[role="option"]:hover,
-div[data-baseweb="menu"] li:hover,
-ul[role="listbox"] li:hover {
+li[role="option"]:hover {
     background-color: var(--covergo-primary-light) !important;
-    color: var(--covergo-white) !important;
-}
-
-/* Dropdown option text */
-li[role="option"] span,
-li[role="option"] div,
-div[data-baseweb="menu"] li span,
-div[data-baseweb="menu"] li div {
-    color: var(--covergo-white) !important;
 }
 
 .stSelectbox > div > div:focus-within,
@@ -625,7 +626,8 @@ div[data-baseweb="menu"] li div {
 }
 
 /* Multiselect tags */
-.stMultiSelect span[data-baseweb="tag"] {
+.stMultiSelect span[data-baseweb="tag"],
+.stMultiSelect span[data-baseweb="tag"] * {
     background-color: var(--covergo-error) !important;
     color: var(--covergo-white) !important;
 }
@@ -637,6 +639,48 @@ div[data-baseweb="menu"] li div {
 
 .stSlider > div > div > div > div {
     background-color: var(--covergo-primary);
+}
+
+/* Slider value text */
+.stSlider > div > div[data-testid="stTickBar"] > div {
+    color: var(--covergo-white) !important;
+}
+
+.stSlider > div > div > div > div > div {
+    color: var(--covergo-white) !important;
+}
+
+/* Slider current value display */
+.stSlider [data-testid="stMarkdownContainer"] {
+    color: var(--covergo-white) !important;
+}
+
+.stSlider [data-testid="stMarkdownContainer"] p {
+    color: var(--covergo-white) !important;
+}
+
+/* Slider value label */
+.stSlider > div > div > div > div > div {
+    color: var(--covergo-white) !important;
+}
+
+.stSlider [data-testid="stTickBar"] div {
+    color: var(--covergo-white) !important;
+}
+
+.stSlider [data-testid="stThumbValue"] {
+    color: var(--covergo-white) !important;
+    background-color: var(--covergo-primary) !important;
+}
+
+/* Slider labels */
+.stSlider label {
+    color: var(--covergo-gray-900) !important;
+}
+
+/* Slider current value display */
+.stSlider > div > div[data-testid="stTickBar"] ~ div {
+    color: var(--covergo-white) !important;
 }
 
 /* ===== Checkbox / Radio ===== */
