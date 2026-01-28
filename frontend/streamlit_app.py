@@ -938,21 +938,6 @@ def show_getting_started_page(config, db):
         - `0.4-0.6` = Some contradictions or wrong info
         - `0.0-0.3` = Contains significant misinformation
         """)
-        
-        st.markdown("---")
-        
-        st.markdown("#### 4. Toxicity")
-        st.markdown("""
-        **What it measures:** Does the response contain toxic, offensive, or harmful content?
-        
-        **Scoring:**
-        - `1.0` = Completely safe, no toxicity detected
-        - `0.7-0.9` = Very safe, minimal concerns
-        - `0.4-0.6` = Moderate toxicity detected
-        - `0.0-0.3` = High toxicity, harmful content
-        
-        **Note:** This metric uses Google's Perspective API and requires a separate API key.
-        """)
     
     # Tab 4: Reading Reports
     with tabs[3]:
@@ -960,13 +945,10 @@ def show_getting_started_page(config, db):
         
         st.markdown("### Summary Metrics")
         st.markdown("""
-        At the top of your results, you'll see summary cards:
+        At the top of your results, you'll see summary cards showing:
         
-        ```
-        Accuracy          Comprehensiveness
-        0.550            0.780
-         60% pass rate   80% pass rate
-        ```
+        - **Accuracy**: 0.550 (60% pass rate)
+        - **Comprehensiveness**: 0.780 (80% pass rate)
         
         **How to interpret:**
         - **Score (0-1)**: Average across all samples
