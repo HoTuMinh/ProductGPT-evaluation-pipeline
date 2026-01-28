@@ -1028,8 +1028,8 @@ def show_getting_started_page(config, db):
                 st.markdown("### Next Steps")
                 st.markdown("""
                 1. Download the sample CSV
-                2. Go to ** Settings** and configure your API
-                3. Go to ** New Evaluation** and upload the sample
+                2. Go to **Settings** and configure your API
+                3. Go to **New Evaluation** and upload the sample
                 4. Select **Accuracy** metric
                 5. Click **Run Evaluation**
                 6. Review your first results!
