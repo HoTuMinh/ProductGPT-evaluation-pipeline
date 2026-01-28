@@ -21,7 +21,7 @@ from app.reports import ReportGenerator
 # Page config
 st.set_page_config(
     page_title="ProductGPT Evaluation Pipeline",
-    page_icon="🤖",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -34,7 +34,7 @@ def load_css():
         with open(css_file, 'r', encoding='utf-8') as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     except FileNotFoundError:
-        st.warning("⚠️ CSS theme file not found. Using default styling.")
+        st.warning(" CSS theme file not found. Using default styling.")
 
 # Apply CSS theme
 load_css()
@@ -60,8 +60,7 @@ def check_authentication():
         st.session_state.authenticated = False
     
     if not st.session_state.authenticated:
-        st.markdown('<div class="main-header">🔐 ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
-        st.markdown("### Please Login")
+        st.markdown('<div class="main-header"> ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
         
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
@@ -96,7 +95,7 @@ def display_evaluation_results(config, db, eval_data):
             show_review_summary(config, db, eval_data)
             return
     
-    st.markdown("### 📊 Evaluation Results")
+    st.markdown("###  Evaluation Results")
     
     # Use session state data which gets updated by Apply Changes
     all_results = st.session_state.last_evaluation['all_results']
@@ -130,7 +129,7 @@ def display_evaluation_results(config, db, eval_data):
                 original_pass_rate = (results_df['llm_score'] >= review_threshold).sum() / len(results_df) * 100
                 
                 st.metric(
-                    label=f"{metric.capitalize()} ✓",
+                    label=f"{metric.capitalize()} ",
                     value=f"{avg_score:.3f}",
                     delta=f"{pass_rate:.1f}% pass rate",
                     help=f"Original LLM: {original_avg:.3f} avg, {original_pass_rate:.1f}% pass rate"
@@ -147,7 +146,7 @@ def display_evaluation_results(config, db, eval_data):
     st.markdown("---")
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
-        if st.button("👁️ Review Samples", type="primary", use_container_width=True):
+        if st.button(" Review Samples", type="primary", use_container_width=True):
             st.session_state.review_mode = 'config'
             st.session_state.review_metric = list(selected_metrics)[0]  # Default to first metric
             st.rerun()
@@ -155,7 +154,7 @@ def display_evaluation_results(config, db, eval_data):
     st.markdown("---")
     
     # Detailed results tabs
-    tabs = st.tabs([f"📋 {m.capitalize()}" for m in selected_metrics] + ["📄 Generate Report"])
+    tabs = st.tabs([f" {m.capitalize()}" for m in selected_metrics] + [" Generate Report"])
     
     for idx, metric in enumerate(selected_metrics):
         with tabs[idx]:
@@ -175,7 +174,7 @@ def display_evaluation_results(config, db, eval_data):
                 # Only include columns that exist
                 display_cols = [col for col in display_cols if col in results_df.columns]
                 
-                st.info("🔍 This metric has been reviewed. 'score' column shows final scores (human overrides where reviewed).")
+                st.info(" This metric has been reviewed. 'score' column shows final scores (human overrides where reviewed).")
                 
                 # Rename columns for clarity in display
                 display_df = results_df[display_cols].copy()
@@ -201,7 +200,7 @@ def display_evaluation_results(config, db, eval_data):
             
             # Download button - CSV will have all columns including llm_score, score, human_reasoning
             csv = results_df.to_csv(index=False)
-            download_label = f"📥 Download {metric} Results" + (" (with Human Reviews)" if has_reviews else " (CSV)")
+            download_label = f" Download {metric} Results" + (" (with Human Reviews)" if has_reviews else " (CSV)")
             st.download_button(
                 label=download_label,
                 data=csv,
@@ -212,12 +211,12 @@ def display_evaluation_results(config, db, eval_data):
     
     # Report generation tab
     with tabs[-1]:
-        st.markdown("### 📄 Generate Comprehensive Report")
+        st.markdown("###  Generate Comprehensive Report")
         st.info("Generate a detailed PDF report with visualizations and analysis.")
         
         # Use form to prevent rerun
         with st.form("pdf_generation_form"):
-            submit_button = st.form_submit_button("📑 Generate PDF Report", type="primary")
+            submit_button = st.form_submit_button(" Generate PDF Report", type="primary")
             
             if submit_button:
                 with st.spinner("Generating report..."):
@@ -276,13 +275,13 @@ def display_evaluation_results(config, db, eval_data):
                             api_stats=api_stats
                         )
                         
-                        st.success("✅ Report generated successfully!")
+                        st.success(" Report generated successfully!")
                         
                         # Store PDF path in session state
                         st.session_state.last_pdf_path = output_path
                         
                     except Exception as e:
-                        st.error(f"❌ Error generating report: {str(e)}")
+                        st.error(f" Error generating report: {str(e)}")
                         import traceback
                         st.code(traceback.format_exc())
         
@@ -292,7 +291,7 @@ def display_evaluation_results(config, db, eval_data):
             with open(st.session_state.last_pdf_path, 'rb') as f:
                 pdf_data = f.read()
                 st.download_button(
-                    label="📥 Download PDF Report",
+                    label=" Download PDF Report",
                     data=pdf_data,
                     file_name=f"evaluation_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
                     mime="application/pdf",
@@ -303,7 +302,7 @@ def display_evaluation_results(config, db, eval_data):
 def show_review_config(config, db, eval_data):
     """Show review configuration page"""
     
-    st.markdown("### 👁️ Review Configuration")
+    st.markdown("###  Review Configuration")
     st.markdown("Configure your review settings before starting.")
     
     st.markdown("---")
@@ -366,7 +365,7 @@ def show_review_config(config, db, eval_data):
     else:
         samples_to_review = results_df
     
-    st.info(f"📝 You will review **{len(samples_to_review)}** samples")
+    st.info(f" You will review **{len(samples_to_review)}** samples")
     
     # Current pass rate
     current_pass_rate = (len(above_threshold) / len(results_df) * 100) if len(results_df) > 0 else 0
@@ -377,12 +376,12 @@ def show_review_config(config, db, eval_data):
     # Action buttons
     col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button("❌ Cancel", use_container_width=True):
+        if st.button(" Cancel", use_container_width=True):
             st.session_state.review_mode = None
             st.rerun()
     
     with col2:
-        if st.button("▶️ Start Review", type="primary", use_container_width=True):
+        if st.button(" Start Review", type="primary", use_container_width=True):
             # Store review config in session state
             st.session_state.review_threshold = threshold
             # IMPORTANT: Keep original index so we can map back to full results_df
@@ -420,7 +419,7 @@ def show_review_interface(config, db, eval_data):
     st.markdown("---")
     
     # LLM Judgment section
-    st.markdown("#### 🤖 LLM Judgment")
+    st.markdown("####  LLM Judgment")
     
     llm_score = sample['score']
     llm_label = "Pass" if llm_score >= threshold else "Fail"
@@ -428,33 +427,33 @@ def show_review_interface(config, db, eval_data):
     col1, col2 = st.columns([2, 1])
     with col1:
         if llm_score >= threshold:
-            st.success(f"✅ **{llm_label}** (Score: {llm_score:.3f} ≥ Threshold: {threshold})")
+            st.success(f" **{llm_label}** (Score: {llm_score:.3f} ≥ Threshold: {threshold})")
         else:
-            st.error(f"❌ **{llm_label}** (Score: {llm_score:.3f} < Threshold: {threshold})")
+            st.error(f" **{llm_label}** (Score: {llm_score:.3f} < Threshold: {threshold})")
     with col2:
         st.metric("LLM Score", f"{llm_score:.3f}")
     
     st.markdown("---")
     
     # Sample content
-    st.markdown("#### 📝 Sample Content")
+    st.markdown("####  Sample Content")
     
-    with st.expander("📋 Question", expanded=True):
+    with st.expander(" Question", expanded=True):
         st.write(sample['question'])
     
-    with st.expander("💬 Response", expanded=True):
+    with st.expander(" Response", expanded=True):
         st.write(sample['response'])
     
-    with st.expander("✅ Benchmark Answer", expanded=True):
+    with st.expander(" Benchmark Answer", expanded=True):
         st.write(sample['benchmark'])
     
-    with st.expander("🧠 LLM Reasoning", expanded=False):
+    with st.expander(" LLM Reasoning", expanded=False):
         st.write(sample.get('reasoning', 'N/A'))
     
     st.markdown("---")
     
     # Human review section
-    st.markdown("#### 👤 Your Review")
+    st.markdown("####  Your Review")
     
     # Check if already reviewed (in current session) - use ORIGINAL index
     existing_review = st.session_state.review_changes.get(original_row_index, {})
@@ -502,17 +501,17 @@ def show_review_interface(config, db, eval_data):
     col1, col2, col3 = st.columns([1, 1, 1])
     
     with col1:
-        if st.button("◀️ Previous", disabled=(current_index == 0), use_container_width=True):
+        if st.button(" Previous", disabled=(current_index == 0), use_container_width=True):
             st.session_state.review_current_index -= 1
             st.rerun()
     
     with col2:
-        if st.button("⏭️ Skip", use_container_width=True):
+        if st.button("⏭ Skip", use_container_width=True):
             st.session_state.review_current_index += 1
             st.rerun()
     
     with col3:
-        if st.button("💾 Save & Next", type="primary", use_container_width=True):
+        if st.button(" Save & Next", type="primary", use_container_width=True):
             # Save review using ORIGINAL row index
             st.session_state.review_changes[original_row_index] = {
                 'score': human_score,
@@ -537,7 +536,7 @@ def show_review_interface(config, db, eval_data):
 def show_review_summary(config, db, eval_data):
     """Show review summary and statistics"""
     
-    st.markdown("### ✅ Review Complete!")
+    st.markdown("###  Review Complete!")
     st.success("You have finished reviewing the selected samples.")
     
     st.markdown("---")
@@ -581,7 +580,7 @@ def show_review_summary(config, db, eval_data):
     pass_rate_change = human_pass_rate - llm_pass_rate
     
     # Display statistics
-    st.markdown("### 📊 Review Statistics")
+    st.markdown("###  Review Statistics")
     
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -594,7 +593,7 @@ def show_review_summary(config, db, eval_data):
     st.markdown("---")
     
     # Pass rate comparison
-    st.markdown("### 📈 Pass Rate Comparison")
+    st.markdown("###  Pass Rate Comparison")
     st.markdown(f"**Threshold:** {threshold}")
     
     col1, col2, col3 = st.columns(3)
@@ -610,7 +609,7 @@ def show_review_summary(config, db, eval_data):
     
     # Review details table
     if reviewed_count > 0:
-        st.markdown("### 📝 Review Details")
+        st.markdown("###  Review Details")
         
         review_data = []
         for row_index, change in changes.items():
@@ -637,7 +636,7 @@ def show_review_summary(config, db, eval_data):
     # Action buttons
     col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button("❌ Discard All Changes", use_container_width=True):
+        if st.button(" Discard All Changes", use_container_width=True):
             # Clear all human reviews from database
             for row_index in changes.keys():
                 # Find sample with this row_index using 'index' column
@@ -652,12 +651,12 @@ def show_review_summary(config, db, eval_data):
                 if key in st.session_state:
                     del st.session_state[key]
             
-            st.warning("⚠️ All changes discarded")
+            st.warning(" All changes discarded")
             time.sleep(1)
             st.rerun()
     
     with col2:
-        if st.button("💾 Apply Changes", type="primary", use_container_width=True):
+        if st.button(" Apply Changes", type="primary", use_container_width=True):
             # Mark as applied - this will update results display
             st.session_state.review_applied = True
             st.session_state.review_metric_updated = metric
@@ -700,7 +699,7 @@ def show_review_summary(config, db, eval_data):
             # Clear review mode
             st.session_state.review_mode = None
             
-            st.success(f"✅ Applied {reviewed_count} reviews to {metric} results!")
+            st.success(f" Applied {reviewed_count} reviews to {metric} results!")
             st.balloons()
             time.sleep(1.5)
             st.rerun()
@@ -727,10 +726,10 @@ def main():
     
     # Sidebar
     with st.sidebar:
-        st.markdown("### 👤 User Information")
+        st.markdown("###  User Information")
         st.write(f"**Logged in as:** {st.session_state.username}")
         
-        if st.button("🚪 Logout"):
+        if st.button(" Logout"):
             st.session_state.authenticated = False
             st.rerun()
         
@@ -738,64 +737,64 @@ def main():
         
         # Show API status
         if st.session_state.selected_provider:
-            st.markdown("### 🔑 API Configuration")
-            provider_icon = {"groq": "🚀", "gemini": "🔮", "openai": "🤖"}
-            st.success(f"{provider_icon.get(st.session_state.selected_provider, '✅')} {st.session_state.selected_provider.upper()} - {st.session_state.selected_model}")
+            st.markdown("###  API Configuration")
+            provider_icon = {"groq": "", "gemini": "", "openai": ""}
+            st.success(f"{provider_icon.get(st.session_state.selected_provider, '')} {st.session_state.selected_provider.upper()} - {st.session_state.selected_model}")
         else:
-            st.markdown("### ⚠️ API Not Configured")
+            st.markdown("###  API Not Configured")
             st.warning("Please configure API in Settings")
         
         st.markdown("---")
-        st.markdown("### 📊 Navigation")
+        st.markdown("###  Navigation")
         page = st.radio(
             "Select Page",
-            ["📖 Getting Started", "⚙️ Settings", "🔍 New Evaluation", "📈 Evaluation History"],
+            [" Getting Started", " Settings", " New Evaluation", " Evaluation History"],
             label_visibility="collapsed"
         )
     
     # Main content
-    st.markdown('<div class="main-header">🤖 ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header"> ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
     
-    if page == "📖 Getting Started":
+    if page == " Getting Started":
         show_getting_started_page(config, db)
-    elif page == "⚙️ Settings":
+    elif page == " Settings":
         show_settings_page(config, db)
-    elif page == "🔍 New Evaluation":
+    elif page == " New Evaluation":
         show_evaluation_page(config, db)
-    elif page == "📈 Evaluation History":
+    elif page == " Evaluation History":
         show_history_page(db)
 
 def show_getting_started_page(config, db):
     """Show getting started guide for first-time users"""
     
-    st.markdown("### 📖 Getting Started Guide")
+    st.markdown("###  Getting Started Guide")
     st.markdown("Welcome! This guide will help you get started with the ProductGPT Evaluation Pipeline.")
     
     # Create tabs for different sections
     tabs = st.tabs([
-        "🚀 Quick Start",
-        "📄 CSV Format", 
-        "📊 Understanding Metrics",
-        "📑 Reading Reports",
-        "💾 Sample Dataset"
+        " Quick Start",
+        " CSV Format", 
+        " Understanding Metrics",
+        " Reading Reports",
+        " Sample Dataset"
     ])
     
     # Tab 1: Quick Start
     with tabs[0]:
-        st.markdown("## 🚀 Quick Start")
+        st.markdown("##  Quick Start")
         st.markdown("""
         Follow these 5 simple steps to run your first evaluation:
         """)
         
         st.markdown("#### Step 1: Configure API")
         st.markdown("""
-        1. Go to **⚙️ Settings** tab
+        1. Go to ** Settings** tab
         2. Click on a provider button (currently only Groq is available)
         3. Select a model
         4. Enter your API key
         5. Click **Save Configuration**
         
-        💡 **Getting API Key:**
+         **Getting API Key:**
         - **Groq**: https://console.groq.com/keys (Free tier available)
         """)
         
@@ -808,14 +807,14 @@ def show_getting_started_page(config, db):
         - `response` - The AI's response
         - `benchmark_answer` - The expected/correct answer
         
-        📥 Download our sample CSV below to see the format!
+         Download our sample CSV below to see the format!
         """)
         
         st.markdown("---")
         
         st.markdown("#### Step 3: Upload & Configure")
         st.markdown("""
-        1. Go to **🔍 New Evaluation** tab
+        1. Go to ** New Evaluation** tab
         2. Upload your CSV file
         3. Verify column mappings are correct
         4. Select which metrics to evaluate (start with **Accuracy**)
@@ -825,7 +824,7 @@ def show_getting_started_page(config, db):
         
         st.markdown("#### Step 4: Run Evaluation")
         st.markdown("""
-        1. Click **🚀 Run Evaluation**
+        1. Click ** Run Evaluation**
         2. Wait for processing (typically 1-2 seconds per sample)
         3. View results in the tabs
         """)
@@ -842,7 +841,7 @@ def show_getting_started_page(config, db):
     
     # Tab 2: CSV Format
     with tabs[1]:
-        st.markdown("## 📄 CSV Format Requirements")
+        st.markdown("##  CSV Format Requirements")
         
         st.markdown("### Required Columns")
         st.markdown("""
@@ -878,7 +877,7 @@ def show_getting_started_page(config, db):
                 st.markdown("**Preview of sample file:**")
                 st.dataframe(df_sample.head(3), use_container_width=True)
                 
-                st.info(f"📊 This sample contains {len(df_sample)} rows")
+                st.info(f" This sample contains {len(df_sample)} rows")
             except Exception as e:
                 st.warning(f"Could not load sample file: {e}")
         
@@ -886,22 +885,22 @@ def show_getting_started_page(config, db):
         
         st.markdown("### Common Issues")
         st.markdown("""
-        ❌ **Column names don't match**
+         **Column names don't match**
         - Make sure columns are named exactly: `question`, `response`, `benchmark_answer`
         - Column names are case-sensitive
         
-        ❌ **Wrong file format**
+         **Wrong file format**
         - Save as CSV, not Excel (.xlsx) or Google Sheets
         - Use "Save As" → "CSV (Comma delimited)"
         
-        ❌ **Encoding issues**
+         **Encoding issues**
         - Save with UTF-8 encoding
         - Avoid special characters or use Unicode properly
         """)
     
     # Tab 3: Understanding Metrics
     with tabs[2]:
-        st.markdown("## 📊 Understanding Metrics")
+        st.markdown("##  Understanding Metrics")
         
         st.markdown("### Available Metrics")
         
@@ -959,7 +958,7 @@ def show_getting_started_page(config, db):
     
     # Tab 4: Reading Reports
     with tabs[3]:
-        st.markdown("## 📑 Reading Reports")
+        st.markdown("##  Reading Reports")
         
         st.markdown("### Summary Metrics")
         st.markdown("""
@@ -968,7 +967,7 @@ def show_getting_started_page(config, db):
         ```
         Accuracy          Comprehensiveness
         0.550            0.780
-        ▲ 60% pass rate  ▲ 80% pass rate
+         60% pass rate   80% pass rate
         ```
         
         **How to interpret:**
@@ -1007,7 +1006,7 @@ def show_getting_started_page(config, db):
     
     # Tab 5: Sample Dataset
     with tabs[4]:
-        st.markdown("## 💾 Sample Dataset")
+        st.markdown("##  Sample Dataset")
         
         st.markdown("""
         Download our sample CSV to see the correct format and try your first evaluation!
@@ -1034,7 +1033,7 @@ def show_getting_started_page(config, db):
                 csv_data = df_sample.to_csv(index=False).encode('utf-8')
                 
                 st.download_button(
-                    label="📥 Download Sample CSV",
+                    label=" Download Sample CSV",
                     data=csv_data,
                     file_name="sample_evaluation.csv",
                     mime="text/csv",
@@ -1042,15 +1041,15 @@ def show_getting_started_page(config, db):
                     use_container_width=True
                 )
                 
-                st.success("✅ Click the button above to download the sample file")
+                st.success(" Click the button above to download the sample file")
                 
                 st.markdown("---")
                 
                 st.markdown("### Next Steps")
                 st.markdown("""
                 1. Download the sample CSV
-                2. Go to **⚙️ Settings** and configure your API
-                3. Go to **🔍 New Evaluation** and upload the sample
+                2. Go to ** Settings** and configure your API
+                3. Go to ** New Evaluation** and upload the sample
                 4. Select **Accuracy** metric
                 5. Click **Run Evaluation**
                 6. Review your first results!
@@ -1060,7 +1059,7 @@ def show_getting_started_page(config, db):
                 st.error(f"Error loading sample file: {e}")
                 st.info("Please make sure the file exists at: data/uploads/productgpt_accuracy.csv")
         else:
-            st.warning("⚠️ Sample file not found")
+            st.warning(" Sample file not found")
             st.info(f"Expected location: {sample_path}")
             st.markdown("""
             To add the sample file:
@@ -1072,32 +1071,32 @@ def show_getting_started_page(config, db):
 def show_settings_page(config, db):
     """Show settings page for API configuration"""
     
-    st.markdown("### ⚙️ API & Model Configuration")
+    st.markdown("###  API & Model Configuration")
     
-    st.info("💡 Configure your API keys and model preferences here. Settings will be saved for your session.")
+    st.info(" Configure your API keys and model preferences here. Settings will be saved for your session.")
     
     # Provider selection
-    st.markdown("#### 1️⃣ Select LLM Provider")
+    st.markdown("#### 1⃣ Select LLM Provider")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("🚀 Groq", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "groq" else "secondary"):
+        if st.button(" Groq", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "groq" else "secondary"):
             st.session_state.selected_provider = "groq"
             st.rerun()
     
     with col2:
-        if st.button("🔮 Gemini", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "gemini" else "secondary"):
+        if st.button(" Gemini", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "gemini" else "secondary"):
             st.session_state.selected_provider = "gemini"
             st.rerun()
     
     with col3:
-        if st.button("🤖 OpenAI", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "openai" else "secondary"):
+        if st.button(" OpenAI", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "openai" else "secondary"):
             st.session_state.selected_provider = "openai"
             st.rerun()
     
     if not st.session_state.get('selected_provider'):
-        st.warning("⬆️ Please select a provider above")
+        st.warning(" Please select a provider above")
         return
     
     st.markdown("---")
@@ -1105,7 +1104,7 @@ def show_settings_page(config, db):
     # Provider-specific configuration
     provider = st.session_state.selected_provider
     
-    st.markdown(f"#### 2️⃣ Configure {provider.upper()}")
+    st.markdown(f"#### 2⃣ Configure {provider.upper()}")
     
     # Model selection based on provider
     if provider == "groq":
@@ -1157,13 +1156,13 @@ def show_settings_page(config, db):
         
         api_help = "Get your API key at: https://platform.openai.com/api-keys"
     
-    st.caption(f"ℹ️ {api_help}")
+    st.caption(f"ℹ {api_help}")
     
     # API Key input
     current_key = st.session_state.api_keys.get(provider, "")
     
     api_key = st.text_input(
-        f"🔑 {provider.upper()} API Key",
+        f" {provider.upper()} API Key",
         value=current_key,
         type="password",
         help="Your API key is stored only in your session and never saved to disk"
@@ -1172,11 +1171,11 @@ def show_settings_page(config, db):
     st.markdown("---")
     
     # Perspective API for Toxicity (optional)
-    st.markdown("#### 🛡️ Toxicity Detection (Optional)")
-    st.info("💡 To use the Toxicity metric, you need a Perspective API key from Google. Get one at: https://perspectiveapi.com/")
+    st.markdown("####  Toxicity Detection (Optional)")
+    st.info(" To use the Toxicity metric, you need a Perspective API key from Google. Get one at: https://perspectiveapi.com/")
     
     perspective_key = st.text_input(
-        "🔑 Perspective API Key (for Toxicity)",
+        " Perspective API Key (for Toxicity)",
         value=st.session_state.get('perspective_api_key', ''),
         type="password",
         help="Required only if you want to evaluate Toxicity metric"
@@ -1187,7 +1186,7 @@ def show_settings_page(config, db):
         os.environ['PERSPECTIVE_API_KEY'] = perspective_key
     
     # Advanced settings
-    with st.expander("🔧 Advanced Settings"):
+    with st.expander(" Advanced Settings"):
         temperature = st.slider(
             "Temperature",
             min_value=0.0,
@@ -1226,9 +1225,9 @@ def show_settings_page(config, db):
     col1, col2 = st.columns([3, 1])
     
     with col1:
-        if st.button("💾 Save Configuration", type="primary", use_container_width=True):
+        if st.button(" Save Configuration", type="primary", use_container_width=True):
             if not api_key:
-                st.error("⚠️ Please enter an API key")
+                st.error(" Please enter an API key")
             else:
                 # Save to session state
                 st.session_state.api_keys[provider] = api_key
@@ -1240,13 +1239,13 @@ def show_settings_page(config, db):
                 st.session_state.max_concurrent = max_concurrent
                 
                 # FIX: Changed provider.UPPER() to provider.upper()
-                st.success(f"✅ Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
+                st.success(f" Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
                 st.balloons()
     
     with col2:
-        if st.button("🧪 Test", use_container_width=True):
+        if st.button(" Test", use_container_width=True):
             if not api_key:
-                st.error("⚠️ Please enter an API key")
+                st.error(" Please enter an API key")
             else:
                 with st.spinner("Testing connection..."):
                     try:
@@ -1260,27 +1259,27 @@ def show_settings_page(config, db):
                                     messages=[{"role": "user", "content": "Say 'test'"}],
                                     max_tokens=10
                                 )
-                                st.success("✅ Connection successful!")
+                                st.success(" Connection successful!")
                             except ImportError:
-                                st.warning("⚠️ Groq package not installed. Connection will be tested during evaluation.")
+                                st.warning(" Groq package not installed. Connection will be tested during evaluation.")
                         elif provider == "gemini":
                             try:
                                 import google.generativeai as genai
                                 genai.configure(api_key=api_key)
                                 model_obj = genai.GenerativeModel(selected_model)
                                 response = model_obj.generate_content("Say 'test'")
-                                st.success("✅ Connection successful!")
+                                st.success(" Connection successful!")
                             except ImportError:
-                                st.warning("⚠️ Gemini package not installed. Connection will be tested during evaluation.")
+                                st.warning(" Gemini package not installed. Connection will be tested during evaluation.")
                         else:
-                            st.info("ℹ️ OpenAI test not implemented yet. Connection will be tested during evaluation.")
+                            st.info("ℹ OpenAI test not implemented yet. Connection will be tested during evaluation.")
                     except Exception as e:
-                        st.error(f"❌ Connection failed: {str(e)}")
+                        st.error(f" Connection failed: {str(e)}")
     
     # Show current configuration
     if st.session_state.api_keys.get(provider):
         st.markdown("---")
-        st.markdown("#### ✅ Current Configuration")
+        st.markdown("####  Current Configuration")
         
         config_data = {
             "Provider": provider.upper(),
@@ -1297,7 +1296,7 @@ def show_settings_page(config, db):
     
     # Tips
     st.markdown("---")
-    st.markdown("#### 💡 Tips")
+    st.markdown("####  Tips")
     st.markdown("""
     - **Groq**: Best for speed & cost (free tier is generous)
     - **Gemini**: Good balance of quality & speed
@@ -1312,9 +1311,9 @@ def show_evaluation_page(config, db):
     
     # Check if API is configured
     if not st.session_state.selected_provider or not st.session_state.api_keys.get(st.session_state.selected_provider):
-        st.warning("⚠️ API not configured. Please go to Settings first.")
-        if st.button("⚙️ Go to Settings"):
-            st.session_state.page = "⚙️ Settings"
+        st.warning(" API not configured. Please go to Settings first.")
+        if st.button(" Go to Settings"):
+            st.session_state.page = " Settings"
             st.rerun()
         return
     
@@ -1324,7 +1323,7 @@ def show_evaluation_page(config, db):
         
         # Button to start new evaluation
         st.markdown("---")
-        if st.button("🔄 Start New Evaluation", type="secondary"):
+        if st.button(" Start New Evaluation", type="secondary"):
             st.session_state.show_results = False
             st.session_state.pop('last_evaluation', None)
             st.rerun()
@@ -1351,9 +1350,9 @@ def show_evaluation_page(config, db):
         try:
             df = pd.read_csv(uploaded_file)
             
-            st.success(f"✅ File uploaded successfully! ({len(df)} rows)")
+            st.success(f" File uploaded successfully! ({len(df)} rows)")
             
-            with st.expander("👀 Preview Data (first 5 rows)"):
+            with st.expander(" Preview Data (first 5 rows)"):
                 st.dataframe(df.head(), use_container_width=True)
             
             # Detect columns
@@ -1391,14 +1390,14 @@ def show_evaluation_page(config, db):
                 )
             
             # Advanced settings
-            with st.expander("⚙️ Advanced Settings"):
+            with st.expander(" Advanced Settings"):
                 batch_size = st.slider("Batch Size", 1, 20, config['batch']['size'], 
                                       help="Number of rows to process in parallel")
                 max_concurrent = st.slider("Max Concurrent API Calls", 1, 10, config['batch']['max_concurrent'],
                                           help="Maximum number of simultaneous API calls")
             
             # Run evaluation
-            if st.button("🚀 Run Evaluation", type="primary", use_container_width=True):
+            if st.button(" Run Evaluation", type="primary", use_container_width=True):
                 if not selected_metrics:
                     st.error("Please select at least one metric to evaluate.")
                     return
@@ -1420,7 +1419,7 @@ def show_evaluation_page(config, db):
                 )
         
         except Exception as e:
-            st.error(f"❌ Error reading file: {str(e)}")
+            st.error(f" Error reading file: {str(e)}")
 
 def run_evaluation(df, api_key, config, db, question_col, response_col, benchmark_col, 
                    selected_metrics, batch_size, max_concurrent, uploaded_file, provider=None, model=None):
@@ -1533,7 +1532,7 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
         st.session_state.show_results = True
         
         progress_bar.progress(1.0)
-        status_text.markdown("**✅ Evaluation completed!**")
+        status_text.markdown("** Evaluation completed!**")
         
         # Rerun to show results page
         st.rerun()
@@ -1544,13 +1543,13 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
             status="failed",
             error_message=str(e)
         )
-        st.error(f"❌ Evaluation failed: {str(e)}")
+        st.error(f" Evaluation failed: {str(e)}")
         raise
 
 def show_history_page(db):
     """Show evaluation history"""
     
-    st.markdown("### 📈 Evaluation History")
+    st.markdown("###  Evaluation History")
     
     # Get runs
     runs = db.get_evaluation_runs(user=st.session_state.username)
@@ -1574,7 +1573,7 @@ def show_history_page(db):
     
     # Select run to view details
     st.markdown("---")
-    st.markdown("### 🔍 View Run Details")
+    st.markdown("###  View Run Details")
     
     run_id = st.selectbox(
         "Select a run to view details",
