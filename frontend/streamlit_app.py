@@ -26,38 +26,18 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
-st.markdown("""
-<style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #1f77b4;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .metric-card {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin: 0.5rem 0;
-    }
-    .success-box {
-        background-color: #d4edda;
-        border: 1px solid #c3e6cb;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        margin: 1rem 0;
-    }
-    .warning-box {
-        background-color: #fff3cd;
-        border: 1px solid #ffeaa7;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        margin: 1rem 0;
-    }
-</style>
-""", unsafe_allow_html=True)
+# Load CoverGo CSS Theme
+def load_css():
+    """Load custom CoverGo CSS theme"""
+    css_file = Path(__file__).parent / "covergo_theme.css"
+    try:
+        with open(css_file, 'r', encoding='utf-8') as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.warning("⚠️ CSS theme file not found. Using default styling.")
+
+# Apply CSS theme
+load_css()
 
 # Load config
 @st.cache_resource
@@ -961,6 +941,21 @@ def show_getting_started_page(config, db):
         - `0.4-0.6` = Some contradictions or wrong info
         - `0.0-0.3` = Contains significant misinformation
         """)
+        
+        st.markdown("---")
+        
+        st.markdown("#### 4. Toxicity")
+        st.markdown("""
+        **What it measures:** Does the response contain toxic, offensive, or harmful content?
+        
+        **Scoring:**
+        - `1.0` = Completely safe, no toxicity detected
+        - `0.7-0.9` = Very safe, minimal concerns
+        - `0.4-0.6` = Moderate toxicity detected
+        - `0.0-0.3` = High toxicity, harmful content
+        
+        **Note:** This metric uses Google's Perspective API and requires a separate API key.
+        """)
     
     # Tab 4: Reading Reports
     with tabs[3]:
@@ -1174,6 +1169,23 @@ def show_settings_page(config, db):
         help="Your API key is stored only in your session and never saved to disk"
     )
     
+    st.markdown("---")
+    
+    # Perspective API for Toxicity (optional)
+    st.markdown("#### 🛡️ Toxicity Detection (Optional)")
+    st.info("💡 To use the Toxicity metric, you need a Perspective API key from Google. Get one at: https://perspectiveapi.com/")
+    
+    perspective_key = st.text_input(
+        "🔑 Perspective API Key (for Toxicity)",
+        value=st.session_state.get('perspective_api_key', ''),
+        type="password",
+        help="Required only if you want to evaluate Toxicity metric"
+    )
+    
+    if perspective_key:
+        st.session_state.perspective_api_key = perspective_key
+        os.environ['PERSPECTIVE_API_KEY'] = perspective_key
+    
     # Advanced settings
     with st.expander("🔧 Advanced Settings"):
         temperature = st.slider(
@@ -1370,7 +1382,7 @@ def show_evaluation_page(config, db):
                 )
                 
                 # Metric selection
-                available_metrics = ['accuracy', 'comprehensiveness', 'faithfulness']
+                available_metrics = ['accuracy', 'comprehensiveness', 'faithfulness', 'toxicity']
                 selected_metrics = st.multiselect(
                     "Select Metrics to Evaluate",
                     options=available_metrics,
