@@ -1,0 +1,482 @@
+/* ============================================
+   COVERGO EVALUATION TOOL - CSS THEME
+   Minimalist White & Blue Design
+   ============================================ */
+
+/* ===== Color Variables ===== */
+:root {
+    --covergo-primary: #1E3A8A;
+    --covergo-primary-light: #2563EB;
+    --covergo-primary-lighter: #DBEAFE;
+    --covergo-success: #10B981;
+    --covergo-warning: #F59E0B;
+    --covergo-error: #EF4444;
+    --covergo-gray-50: #F9FAFB;
+    --covergo-gray-100: #F3F4F6;
+    --covergo-gray-200: #E5E7EB;
+    --covergo-gray-300: #D1D5DB;
+    --covergo-gray-600: #4B5563;
+    --covergo-gray-700: #374151;
+    --covergo-gray-900: #111827;
+    --covergo-white: #FFFFFF;
+}
+
+/* ===== Global Styles ===== */
+.stApp {
+    background-color: var(--covergo-gray-50);
+}
+
+/* Main content area */
+.main .block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    max-width: 1400px;
+}
+
+/* ===== Typography ===== */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--covergo-gray-900);
+    font-weight: 600;
+}
+
+.main-header {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--covergo-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+    letter-spacing: -0.025em;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--covergo-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid var(--covergo-primary);
+}
+
+.section-header {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--covergo-gray-900);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* ===== Sidebar ===== */
+[data-testid="stSidebar"] {
+    background-color: var(--covergo-white);
+    border-right: 1px solid var(--covergo-gray-200);
+}
+
+[data-testid="stSidebar"] .stRadio > label {
+    font-weight: 600;
+    color: var(--covergo-gray-700);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+[data-testid="stSidebar"] [role="radiogroup"] label {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+[data-testid="stSidebar"] [role="radiogroup"] label:hover {
+    background-color: var(--covergo-gray-100);
+}
+
+[data-testid="stSidebar"] [data-baseweb="radio"] [data-checked="true"] + div {
+    background-color: var(--covergo-primary-lighter);
+    border-left: 4px solid var(--covergo-primary);
+}
+
+/* ===== Cards ===== */
+.card {
+    background-color: var(--covergo-white);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--covergo-gray-200);
+    transition: box-shadow 0.2s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--covergo-gray-900);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--covergo-gray-200);
+}
+
+.metric-card {
+    background: linear-gradient(135deg, var(--covergo-primary-lighter) 0%, var(--covergo-white) 100%);
+    border-left: 4px solid var(--covergo-primary);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    margin: 0.75rem 0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--covergo-primary);
+    margin: 0.5rem 0;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--covergo-gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ===== Status Badges ===== */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-pass {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.badge-fail {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+.badge-active {
+    background-color: var(--covergo-primary-lighter);
+    color: var(--covergo-primary);
+}
+
+.badge-inactive {
+    background-color: var(--covergo-gray-200);
+    color: var(--covergo-gray-600);
+}
+
+/* ===== Buttons ===== */
+.stButton > button {
+    background-color: var(--covergo-primary);
+    color: var(--covergo-white);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stButton > button:hover {
+    background-color: var(--covergo-primary-light);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.stButton > button:active {
+    transform: translateY(0);
+}
+
+/* Secondary button */
+.stButton.secondary > button {
+    background-color: var(--covergo-white);
+    color: var(--covergo-primary);
+    border: 2px solid var(--covergo-primary);
+}
+
+.stButton.secondary > button:hover {
+    background-color: var(--covergo-primary-lighter);
+}
+
+/* Danger button */
+.stButton.danger > button {
+    background-color: var(--covergo-error);
+    color: var(--covergo-white);
+}
+
+.stButton.danger > button:hover {
+    background-color: #DC2626;
+}
+
+/* Success button */
+.stButton.success > button {
+    background-color: var(--covergo-success);
+    color: var(--covergo-white);
+}
+
+.stButton.success > button:hover {
+    background-color: #059669;
+}
+
+/* ===== Inputs ===== */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+.stTextArea textarea {
+    border: 2px solid var(--covergo-gray-300);
+    border-radius: 0.5rem;
+    padding: 0.625rem;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus,
+.stTextArea textarea:focus {
+    border-color: var(--covergo-primary);
+    box-shadow: 0 0 0 3px var(--covergo-primary-lighter);
+}
+
+/* ===== File Uploader ===== */
+.stFileUploader {
+    background-color: var(--covergo-white);
+    border: 2px dashed var(--covergo-gray-300);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.stFileUploader:hover {
+    border-color: var(--covergo-primary);
+    background-color: var(--covergo-primary-lighter);
+}
+
+/* ===== Tables / DataFrames ===== */
+.stDataFrame {
+    border: 1px solid var(--covergo-gray-200);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.stDataFrame table {
+    font-size: 0.875rem;
+}
+
+.stDataFrame thead tr th {
+    background-color: var(--covergo-primary);
+    color: var(--covergo-white);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+    border: none;
+}
+
+.stDataFrame tbody tr {
+    border-bottom: 1px solid var(--covergo-gray-200);
+    transition: background-color 0.2s;
+}
+
+.stDataFrame tbody tr:hover {
+    background-color: var(--covergo-gray-50);
+}
+
+.stDataFrame tbody tr td {
+    padding: 0.875rem 1rem;
+}
+
+/* ===== Alerts / Messages ===== */
+.success-box {
+    background-color: #D1FAE5;
+    border: 2px solid var(--covergo-success);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    color: #065F46;
+}
+
+.warning-box {
+    background-color: #FEF3C7;
+    border: 2px solid var(--covergo-warning);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    color: #92400E;
+}
+
+.error-box {
+    background-color: #FEE2E2;
+    border: 2px solid var(--covergo-error);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    color: #991B1B;
+}
+
+.info-box {
+    background-color: var(--covergo-primary-lighter);
+    border: 2px solid var(--covergo-primary);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    color: var(--covergo-primary);
+}
+
+/* ===== Progress Bar ===== */
+.stProgress > div > div > div {
+    background-color: var(--covergo-primary);
+}
+
+/* ===== Expander ===== */
+.streamlit-expanderHeader {
+    background-color: var(--covergo-white);
+    border: 1px solid var(--covergo-gray-200);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-weight: 600;
+    color: var(--covergo-gray-900);
+}
+
+.streamlit-expanderHeader:hover {
+    background-color: var(--covergo-gray-50);
+}
+
+/* ===== Tabs ===== */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--covergo-gray-200);
+}
+
+.stTabs [data-baseweb="tab"] {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    color: var(--covergo-gray-600);
+    border-radius: 0.5rem 0.5rem 0 0;
+    transition: all 0.2s;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    background-color: var(--covergo-gray-100);
+    color: var(--covergo-gray-900);
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: var(--covergo-white);
+    color: var(--covergo-primary);
+    border-bottom: 3px solid var(--covergo-primary);
+}
+
+/* ===== Metrics (st.metric) ===== */
+[data-testid="stMetricValue"] {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--covergo-primary);
+}
+
+[data-testid="stMetricLabel"] {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--covergo-gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+[data-testid="stMetricDelta"] {
+    font-size: 0.875rem;
+}
+
+/* ===== Selectbox / Multiselect ===== */
+.stSelectbox > div > div,
+.stMultiSelect > div > div {
+    border: 2px solid var(--covergo-gray-300);
+    border-radius: 0.5rem;
+    transition: border-color 0.2s;
+}
+
+.stSelectbox > div > div:focus-within,
+.stMultiSelect > div > div:focus-within {
+    border-color: var(--covergo-primary);
+    box-shadow: 0 0 0 3px var(--covergo-primary-lighter);
+}
+
+/* ===== Slider ===== */
+.stSlider > div > div > div {
+    background-color: var(--covergo-primary);
+}
+
+.stSlider > div > div > div > div {
+    background-color: var(--covergo-primary);
+}
+
+/* ===== Checkbox / Radio ===== */
+.stCheckbox > label,
+.stRadio > label {
+    font-weight: 500;
+    color: var(--covergo-gray-700);
+}
+
+/* ===== Divider ===== */
+hr {
+    border: none;
+    border-top: 2px solid var(--covergo-gray-200);
+    margin: 2rem 0;
+}
+
+/* ===== Code Block ===== */
+.stCodeBlock {
+    background-color: var(--covergo-gray-900);
+    border-radius: 0.5rem;
+    border: 1px solid var(--covergo-gray-700);
+}
+
+/* ===== Spinner ===== */
+.stSpinner > div {
+    border-color: var(--covergo-primary);
+}
+
+/* ===== Toast Messages ===== */
+.stToast {
+    background-color: var(--covergo-white);
+    border: 2px solid var(--covergo-gray-200);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Download Button ===== */
+.stDownloadButton > button {
+    background-color: var(--covergo-success);
+    color: var(--covergo-white);
+}
+
+.stDownloadButton > button:hover {
+    background-color: #059669;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .main-header {
+        font-size: 2rem;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .card {
+        padding: 1rem;
+    }
+}
