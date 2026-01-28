@@ -273,6 +273,12 @@ h1, h2, h3, h4, h5, h6 {
     border: none !important;
 }
 
+.stDownloadButton > button p,
+.stDownloadButton > button span,
+.stDownloadButton > button div {
+    color: var(--covergo-white) !important;
+}
+
 .stDownloadButton > button:hover {
     background-color: var(--covergo-primary-light) !important;
     color: var(--covergo-white) !important;
@@ -563,15 +569,50 @@ div[data-testid="stAlert"],
 /* ===== Selectbox / Multiselect ===== */
 .stSelectbox > div > div,
 .stMultiSelect > div > div {
-    border: 2px solid var(--covergo-gray-300);
+    background-color: var(--covergo-primary);
+    border: 2px solid var(--covergo-primary);
     border-radius: 0.5rem;
     transition: border-color 0.2s;
+    color: var(--covergo-white);
+}
+
+.stSelectbox > div > div > div,
+.stMultiSelect > div > div > div {
+    background-color: var(--covergo-primary);
+    color: var(--covergo-white);
+}
+
+/* Selectbox input */
+.stSelectbox input,
+.stSelectbox div[data-baseweb="select"] > div {
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
+}
+
+/* Dropdown options */
+[data-baseweb="popover"] {
+    background-color: var(--covergo-primary) !important;
+}
+
+[data-baseweb="menu"] li {
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
+}
+
+[data-baseweb="menu"] li:hover {
+    background-color: var(--covergo-primary-light) !important;
 }
 
 .stSelectbox > div > div:focus-within,
 .stMultiSelect > div > div:focus-within {
-    border-color: var(--covergo-primary);
+    border-color: var(--covergo-primary-light);
     box-shadow: 0 0 0 3px var(--covergo-primary-lighter);
+}
+
+/* Multiselect tags */
+.stMultiSelect span[data-baseweb="tag"] {
+    background-color: var(--covergo-error) !important;
+    color: var(--covergo-white) !important;
 }
 
 /* ===== Slider ===== */
