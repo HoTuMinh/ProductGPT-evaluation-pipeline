@@ -191,8 +191,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ===== Buttons ===== */
 .stButton > button {
-    background-color: var(--covergo-primary);
-    color: var(--covergo-white);
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
     border: none;
     border-radius: 0.5rem;
     padding: 0.625rem 1.25rem;
@@ -205,7 +205,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .stButton > button:hover {
-    background-color: var(--covergo-primary-light);
+    background-color: var(--covergo-primary-light) !important;
+    color: var(--covergo-white) !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
 }
@@ -217,51 +218,88 @@ h1, h2, h3, h4, h5, h6 {
 /* Primary button (explicitly white text) */
 .stButton > button[kind="primary"],
 .stButton > button[data-testid="baseButton-primary"] {
-    background-color: var(--covergo-primary);
-    color: var(--covergo-white);
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
 }
 
 /* Secondary button */
 .stButton.secondary > button {
-    background-color: var(--covergo-white);
-    color: var(--covergo-primary);
+    background-color: var(--covergo-white) !important;
+    color: var(--covergo-primary) !important;
     border: 2px solid var(--covergo-primary);
 }
 
 .stButton.secondary > button:hover {
-    background-color: var(--covergo-primary-lighter);
+    background-color: var(--covergo-primary-lighter) !important;
 }
 
 /* Danger button */
 .stButton.danger > button {
-    background-color: var(--covergo-error);
-    color: var(--covergo-white);
+    background-color: var(--covergo-error) !important;
+    color: var(--covergo-white) !important;
 }
 
 .stButton.danger > button:hover {
-    background-color: #DC2626;
+    background-color: #DC2626 !important;
 }
 
 /* Success button */
 .stButton.success > button {
-    background-color: var(--covergo-success);
-    color: var(--covergo-white);
+    background-color: var(--covergo-success) !important;
+    color: var(--covergo-white) !important;
 }
 
 .stButton.success > button:hover {
-    background-color: #059669;
+    background-color: #059669 !important;
+}
+
+/* ===== Download Button ===== */
+.stDownloadButton > button {
+    background-color: var(--covergo-success) !important;
+    color: var(--covergo-white) !important;
+}
+
+.stDownloadButton > button:hover {
+    background-color: #059669 !important;
+}
+
+/* ===== Custom Alert Styling with !important ===== */
+/* Force gray background for ALL alerts by default */
+[class*="stAlert"],
+[class*="stNotification"],
+[data-testid*="stAlert"],
+[data-testid*="stNotification"] {
+    background-color: var(--covergo-gray-100) !important;
+    border-left: 4px solid var(--covergo-gray-400) !important;
+    color: var(--covergo-gray-900) !important;
+    border-radius: 0.5rem !important;
+    padding: 1rem !important;
+}
+
+/* Blue info box - for configuration hints */
+[data-baseweb="notification"][kind="info"] {
+    background-color: var(--covergo-primary) !important;
+    border-left-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
+}
+
+/* Keep green ONLY for success messages after actions */
+[data-baseweb="notification"][kind="success"] {
+    background-color: var(--covergo-gray-100) !important;
+    border-left-color: var(--covergo-success) !important;
+    color: var(--covergo-gray-900) !important;
 }
 
 /* ===== Inputs ===== */
 .stTextInput > div > div > input,
 .stNumberInput > div > div > input,
 .stTextArea textarea {
-    background-color: #2D3748;
-    border: 2px solid #4A5568;
+    background-color: var(--covergo-white);
+    border: 2px solid var(--covergo-gray-300);
     border-radius: 0.5rem;
     padding: 0.75rem;
     font-size: 0.875rem;
-    color: var(--covergo-white);
+    color: var(--covergo-gray-900);
     transition: border-color 0.2s;
     font-family: 'Ubuntu', sans-serif;
 }
@@ -269,7 +307,7 @@ h1, h2, h3, h4, h5, h6 {
 .stTextInput > div > div > input::placeholder,
 .stNumberInput > div > div > input::placeholder,
 .stTextArea textarea::placeholder {
-    color: #A0AEC0;
+    color: var(--covergo-gray-400);
 }
 
 .stTextInput > div > div > input:focus,
@@ -282,9 +320,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Password input eye icon */
 .stTextInput button {
-    background-color: #2D3748;
+    background-color: var(--covergo-white);
     border: none;
-    color: var(--covergo-white);
+    color: var(--covergo-gray-600);
 }
 
 /* ===== File Uploader ===== */
@@ -381,10 +419,50 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Streamlit's built-in st.info, st.warning, st.success, st.error */
 .stAlert {
-    background-color: var(--covergo-gray-100);
-    border: 2px solid var(--covergo-gray-300);
-    border-radius: 0.75rem;
-    color: var(--covergo-gray-900);
+    background-color: var(--covergo-gray-100) !important;
+    border: 2px solid var(--covergo-gray-300) !important;
+    border-radius: 0.75rem !important;
+    color: var(--covergo-gray-900) !important;
+}
+
+/* Override specific alert types */
+div[data-testid="stNotification"],
+div[data-testid="stAlert"],
+.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stNotificationContentSuccess"],
+.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stNotificationContentInfo"],
+.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stNotificationContentWarning"],
+.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stNotificationContentError"] {
+    background-color: var(--covergo-gray-100) !important;
+    border: 2px solid var(--covergo-gray-300) !important;
+    color: var(--covergo-gray-900) !important;
+}
+
+/* Success messages - keep green for download button context, gray for notifications */
+.stSuccess {
+    background-color: var(--covergo-gray-100) !important;
+    border-color: var(--covergo-gray-300) !important;
+    color: var(--covergo-gray-900) !important;
+}
+
+/* Info messages - blue background with white text */
+.stInfo {
+    background-color: var(--covergo-primary) !important;
+    border-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
+}
+
+/* Warning messages - gray */
+.stWarning {
+    background-color: var(--covergo-gray-100) !important;
+    border-color: var(--covergo-gray-300) !important;
+    color: var(--covergo-gray-900) !important;
+}
+
+/* Error messages - gray */
+.stError {
+    background-color: var(--covergo-gray-100) !important;
+    border-color: var(--covergo-gray-300) !important;
+    color: var(--covergo-gray-900) !important;
 }
 
 /* ===== Progress Bar ===== */
