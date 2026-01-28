@@ -567,46 +567,61 @@ div[data-testid="stAlert"],
 }
 
 /* ===== Selectbox / Multiselect ===== */
+/* Main selectbox container */
 .stSelectbox > div > div,
 .stMultiSelect > div > div {
-    background-color: var(--covergo-primary);
-    border: 2px solid var(--covergo-primary);
-    border-radius: 0.5rem;
+    background-color: var(--covergo-primary) !important;
+    border: 2px solid var(--covergo-primary) !important;
+    border-radius: 0.5rem !important;
     transition: border-color 0.2s;
-    color: var(--covergo-white);
+    color: var(--covergo-white) !important;
 }
 
+/* Selected value display */
 .stSelectbox > div > div > div,
-.stMultiSelect > div > div > div {
-    background-color: var(--covergo-primary);
-    color: var(--covergo-white);
-}
-
-/* Selectbox input */
-.stSelectbox input,
-.stSelectbox div[data-baseweb="select"] > div {
+.stMultiSelect > div > div > div,
+.stSelectbox div[data-baseweb="select"] > div,
+.stSelectbox div[data-baseweb="select"] span,
+.stSelectbox div[data-baseweb="select"] p {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
+}
+
+/* Dropdown popover container */
+div[data-baseweb="popover"],
+ul[role="listbox"],
+div[data-baseweb="menu"] {
+    background-color: var(--covergo-primary) !important;
 }
 
 /* Dropdown options */
-[data-baseweb="popover"] {
-    background-color: var(--covergo-primary) !important;
-}
-
-[data-baseweb="menu"] li {
+li[role="option"],
+div[data-baseweb="menu"] li,
+ul[role="listbox"] li {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
 }
 
-[data-baseweb="menu"] li:hover {
+/* Dropdown option hover */
+li[role="option"]:hover,
+div[data-baseweb="menu"] li:hover,
+ul[role="listbox"] li:hover {
     background-color: var(--covergo-primary-light) !important;
+    color: var(--covergo-white) !important;
+}
+
+/* Dropdown option text */
+li[role="option"] span,
+li[role="option"] div,
+div[data-baseweb="menu"] li span,
+div[data-baseweb="menu"] li div {
+    color: var(--covergo-white) !important;
 }
 
 .stSelectbox > div > div:focus-within,
 .stMultiSelect > div > div:focus-within {
-    border-color: var(--covergo-primary-light);
-    box-shadow: 0 0 0 3px var(--covergo-primary-lighter);
+    border-color: var(--covergo-primary-light) !important;
+    box-shadow: 0 0 0 3px var(--covergo-primary-lighter) !important;
 }
 
 /* Multiselect tags */
