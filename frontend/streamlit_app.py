@@ -700,7 +700,6 @@ def show_review_summary(config, db, eval_data):
             st.session_state.review_mode = None
             
             st.success(f" Applied {reviewed_count} reviews to {metric} results!")
-            st.balloons()
             time.sleep(1.5)
             st.rerun()
 
@@ -1028,8 +1027,8 @@ def show_getting_started_page(config, db):
                 st.markdown("### Next Steps")
                 st.markdown("""
                 1. Download the sample CSV
-                2. Go to **Settings** and configure your API
-                3. Go to **New Evaluation** and upload the sample
+                2. Go to ** Settings** and configure your API
+                3. Go to ** New Evaluation** and upload the sample
                 4. Select **Accuracy** metric
                 5. Click **Run Evaluation**
                 6. Review your first results!
@@ -1150,21 +1149,6 @@ def show_settings_page(config, db):
     
     st.markdown("---")
     
-    # Perspective API for Toxicity (optional)
-    st.markdown("####  Toxicity Detection (Optional)")
-    st.info(" To use the Toxicity metric, you need a Perspective API key from Google. Get one at: https://perspectiveapi.com/")
-    
-    perspective_key = st.text_input(
-        " Perspective API Key (for Toxicity)",
-        value=st.session_state.get('perspective_api_key', ''),
-        type="password",
-        help="Required only if you want to evaluate Toxicity metric"
-    )
-    
-    if perspective_key:
-        st.session_state.perspective_api_key = perspective_key
-        os.environ['PERSPECTIVE_API_KEY'] = perspective_key
-    
     # Advanced settings
     with st.expander(" Advanced Settings"):
         temperature = st.slider(
@@ -1220,7 +1204,6 @@ def show_settings_page(config, db):
                 
                 # FIX: Changed provider.UPPER() to provider.upper()
                 st.success(f" Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
-                st.balloons()
     
     with col2:
         if st.button(" Test", use_container_width=True):
