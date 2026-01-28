@@ -868,7 +868,7 @@ def show_getting_started_page(config, db):
         st.markdown("### Example CSV Structure")
         
         # Show sample data preview
-        sample_path = Path(__file__).parent.parent / "data" / "uploads" / "productgpt_accuracy.csv"
+        sample_path = Path(__file__).parent.parent / "data" / "uploads" / "sample.csv"
         
         if sample_path.exists():
             try:
@@ -994,7 +994,7 @@ def show_getting_started_page(config, db):
         """)
         
         # Load and show sample
-        sample_path = Path(__file__).parent.parent / "data" / "uploads" / "productgpt_accuracy.csv"
+        sample_path = Path(__file__).parent.parent / "data" / "uploads" / "sample.csv"
         
         if sample_path.exists():
             try:
