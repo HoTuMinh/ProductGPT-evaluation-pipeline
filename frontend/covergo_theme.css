@@ -193,7 +193,7 @@ h1, h2, h3, h4, h5, h6 {
 .stButton > button {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
-    border: none;
+    border: none !important;
     border-radius: 0.5rem;
     padding: 0.625rem 1.25rem;
     font-weight: 500;
@@ -202,6 +202,12 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-family: 'Ubuntu', sans-serif;
+}
+
+.stButton > button p,
+.stButton > button span,
+.stButton > button div {
+    color: var(--covergo-white) !important;
 }
 
 .stButton > button:hover {
@@ -222,11 +228,18 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--covergo-white) !important;
 }
 
+.stButton > button[kind="primary"] p,
+.stButton > button[kind="primary"] span,
+.stButton > button[data-testid="baseButton-primary"] p,
+.stButton > button[data-testid="baseButton-primary"] span {
+    color: var(--covergo-white) !important;
+}
+
 /* Secondary button */
 .stButton.secondary > button {
     background-color: var(--covergo-white) !important;
     color: var(--covergo-primary) !important;
-    border: 2px solid var(--covergo-primary);
+    border: 2px solid var(--covergo-primary) !important;
 }
 
 .stButton.secondary > button:hover {
@@ -255,12 +268,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ===== Download Button ===== */
 .stDownloadButton > button {
-    background-color: var(--covergo-success) !important;
+    background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
+    border: none !important;
 }
 
 .stDownloadButton > button:hover {
-    background-color: #059669 !important;
+    background-color: var(--covergo-primary-light) !important;
+    color: var(--covergo-white) !important;
 }
 
 /* ===== Custom Alert Styling with !important ===== */
@@ -270,6 +285,7 @@ h1, h2, h3, h4, h5, h6 {
 [data-testid*="stAlert"],
 [data-testid*="stNotification"] {
     background-color: var(--covergo-gray-100) !important;
+    border: 1px solid var(--covergo-gray-300) !important;
     border-left: 4px solid var(--covergo-gray-400) !important;
     color: var(--covergo-gray-900) !important;
     border-radius: 0.5rem !important;
@@ -283,10 +299,11 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--covergo-white) !important;
 }
 
-/* Keep green ONLY for success messages after actions */
+/* Keep gray for success messages */
 [data-baseweb="notification"][kind="success"] {
     background-color: var(--covergo-gray-100) !important;
-    border-left-color: var(--covergo-success) !important;
+    border: 1px solid var(--covergo-gray-300) !important;
+    border-left: 4px solid var(--covergo-success) !important;
     color: var(--covergo-gray-900) !important;
 }
 
