@@ -876,8 +876,6 @@ def show_getting_started_page(config, db):
                 df_sample = pd.read_csv(sample_path)
                 st.markdown("**Preview of sample file:**")
                 st.dataframe(df_sample.head(3), use_container_width=True)
-                
-                st.info(f" This sample contains {len(df_sample)} rows")
             except Exception as e:
                 st.warning(f"Could not load sample file: {e}")
         
