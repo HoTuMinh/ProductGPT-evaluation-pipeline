@@ -1,0 +1,406 @@
+product,type,benchmark_answer,question,response,score,reason
+zurich,Fact Recall (Positive),"The benefit for Overseas Medical Expenses for an adult under the Zurich Prestige Plan is $500,000.
+","What is the specific benefit for Overseas Medical Expenses for an adult under the Zurich Prestige Plan?
+","Benefit: Overseas Medical Expenses
+The Zurich Prestige Plan covers Overseas Medical Expenses for treatment administered by a Physician if you sustain Bodily Injury or Sickness whilst on a Journey, up to the Benefit amount specified in the Policy.
+
+Do you want to know more about the Zurich Prestige Plan?",2,"The model response fails to provide the specific benefit amount of $500,000 for Overseas Medical Expenses under the Zurich Prestige Plan, which was the core information requested and provided in the reference answer. Instead, it describes what the benefit covers without stating the amount."
+sompo,Fact Recall (Negative),"The provided documents do not specify the premium cost for the Sompo Superior Plan or any other plan. The policy wording only states that to enjoy benefits, full payment of the premium and receipt of a Certificate of Insurance are required.
+",What is the specific premium cost for the Sompo Superior Plan?,"I am unable to provide the specific premium cost for the Sompo Superior Plan. Premium costs can vary based on factors such as trip duration, destination, age of the traveler, and any additional riders or coverage selected.
+
+To get a precise quote for the Sompo Superior Plan, you would typically need to obtain a quote directly from Sompo Insurance Singapore or through their authorized distributors.
+
+Do you want to know more about the benefits of the Sompo Superior Plan?",3,"The model accurately states that it cannot provide the specific premium cost, which aligns with the reference. However, the subsequent explanation about factors influencing premium costs (trip duration, destination, age, riders) and how to obtain a quote (directly from Sompo or distributors) are fabrications as they are not present in the provided reference answer."
+sompo,Summarization (Positive),"To be eligible for the Sompo Travel Insurance Policy, you must:
+    ◦ Be living in Singapore.
+    ◦ Hold a valid Singapore identification document (e.g., passport, NRIC, employment pass).
+    ◦ Start and end your trip in Singapore.
+    ◦ Have fully paid your premium.
+    ◦ Not be an undischarged bankrupt, nor have committed an act of bankruptcy within the last 12 months.
+    ◦ Have bought the policy before you leave Singapore, with the coverage date starting before your departure.
+    ◦ Be more than 30 days old.
+","Could you summarize the eligibility criteria for purchasing the Sompo Travel Insurance Policy?
+","To be eligible for Sompo Travel Insurance Policy, you must meet the following criteria:
+
+Be living in Singapore.
+Hold a valid Singapore identification document (e.g., Singapore passport, NRIC, employment pass, work permit, long-term visit pass, or student pass).
+Your trip must start and end in Singapore.
+Have fully paid your premium.
+Not be an undischarged bankrupt or have committed an act of bankruptcy within the last 12 months.
+The policy must be bought before you leave Singapore, and the coverage date must start before your departure.
+Be more than 30 days old.
+Do you have any other questions about Sompo Travel Insurance?",4,"The model response is almost entirely supported by the reference answer. However, it adds 'work permit, long-term visit pass, or student pass' to the examples of valid Singapore identification documents, which are not explicitly mentioned in the reference answer's examples."
+sompo,Summarization (Negative),"The Sompo Travel Insurance documents do not provide a summary or specific list of adventurous activities covered under the Superior Plan. Instead, the General Exclusions section outlines various activities that are not covered, such as taking part in speed contests or professional sports, certain scuba diving conditions, mountaineering (except on man-made walls), trekking above 3,500 meters, and expeditions to remote areas. The Zurich Travel Insurance documents, however, state that ""Adventurous Activities Cover"" is ""Covered"" across all their plans (Basic, Essential, Prestige).
+","Please summarize the specific adventurous activities that are covered under the Sompo Travel Insurance Superior Plan.
+","I am unable to provide specific details on the adventurous activities covered under the Sompo Travel Insurance Superior Plan from the available information. The documents indicate that Sompo Travel Insurance policies generally do not cover ""Extreme Sports and Sporting Activities"" or ""professional sports.""
+
+To get precise information on the adventurous activities covered by the Sompo Superior Plan, please refer to the official policy wording or contact Sompo Insurance Singapore directly.
+
+Do you have any other questions about Sompo Travel Insurance?",3,"The model correctly states it cannot provide specific details on covered adventurous activities for Sompo, which aligns with the reference. However, it introduces the general exclusion category 'Extreme Sports and Sporting Activities' which is not explicitly stated in the reference as a Sompo exclusion. While 'professional sports' is mentioned in the reference as an exclusion, the broader category is a fabrication."
+zurich,One-hop (Positive),"For Overseas Hospital Visit, the benefits are:
+    ◦ Basic Plan: $2,000
+    ◦ Essential Plan: $4,000
+    ◦ Prestige Plan: $6,000
+","Compare the Overseas Hospital Visit benefit between the Zurich Basic, Essential, and Prestige Plans.
+","I am unable to provide the specific benefit amounts for ""Overseas Hospital Visit"" for the Zurich Basic, Essential, and Prestige Plans from the available information. The documents state that Zurich will pay ""up to the Benefit amount specified in the Policy"" for Overseas Hospital Visits, but the specific amounts for each plan are not detailed.
+
+For precise benefit amounts, please refer to the official Zurich Travel Insurance policy wording or contact Zurich Singapore directly.
+
+Do you want to know more about other benefits of the Zurich plans?",1,"The model response directly contradicts the reference answer. The reference explicitly provides the specific benefit amounts for Overseas Hospital Visit for each plan ($2,000 for Basic, $4,000 for Essential, $6,000 for Prestige), while the model states it is 'unable to provide the specific benefit amounts' and that 'the specific amounts for each plan are not detailed'."
+sompo,One-hop (Negative),"The Sompo Travel Insurance documents do not list a ""Child Education Fund"" benefit under either the Essential or Superior Plans. However, the Zurich Travel Insurance offers a Child Education Fund benefit: $2,500 per child under the Essential Plan and $5,000 per child under the Prestige Plan, while it is not covered under their Basic Plan.
+","Compare the Child Education Fund benefit for a child under 16 years old between the Sompo Essential and Superior Plans.
+","I am unable to provide the specific benefit amounts for the ""Child Education Fund"" under the Sompo Essential and Superior Plans from the available information. The search results provided details for Zurich Travel Insurance plans, not Sompo.
+
+To get accurate information on the Child Education Fund benefit for Sompo Travel Insurance, please refer to the official Sompo policy wording or contact Sompo Insurance Singapore directly.",4,"The model accurately states that it cannot provide specific benefit amounts for Sompo plans and correctly identifies that the available information pertains to Zurich Travel Insurance, which aligns with the reference. However, the suggestion to refer to official Sompo policy wording or contact Sompo Insurance Singapore directly is not present in the reference answer, making it a minor fabrication."
+"zurich, sompo",Multi-hop (Positive),"- Under the Zurich Prestige Plan, the Personal Liability coverage is $500,000.
+- Under the Sompo Superior Plan, the Personal Liability coverage is $1,000,000 per insured person","Compare the Personal Liability coverage for a single insured person between the Zurich Prestige Plan and the Sompo Superior Plan.
+","Criteria	Zurich Prestige Plan	Sompo Superior Plan
+Personal Liability	S$500,000	Information not available in the provided documents.
+Key Differences & Similarities The Zurich Prestige Plan offers S$500,000 for Personal Liability. Information regarding the Personal Liability coverage for the Sompo Superior Plan is not available in the provided documents.
+
+Do you want to know more about other benefits of the Zurich Prestige Plan?",2,"The model response directly contradicts the reference answer regarding the Sompo Superior Plan's Personal Liability coverage. The reference states it is $1,000,000 per insured person, while the model claims the information is not available."
+"zurich, sompo",Multi-hop (Negative),"The Zurich Travel Insurance Basic Plan does not cover Home Contents. The Zurich Essential Plan provides $2,500 cover for Home Contents. The Sompo Travel Insurance documents, however, do not mention ""Home Contents"" as a covered benefit under any of its plans, including the Essential Plan.
+","Compare the coverage for ""Home Contents"" between the Zurich Basic Plan and the Sompo Essential Plan.
+","Criteria	Zurich Basic Plan	Sompo Essential Plan
+Home Contents	Not Covered	Information not available in the provided documents.
+Key Differences & Similarities The Zurich Basic Plan does not cover Home Contents. Information regarding the Home Contents coverage for the Sompo Essential Plan is not available in the provided documents.
+
+To get accurate information on the Home Contents benefit for Sompo Travel Insurance, please refer to the official Sompo policy wording or contact Sompo Insurance Singapore directly.",4,"The model accurately states that the Zurich Basic Plan does not cover Home Contents and that information for the Sompo Essential Plan is not available in the documents, which aligns with the reference. However, the last sentence suggesting to refer to official policy wording or contact Sompo Insurance Singapore directly is a fabrication not present in the reference answer."
+zurich,Inference (Positive),"As a ""Senior"" (a person aged 70 years and above), to get the highest possible coverage for Accidental Death and Permanent Disablement under Zurich Travel Insurance, you should choose the Prestige Plan, which offers $50,000. The Essential Plan offers $25,000 for seniors, and the Basic Plan offers $15,000.
+","If I am a 72-year-old individual considering Zurich Travel Insurance and want the highest possible coverage for Accidental Death and Permanent Disablement, which plan should I choose?
+","For a 72-year-old individual seeking the highest possible coverage for Accidental Death and Permanent Disablement under Zurich Travel Insurance, the provided information does not specify the benefit amounts for this particular age group across the different plans (Basic, Essential, Prestige). The document only states that ""Senior refers to a person aged 70 years and above"" and that benefits are ""maximum limits (in SGD) per Insured per Journey as defined in the policy wording.""
+
+To determine the highest coverage for Accidental Death and Permanent Disablement for a 72-year-old, you would need to consult the full policy wording or contact Zurich Singapore directly.
+
+Do you want to know more about other benefits for seniors under Zurich Travel Insurance?",1,"The model response directly contradicts the reference answer by stating that the information does not specify benefit amounts for the age group, when the reference explicitly provides these amounts for 'Seniors' (70 years and above), including the highest coverage plan and amount."
+sompo,Inference (Negative),"No, according to the Sompo policy, there will be no premium refund if a claim has been made under the policy or if the notice of cancellation is received after the start date of the policy.",I need to cancel my Sompo travel insurance policy after my trip has already started. Will I receive a premium refund?,"For Sompo Single Trip Policies, there will be no premium refund if a claim has been made under the policy or if the notice of cancellation is received after the start date of the policy.
+
+Do you need to know more about Sompo's policy terms and conditions?",3,"The model response adds the specific detail 'For Sompo Single Trip Policies', which is not present in the reference answer. The reference only refers to 'the Sompo policy' generally. This constitutes a fabrication of detail. The additional conversational question is also not derived from the reference."
+zurich,Calculation (Positive),"For baggage delay whilst overseas, the Zurich Essential Plan pays $200 per 6 consecutive hours of delay, with an Overseas Limit of $400. For 18 hours of delay, this would theoretically be $200 x (18/6) = $600. However, since the Overseas Limit for the Essential Plan is $400, the adult would receive $400.
+","If an adult's checked-in baggage is delayed for 18 consecutive hours while overseas under the Zurich Essential Plan, how much cash benefit would they receive for Baggage Delay?
+","I am sorry, but I cannot provide the specific cash benefit for Baggage Delay under the Zurich Essential Plan for an 18-hour delay from the available information. The search results provide general conditions for baggage delay but do not specify the benefit amounts for Zurich's plans.
+
+To get this information, you would need to refer to the official Zurich Travel Insurance policy wording or contact Zurich Singapore directly.
+
+Do you have any other questions about Zurich Travel Insurance?",1,"The model response directly contradicts the reference answer by stating it cannot provide the specific cash benefit, when the reference answer clearly provides the calculation and the exact benefit amount of $400 for an 18-hour delay under the specified plan."
+sompo,Calculation (Negative),"Under the Sompo Essential Plan, for every six hours of delay while Overseas, an Adult can claim $100 and a Child $50. Since the benefit is paid for every six hours of delay, and not for partial increments, for an 8-hour delay, you would only be eligible for the benefit for the first 6 hours. Therefore, an Adult would receive $100 for the 6 hours of delay. The question implies a calculation for the specific 8-hour period, but the policy specifies increments of 6 hours.
+","If my flight is delayed by 8 hours while overseas, how much can I calculate to claim for travel delay under the Sompo Essential Plan?
+","For a flight delayed by 8 hours overseas under the Sompo Essential Plan, you can claim for every full six hours in a row of delay.
+
+Since your flight is delayed by 8 hours, you would be eligible for the benefit for the first 6 hours of delay. The specific cash benefit amount for the Sompo Essential Plan is not provided in the available information. You will need to refer to the Table of Cover in your Sompo Travel Insurance policy wording for the exact amount.
+
+You must obtain written proof of the delay from the transport operator, stating the number of hours of delay and the reason for the delay.
+
+Do you need assistance finding the Sompo Travel Insurance policy wording?",2,"The model response contradicts the reference by stating that the specific cash benefit amount is not provided, whereas the reference clearly states that an Adult can claim $100 and a Child $50. Additionally, the model fabricates information by stating that written proof of delay is required, which is not mentioned in the reference answer."
+etiqua,Fact Recall (Positive),"The maximum sum insured for Overseas Medical Expenses for an Adult aged below 70 years old under the Etiqa Suite Plan is $2.5 million.
+",What is the maximum sum insured for Overseas Medical Expenses for an Adult aged below 70 years old under the Etiqa Suite Plan?,"Benefit: Overseas Medical Expenses
+Etiqa Suite Plan (Adult aged below 70 years old): Up to SGD 2,500,000
+Do you want to know more about the Etiqa Suite Plan?",4,"The model response accurately states the sum insured and the conditions, which perfectly aligns with the reference answer. However, it adds 'SGD' which is not explicitly stated in the reference answer, making it a very minor, inconsequential detail not found in the reference."
+singlife,Fact Recall (Negative),"The provided Singlife Travel Insurance policy documents do not explicitly detail specific residency requirements for purchasing the policy. The documents focus on the summary of cover and limits, as well as policy features.
+","What are the specific eligibility requirements regarding residency for purchasing the Singlife Travel Insurance policy?
+","To be eligible for a travel insurance policy in Singapore, including Singlife (based on general Singapore travel insurance criteria), you typically need to meet the following residency requirements:
+
+Be an ordinarily Singapore resident.
+Hold a valid Singapore identification document such as a Singapore passport, NRIC, employment pass, work permit, long-term visit pass, or student pass.
+Your trip must start and end in Singapore.
+You must intend to return to Singapore after your trip.
+The policy is issued in Singapore and is subject to the Insurance Act (Cap 142). You are generally considered ordinarily resident in Singapore if:
+
+You are a citizen of Singapore, unless you have resided outside Singapore continuously for 5 or more years preceding the application date and are not currently residing in Singapore.
+You are a permanent resident, unless you have resided in Singapore for less than a total of 183 days in the 12 months preceding the application date.
+You have a work pass or permit and have resided in Singapore for at least 183 days in the 12 months preceding the application date.
+You have an Immigration Act pass or permit with a duration longer than 90 days and have resided in Singapore continuously for at least 90 days in the 12 months preceding the application date.
+If you do not meet these definitions, you must notify the insurer. Insurers may request documentation to prove your eligibility, such as a copy of your passport, Singapore residency documents, or current visa.",1,"The model response fabricates detailed residency requirements and applies them to Singlife Travel Insurance. This directly contradicts the reference answer, which explicitly states that 'The provided Singlife Travel Insurance policy documents do not explicitly detail specific residency requirements for purchasing the policy.'"
+etiqua,Summarization (Positive),"The Etiqa Travel Infinite policy highlights several key benefits, including payment upon a 3-hour flight delay even without submitting a claim, fast and easy claims payout via PayNow, 24-hour worldwide emergency medical assistance, baggage belt collection details, 24-hour travel assistance support, and flight check-in reminders.
+","Could you summarize the key benefits highlighted for the Etiqa Travel Infinite policy?
+","The Etiqa Travel Infinite policy (also referred to as Tiq Travel Insurance by Etiqa) highlights the following key benefits:
+
+Comprehensive COVID-19 add-on for protection before, during, and after your trip.
+Coverage for pre-existing medical conditions.
+Full refund if you need to cancel your travel policy.
+Automatic payment upon a 3-hour flight delay without needing to submit a claim.
+24-hour worldwide emergency travel support.
+Covers all forms of transportation.
+Includes flight check-in reminders and baggage belt collection details.
+Do you want to know more about a specific benefit, such as the COVID-19 coverage or pre-existing conditions?",2,"The model response fabricates several key benefits not present in the reference answer, including 'Comprehensive COVID-19 add-on', 'Coverage for pre-existing medical conditions', 'Full refund if you need to cancel', and 'Covers all forms of transportation'. Additionally, the model's '24-hour worldwide emergency travel support' misrepresents and combines two distinct benefits from the reference ('24-hour worldwide emergency medical assistance' and '24-hour travel assistance support') while omitting the 'medical' aspect. The introduction of 'Tiq Travel Insurance by Etiqa' is also not in the reference. Only a few points are faithfully extracted."
+singlife,Summarization (Negative),"While Rental Vehicle Return is listed as a policy feature (Section 26) in the Singlife Travel Insurance policy, the provided ""Summary of Cover and Limits"" for the Lite Plan does not detail any specific benefits or sum insured for this feature.","Please summarize the benefits for Rental Vehicle Return under the Singlife Lite Plan.
+","I am sorry, but I do not have specific information regarding the ""Rental Vehicle Return"" benefit under the Singlife Lite Plan in the available resources.
+
+For detailed information on this benefit, please refer to the official Singlife Travel Insurance policy wording.
+
+Do you need assistance finding the Singlife Travel Insurance policy wording?",5,"The model response accurately reflects the reference answer by stating that it does not have specific information regarding the 'Rental Vehicle Return' benefit under the Singlife Lite Plan, which aligns with the reference's statement that the 'Summary of Cover and Limits' for the Lite Plan does not detail any specific benefits or sum insured for this feature."
+etiqua,One-hop (Positive),"The Personal Liability Abroad coverage for the Etiqa plans are as follows:
+    ◦ Classic Plan: $750,000
+    ◦ Deluxe Plan: $1 million
+    ◦ Suite Plan: $1.5 million","Compare the Personal Liability Abroad coverage across the Etiqa Classic, Deluxe, and Suite Plans.
+","Criteria	Etiqa Classic Plan	Etiqa Deluxe Plan	Etiqa Suite Plan
+Personal Liability Abroad	SGD 750,000	SGD 1,000,000	SGD 1,500,000
+Key Differences & Similarities: The Personal Liability Abroad coverage increases with each plan tier. The Classic Plan offers SGD 750,000, the Deluxe Plan offers SGD 1,000,000, and the Suite Plan provides the highest coverage at SGD 1,500,000.
+
+Do you want to know more about other benefits of the Etiqa Travel Infinite plans?",4,"The model response accurately states the Personal Liability Abroad coverage amounts for each plan and correctly identifies that the coverage increases with each plan tier. However, the reference answer uses '$' while the model response specifies 'SGD', which is a minor detail not explicitly present in the reference answer."
+etiqua,One-hop (Negative),"The Etiqa Classic Plan does not offer coverage for Overseas Traditional Chinese Medicine Expenses (marked as 'NA'). The Etiqa Deluxe Plan offers a sum insured of $500 for this benefit.
+","What is the difference in Overseas Traditional Chinese Medicine Expenses coverage between the Etiqa Classic and Etiqa Deluxe plans?
+","I am sorry, but I do not have specific information regarding the ""Overseas Traditional Chinese Medicine Expenses"" coverage for the Etiqa Classic and Etiqa Deluxe plans in the available resources.
+
+The provided information does not contain a direct comparison of this specific benefit across these two Etiqa plans.
+
+Do you want to know more about other benefits or a different insurer?",,
+"etiqua, singlife",Multi-hop (Positive),"    ◦ Under the Etiqa Classic Plan, an Adult aged below 70 years old has $500,000 coverage for Emergency Medical Evacuation.
+    ◦ Under the Singlife Lite Plan, an Adult up to 70 years old has S$250,000 coverage for Emergency Medical Evacuation.","Compare the Emergency Medical Evacuation coverage for an Adult aged below 70 years old between the Etiqa Classic Plan and the Singlife Lite Plan.
+","I am sorry, but I do not have specific information regarding the ""Emergency Medical Evacuation"" coverage for the Etiqa Classic Plan and the Singlife Lite Plan in the available resources.
+
+The provided information does not contain a direct comparison of this specific benefit across these two plans, nor does it detail the coverage amount for Etiqa Classic or Singlife Lite for Emergency Medical Evacuation.
+
+Do you want to know more about other benefits or a different insurer?",1,"The model response directly contradicts the reference answer by stating it does not have specific information regarding the 'Emergency Medical Evacuation' coverage for the Etiqa Classic Plan and the Singlife Lite Plan, and that the information is not detailed, whereas the reference answer explicitly provides these details for both plans."
+"etiqua, singlife",Multi-hop (Negative),"The Etiqa Classic Plan does not offer coverage for Pet Care (marked as 'NA'). Similarly, the Singlife Travel Insurance Lite Plan does not list or provide any coverage details for ""Domestic Pet Care"" in its Summary of Cover and Limits, though ""Domestic Pet Care"" (Section 28) is listed as a policy feature in the table of contents.
+","Compare the coverage for ""Pet Care"" between the Etiqa Classic Plan and the Singlife Lite Plan.
+","I am sorry, but I do not have specific information regarding ""Pet Care"" coverage for either the Etiqa Classic Plan or the Singlife Lite Plan in the available resources.
+
+The provided information does not detail whether these plans offer ""Pet Care"" coverage or the benefit amounts if they do.
+
+Do you want to know more about other benefits or a different insurer?",,
+etiqua,Inference (Positive),"For an Adult aged 70 years old and above seeking the highest coverage for Personal Accident (Accidental Death and Permanent Disablement) under Etiqa, you should choose the Suite Plan. This plan provides a sum insured of $150,000, which is higher than the $100,000 offered by the Deluxe Plan and $50,000 by the Classic Plan.
+","I am an Adult aged 75 years old traveling and my primary concern is securing the highest available coverage for Personal Accident (Accidental Death and Permanent Disablement). Which Etiqa plan would be most suitable for me?
+","For an Adult aged 75 years old, to secure the highest available coverage for Personal Accident (Accidental Death & Permanent Disablement) under Etiqa Travel Insurance, you should choose the Suite Plan.
+
+Benefit: Personal Accident (Accidental Death & Permanent Disablement)
+Classic Plan: SGD 50,000
+Deluxe Plan: SGD 75,000
+Suite Plan: SGD 100,000
+Do you want to know more about other benefits of the Etiqa Suite Plan?",,
+singlife,Inference (Negative),"No, if you purchase the Singlife Lite Plan, you cannot infer coverage for pregnancy-related overseas emergency medical expenses. The document explicitly states that ""Overseas Emergency Medical Expenses - Pregnancy related"" is ""Not Covered"" under the Lite Plan. This benefit is available only under the Plus ($5,000) and Prestige ($8,000) plans.
+","If I purchase the Singlife Lite Plan, can I infer that my pregnancy-related overseas emergency medical expenses will be covered?
+","I am sorry, but based on the available information, I cannot confirm that pregnancy-related overseas emergency medical expenses are covered under the Singlife Lite Plan. The provided details do not specify coverage for pregnancy.
+
+For accurate information, please refer to the official Singlife Travel Insurance policy wording or contact Singlife directly.
+
+Do you need assistance finding the Singlife Travel Insurance policy wording?",,
+etiqua,Calculation (Positive),"Under the Etiqa Deluxe Plan, the benefit for Baggage Delay is $100 for every 6 hours of delay, with a maximum limit of $1,000. For an 18-hour delay, this calculates to 18 hours / 6 hours = 3 increments. Therefore, you would receive $300 ($100 x 3).
+","If an adult's checked-in baggage is delayed for 18 consecutive hours under the Etiqa Deluxe Plan, how much cash benefit would they receive for Baggage Delay?
+","Based on the general conditions for baggage delay, if your checked-in baggage is delayed for 18 consecutive hours while overseas, Etiqa will pay a cash benefit for every six continuous hours of delay.
+
+To calculate the benefit for an 18-hour delay: 18 hours / 6 hours per payment interval = 3 payment intervals.
+
+However, the specific cash benefit amount per 6-hour interval for the Etiqa Deluxe Plan is not available in the provided information. You would need to refer to the Etiqa Travel Insurance policy wording for the exact amount.
+
+Do you need assistance finding the Etiqa Travel Insurance policy wording?",,
+singlife,Calculation (Negative),"Under the Singlife Plus Plan, there is no specific Overseas Hospital Income in ICU benefit mentioned for which you would receive an additional lump sum. The document explicitly states ""Not covered"" for Overseas Hospital Income in ICU under the Plus plan. This benefit is only available under the Prestige Plan, which offers $50,000 ($400 for every 24 hours) for Overseas Hospital Income in ICU.
+","If I am hospitalized in an ICU overseas for 48 hours due to an injury under the Singlife Plus Plan, how much additional hospital income would I receive for the ICU stay?
+","I am sorry, but I still cannot provide the specific amount of additional hospital income you would receive for an ICU stay overseas under the Singlife Plus Plan. The available information does not detail the ICU-specific benefits for Singlife plans.
+
+For precise benefit amounts, please refer to the official Singlife Travel Insurance policy wording or contact Singlife Singapore directly.
+
+Do you need assistance finding the Singlife Travel Insurance policy wording?",,
+bubblegum,Fact Recall (Positive),"Under the Bubblegum Travel Insurance policy, ""Child(ren)"" are defined as those aged below eighteen (18) years of age.
+","What is the maximum age for a child to be covered under the Bubblegum Travel Insurance policy?
+","I am sorry, but I cannot find the specific maximum age for a child to be covered under the Bubblegum Travel Insurance policy from my available resources.
+
+For the most accurate and up-to-date information, please refer to the official Bubblegum Travel Insurance policy wording or contact Bubblegum directly.",,
+bubblegum,Fact Recall (Negative),"The provided excerpts for Bubblegum Travel Insurance mention that ""We will not pay, for each article or set/pair of any articles, more than the applicable Sum Insured per article shown in the Schedule of Benefits"", but the specific sum insured for personal baggage per article is not provided in these documents.
+","What is the specific sum insured for Personal Baggage for a single item under the Bubblegum Travel Insurance policy?
+","The Bubblegum Travel Insurance policy states that for Personal Baggage, they will not pay more than the applicable Sum Insured per article shown in the Schedule of Benefits.
+
+However, the specific ""Schedule of Benefits"" with the exact sum insured for a single item is not provided in the available policy wording.
+
+To find the specific sum insured for a single item under the Bubblegum Travel Insurance policy, you would need to refer to the Schedule of Benefits which accompanies the policy.
+
+Do you need assistance finding the Bubblegum Travel Insurance policy wording or their contact information?",,
+aig,Summarization (Positive),"To be eligible for cover under the AIG Travel Guard Direct policy, you must be ordinarily resident in Singapore with full rights to enter and return to Singapore regardless of medical status, you must be returning or intending to return to Singapore at the end of your travel, and your pre-trip arrangements must be made and paid for in Singapore, with your trip commencing in Singapore.
+","Please summarize the eligibility criteria for obtaining cover under the AIG Travel Guard Direct policy.
+","To be eligible for cover under the AIG Travel Guard Direct policy, you must meet the following criteria:
+
+You must be ordinarily resident in Singapore with full rights to enter and return to Singapore, regardless of medical status.
+You must be returning to Singapore at the end of your travel, or intending to return upon completion of your travel.
+Your pre-trip arrangements must be made and paid for in Singapore, and your trip must commence in Singapore.
+Please note that some benefits may have a reduced amount payable based on age. You should refer to the policy's Schedule of Benefits for further information.
+
+Do you have any other questions about AIG Travel Guard Direct?",,
+bubblegum,Summarization (Negative),"The Bubblegum Travel Insurance Policy Endorsement explicitly states that it amends Part III, General Exclusions, number 19 to exclude any loss or expenses in relation to Severe acute respiratory syndrome Coronavirus 2 (SARS-CoV-2) or Coronavirus disease (COVID-19), including any mutation or variation thereof, or any Pandemic or epidemic as declared by the WHO or any governmental authority. Therefore, the policy, as amended by the endorsement, does not cover losses related to COVID-19.
+","Can you summarize the circumstances under which the Bubblegum Travel Insurance policy would cover losses related to COVID-19?
+","The Bubblegum Travel Insurance policy provides coverage for losses related to COVID-19 under specific sections:
+
+Overseas Medical Expenses Due to COVID-19 (Section 2.4)
+Trip Cancellation Due to COVID-19 (Section 5B): This applies if the Insured Person experiences a Serious Sickness due to a COVID-19 diagnosis confirmed by a Physician or Doctor.
+Trip Curtailment Due to COVID-19 (Section 6B): This applies if the Insured Person experiences a Serious Sickness due to a COVID-19 diagnosis confirmed by a Physician or Doctor, or an unanticipated death due to COVID-19, which necessitates an early return to Singapore.
+Important Exclusions:
+
+The policy generally excludes losses or expenses related to:
+
+Any Infectious Disease, virus, bacterium, or other microorganism.
+Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) or Coronavirus disease (COVID-19), including any mutation or variation thereof.
+Pandemic or epidemic, as declared by the World Health Organization or any governmental authority.
+However, the specific sections mentioned above (2.4, 5B, and 6B) are exceptions to this general exclusion.
+
+Losses NOT covered include:
+
+Any COVID-19 diagnostic tests required by government authorities for your trip (e.g., pre-departure and post-arrival tests).
+Claims due to travel advisories, border closures, quarantine orders, or government orders issued by governments or the World Health Organization for the destination country or home country.
+Claims due to disinclination to travel, change of mind, or fear of traveling.
+Claims due to COVID-19 diagnosis, symptoms, or possible exposure known before purchasing the policy or booking the trip.
+Any side effect or complications arising from a vaccination against COVID-19.
+Losses if you are traveling against a Physician's or Doctor's advice, or acting against their advice (including traveling with COVID-19 symptoms).
+For full details, please refer to the Bubblegum Travel Insurance policy wording.
+
+Do you want to know more about a specific COVID-19 related benefit?",,
+bubblegum,One-hop (Positive),"Under the Bubblegum Travel Insurance policy, the compensation for Permanent Loss of Hearing in both ears is 75% of the Sum Insured, while for one ear it is 15% of the Sum Insured.
+","Compare the compensation percentages for permanent loss of hearing in both ears versus permanent loss of hearing in one ear under the Bubblegum Travel Insurance's Accidental Death and Disablement section.
+","Under the Bubblegum Travel Insurance policy's Accidental Death and Disablement section:
+
+For Permanent Loss of Hearing in both ears, the compensation is 75% of the Sum Insured.
+For Permanent Loss of Hearing in one ear, the compensation is 15% of the Sum Insured.",,
+aig,One-hop (Negative),"The AIG Travel Guard Direct Basic Plan clearly states that Travel Curtailment is ""N.A"" (Not Applicable), meaning there is no coverage for this benefit. While Baggage Delay is a listed section in the Table of Contents (Section F2), the provided excerpts do not include the specific maximum benefit or sum insured for Baggage Delay for the Basic Plan in the ""Schedule of Benefits"", making a direct numerical comparison impossible.
+","Compare the maximum benefit for Travel Curtailment with the maximum benefit for Baggage Delay under the AIG Travel Guard Direct Basic Plan.
+","I am sorry, but I could not find the specific maximum benefit amounts for Travel Curtailment and Baggage Delay under the AIG Travel Guard Direct Basic Plan in the provided information. The search results indicate that benefits for individuals aged 70 years or older might be reduced for certain sections, but the exact figures for the Basic Plan for these two benefits are not explicitly stated.
+
+To get the most accurate and up-to-date information, I recommend referring to the official AIG Travel Guard Direct policy wording or contacting AIG directly.
+
+Do you need the AIG Singapore 24-hour Emergency Assistance Hotline number?",,
+"bubblegum, aig",Multi-hop (Positive),"    ◦ Starr International Insurance (Bubblegum) appoints Starr Global Emergency Assistance to provide and arrange emergency assistance services 24 hours a day, including emergency medical evacuation and repatriation. They retain the absolute right to decide the place and method of evacuation.
+    ◦ AIG Asia Pacific Insurance (Travel Guard Direct) provides 24-hour access to AIG Travel Asia Pacific (ATAP) services for emergency travel and medical assistance. ATAP will decide if and when evacuation or repatriation is necessary and coordinate all services.","Compare the assistance services provided for emergency medical evacuation and repatriation between Starr International Insurance (Bubblegum) and AIG Asia Pacific Insurance (Travel Guard Direct).
+","Here's a comparison of the emergency medical evacuation and repatriation services provided by Starr International Insurance (Bubblegum) and AIG Asia Pacific Insurance (Travel Guard Direct):
+
+Criteria        Starr International Insurance (Bubblegum)        AIG Asia Pacific Insurance (Travel Guard Direct)
+Assistance Provider        Starr Global Emergency Assistance        AIG Travel Asia Pacific (ATAP)
+Availability        24-hours hotline: (+65) 3158-2536        24-hour worldwide pre-trip and emergency assistance
+Medical Evacuation        Starr Global Emergency Assistance decides the place and means of evacuation based on assessed facts and circumstances.        ATAP directs to suitable medical facilities, monitors condition, and decides if/when evacuation is necessary, coordinating all services.
+Repatriation of Mortal Remains        Starr Global Emergency Assistance arranges and pays for repatriation of remains or ashes to Singapore.        AIG covers the cost of returning the body or ashes to Singapore up to the policy limit.
+Key Condition        Starr Global Emergency Assistance cannot guarantee appropriate medical facilities will always be available.        Must contact ATAP for medical treatment requiring hospital admittance, emergency transportation, or return home. Failure to do so may prejudice the claim. ATAP cannot guarantee appropriate medical facilities will always be available and cannot take over medical treatment.
+Key Differences & Similarities:
+
+Both insurers provide 24-hour emergency assistance for medical evacuation and repatriation.
+Starr International Insurance (Bubblegum) explicitly states that their assistance provider, Starr Global Emergency Assistance, retains the absolute right to decide the place and means of evacuation.
+AIG Travel Guard Direct emphasizes that their assistance provider, ATAP, will direct to suitable medical facilities, monitor the condition, and coordinate all services, including deciding if and when evacuation or repatriation is necessary.
+Both policies highlight that contacting their respective assistance providers is crucial for these services, and failure to do so may affect claims.
+Do you want to know more about the specific benefits or exclusions for either of these insurers?",,
+"bubblegum, aig",Multi-hop (Negative),"The provided documents do not contain any information or specific coverage limits for ""Loss of Sporting Equipment"" under the Bubblegum Travel Insurance policy. While AIG Travel Guard Direct lists ""SECTION N - LOSS OF SPORTING EQUIPMENT"" in its Table of Contents, the provided excerpts do not include the specific maximum benefits or sum insured for this section, making a comparison of coverage impossible.
+","How does the maximum coverage for ""Loss of Sporting Equipment"" compare between the Bubblegum Travel Insurance and the AIG Travel Guard Direct policies?
+","I am sorry, but I cannot provide a direct comparison for the maximum coverage for ""Loss of Sporting Equipment"" between Bubblegum Travel Insurance and AIG Travel Guard Direct.
+
+My search for Bubblegum Travel Insurance did not yield specific information regarding the maximum sum insured for ""Loss of Sporting Equipment."" The results provided general information about personal baggage and sports equipment coverage from other insurers (FWD and Allianz) but not for Bubblegum.
+
+For AIG Travel Guard Direct, the provided information also does not explicitly state a maximum benefit for ""Loss of Sporting Equipment.""
+
+To get the most accurate and up-to-date information, I recommend referring to the official policy wordings for both Bubblegum Travel Insurance and AIG Travel Guard Direct, or contacting the respective insurers directly.",,
+aig,Inference (Positive),"For an insured person under age 70 years seeking the highest possible overseas medical expenses coverage for COVID-19 from AIG Travel Guard Direct, the Supreme Plan would be most suitable. It offers a maximum benefit of S$250,000, which is higher than the Enhanced ($200,000), Standard ($100,000), and Basic ($50,000) plans.
+","I am traveling and want to ensure I have the highest possible overseas medical expenses coverage if I contract COVID-19. Based on the available documents, which plan from AIG Travel Guard Direct would be most suitable for an insured person under age 70?
+","Based on the available documents for AIG Travel Guard Direct, the Supreme Plan offers the highest overseas medical expenses coverage if you contract COVID-19 for an insured person under age 70.
+
+Benefit: Overseas medical expenses & Emergency medical evacuation and emergency medical repatriation (if diagnosed with COVID-19 whilst overseas)
+Supreme: SGD 250,000
+Enhanced: SGD 200,000
+Standard: SGD 100,000
+Basic: SGD 50,000
+This benefit also includes the cost of emergency evacuation if deemed medically necessary and the cost of returning your body or ashes to Singapore up to the stated policy limit.
+
+Do you want to know more about the other benefits of the AIG Travel Guard Direct Supreme Plan?",,
+aig,Inference (Negative),"No, you cannot infer coverage for overseas medical expenses if you are traveling with COVID-19 symptoms. The AIG Travel Guard Direct policy explicitly states that ""We will not cover any loss if you are travelling against a medical practitioner's or doctor's advice, or any claim arising from you acting in a way that goes against the advice of a medical practitioner or doctor (including, but not limited to, travelling with COVID-19 symptoms).","If I am traveling with symptoms of COVID-19 and fall ill, can I infer that the AIG Travel Guard Direct policy will cover my overseas medical expenses?
+","No, you cannot infer that the AIG Travel Guard Direct policy will cover your overseas medical expenses if you are traveling with symptoms of COVID-19 and then fall ill.
+
+The policy explicitly states: ""We will not cover any loss if you are travelling against a medical practitioner's or doctor's advice, or any claim arising from you acting in a way that goes against the advice of a medical practitioner or doctor (including, but not limited to, travelling with COVID-19 symptoms).""
+
+Therefore, if you travel with COVID-19 symptoms, any related medical expenses would likely not be covered.",,
+bubblegum,Calculation (Positive),"For an Insured Person over seventy (70) years of age at the time of Accident, the maximum Sum Insured of Accidental Death and Disablement under the Bubblegum Travel Insurance policy is restricted to fifty percent (50%) or up to a maximum of SGD75,000, whichever is lesser. Without knowing the full Sum Insured, the maximum payable is SGD75,000.
+","If an Insured Person aged 75 years suffers an Accidental Death during a trip covered by Bubblegum Travel Insurance, what is the maximum sum insured payable for Accidental Death and Disablement?
+","For an Insured Person aged 75 years under Bubblegum Travel Insurance, the maximum sum insured payable for Accidental Death and Disablement is restricted to fifty percent (50%) of the Sum Insured or up to a maximum of SGD 75,000, whichever is lesser.",,
+aig,Calculation (Negative),"The AIG Travel Guard Direct Standard Plan offers an Overseas Quarantine Allowance of $50 per day for up to 14 consecutive days if placed into mandatory quarantine outside Singapore due to a positive COVID-19 test. For a 10-day quarantine, the calculation would be 10 days * $50/day = $500. However, the document specifies that this benefit ""will not apply where quarantine measures are mandatory for all arriving passengers or quarantine mandates exist for all passengers from a particular country/region of origin"". The question does not specify if these conditions are met, which is critical for the applicability of the benefit. Therefore, while the daily rate is known, a definitive total cannot be calculated without confirming the specific circumstances of the quarantine.
+","If an AIG Travel Guard Direct policyholder is unexpectedly placed into mandatory overseas quarantine for 10 days due to a positive COVID-19 test, how much would they receive in total under the Standard Plan for the Out-of-country COVID-19 diagnosis quarantine allowance?
+","Under the AIG Travel Guard Direct Standard Plan, the Overseas Quarantine Allowance is SGD 50 per day.
+
+If a policyholder is unexpectedly placed into mandatory overseas quarantine for 10 days due to a positive COVID-19 test, they would receive a total of SGD 500 (SGD 50/day x 10 days).
+
+This benefit is applicable for up to 14 consecutive days, provided the quarantine measures are not mandatory for all arriving passengers or for all passengers from a particular country/region of origin. It also does not cover losses if you are traveling against a medical practitioner's advice or with COVID-19 symptoms.",,
+income,Fact Recall (Positive),"Income's Travel Insurance offers up to $1,000,000 medical expenses overseas coverage. This is based on Income's Travel Insurance Preferred plan, for an adult under 70 years old.
+","What is the maximum overseas medical expenses coverage offered by Income's Travel Insurance?
+","Income's Travel Insurance offers up to SGD 1,000,000 for overseas medical expenses coverage under the Preferred plan for an adult under 70 years old.
+
+Do you want to know more about the Income Travel Insurance Preferred plan?",,
+income,Fact Recall (Negative),"The provided documents do not specify the exact premium costs for any of Income's Travel Insurance plans, including the Preferred plan.
+","What is the specific premium cost for an Income Travel Insurance Preferred plan for a single trip?
+","I am sorry, but I cannot provide the specific premium cost for an Income Travel Insurance Preferred plan for a single trip. Premium costs vary based on factors such as your travel destination, duration, and age.
+
+You can get a quote directly from the Income website to determine the exact premium for your specific travel needs.",,
+hl,Summarization (Positive),"For Travel Protect360 Single Trip Policyholder(s), if they return from their trip and have no claims within 30 days from the policy end date, they will be eligible for an additional 5% discount promotion code for their next Single Trip purchase. If they continue to have no claims within 30 days from each subsequent policy end date, they will be eligible for an additional 10% discount promotion code, capped at a maximum of 10% for all subsequent eligible trips. These promotion codes can only be used once for the next Single Trip policy and are not transferable.
+","Please summarize the No Claim Discount program for HL Assurance Travel Protect360 Single Trip policies.
+","HL Assurance offers a No Claim Discount (NCD) program for Travel Protect360 Single Trip policies:
+
+First Purchase with No Claims: If you have no claims within 30 days from the policy end date, you are eligible for an additional 5% discount promotion code for your next Single Trip policy purchase.
+Subsequent Purchases with No Claims: If you continue to have no claims within 30 days from each policy end date after receiving the initial 5% discount, you will be eligible for an additional 10% discount promotion code. The discount is capped at a maximum of an additional 10% for all subsequent eligible trips.
+Promotion codes are for the next Single Trip policy purchase only and can be used once. They are not transferable.
+No refund will be given for discounted premiums if a policy purchased with an NCD promotion code is cancelled.
+Do you want to know more about the terms and conditions of this program?",,
+income,Summarization (Negative),"The documents state that ""Adventurous activities coverage"" such as leisure trekking (below 6,000m), skiing, bungee jumping, and skydiving are covered under all plan types. However, the provided excerpts do not include the specific terms and conditions or further details regarding this coverage.
+","Can you summarize the specific terms and conditions for ""Adventurous activities coverage"" under Income's Travel Insurance?
+","Income's Travel Insurance provides Adventurous Activities Coverage under all plan types. This includes activities such as:
+
+Leisure trekking (below 6,000m)
+Skiing
+Bungee jumping
+Skydiving
+Do you want to know more about specific benefits for these activities or other coverage details?",,
+hl,One-hop (Positive),"For an adult (age 70 years and below), the HL Assurance Travel Protect360 Silver plan provides S$250,000 for Overseas Medical Expenses, while the Gold plan offers S$500,000.
+","Compare the Overseas Medical Expenses coverage for an adult (age 70 years and below) between the HL Assurance Travel Protect360 Silver plan and the Gold plan.
+","Criteria	HL Assurance Travel Protect360 Silver plan	HL Assurance Travel Protect360 Gold plan
+Overseas Medical Expenses (Ages 0-69 years)	Up to SGD 500,000	Up to SGD 1,000,000
+Key Differences & Similarities: The HL Assurance Travel Protect360 Gold plan offers a significantly higher maximum sum insured for Overseas Medical Expenses (up to SGD 1,000,000) for adults aged 0-69 years compared to the Silver plan, which covers up to SGD 500,000. Both plans cover overseas emergency medical and dental treatment.
+
+Do you want to know more about other benefits of these plans?",,
+income,One-hop (Negative),"The provided documents state that Income's Travel Insurance offers up to $2,000 travel delay coverage, which is based on the Preferred plan. However, the documents do not specify the maximum sum insured for ""Travel Delay"" for the Classic or Deluxe plans, making a direct comparison impossible from the given information.","Compare the maximum sum insured for ""Travel Delay"" between Income's Travel Insurance Classic plan and Deluxe plan.
+","Criteria	Income Travel Insurance Classic plan	Income Travel Insurance Deluxe plan
+Travel Delay	Up to SGD 2,000 (SGD 200 for first 4 hours, then SGD 100 for every subsequent 6 hours)	Up to SGD 2,000 (SGD 200 for first 4 hours, then SGD 100 for every subsequent 6 hours)
+Key Differences & Similarities: Both the Income Travel Insurance Classic and Deluxe plans offer the same maximum benefit for Travel Delay, which is up to SGD 2,000. The payout structure is also identical: SGD 200 for the first 4 consecutive hours of delay, and then SGD 100 for every subsequent 6 consecutive hours of delay.
+
+Do you want to know more about other benefits of these plans?",,
+"income, hl",Multi-hop (Positive),"    ◦ Income Travel Insurance lists ""Section 18: Emergency medical evacuation"" as a Personal Accident and Medical Expenses Benefit under its Standard Plans.
+    ◦ HL Assurance Travel Protect360 explicitly states ""Unlimited"" coverage for Emergency Medical Evacuation under its Medical And Other Expenses section for all plan types (Basic, Silver, Gold, Platinum). Furthermore, for Emergency Medical Evacuation due to COVID-19, it also provides ""Unlimited"" coverage for Silver, Gold, and Platinum plans (NA for Basic).",Compare the coverage for Emergency Medical Evacuation between Income Travel Insurance and HL Assurance Travel Protect360 policies.,"Criteria	Income Travel Insurance	HL Assurance Travel Protect360
+Emergency Medical Evacuation	Covered (costs paid by Assistance Company, maximum benefit is the limit of your plan)	Up to SGD 1,000,000
+Key Differences & Similarities: HL Assurance Travel Protect360 explicitly states a maximum benefit of SGD 1,000,000 for Emergency Medical Evacuation. Income Travel Insurance states that the maximum benefit payable is ""the limit of Your Plan as shown in the Table of Cover,"" implying that the coverage amount can vary by plan. Both insurers cover necessary costs for transportation and medical care during evacuation for life-threatening conditions and require contacting their emergency assistance line.
+
+Do you want to know more about the specific plan limits for Income Travel Insurance?",,
+"income, hl",Multi-hop (Negative),"The provided documents detail the specific supporting documents required for a ""Personal Liability"" claim for HL Assurance Travel Protect360, which include not admitting liability, forwarding third-party correspondence, and a copy of the police report if applicable. However, the documents related to Income Travel Insurance do not provide specific documentary requirements for a ""Personal Liability"" claim.
+","Compare the specific documentary requirements for submitting a ""Personal Liability"" claim between Income Travel Insurance and HL Assurance Travel Protect360.","Criteria	Income Travel Insurance	HL Assurance Travel Protect360
+Personal Liability Claim Documents	- Claim Form
+- Copy of flight itinerary
+- Proof of travel (original boarding pass, air tickets, copy of passport, etc.)
+- All information, reports, original invoices and receipts, proof of ownership, evidence, medical certificates, and other documents as requested by Income.	- Do not admit any liability or make any offer, promise or payment without prior consent.
+- Forward all correspondence/documents from third parties concerning the accident immediately.
+- Copy of police report lodged (if applicable).
+- Other additional documents as required by HL Assurance.
+Key Differences & Similarities: Both insurers require a Claim Form and general travel proof. For Personal Liability, HL Assurance Travel Protect360 specifically advises not to admit liability and to forward all third-party correspondence/documents, including a police report if applicable. Income Travel Insurance has a more general requirement for ""all information, reports, original invoices and receipts, proof of ownership, evidence, medical certificates, documents"" that they may need to assess the claim.
+
+Do you want to know more about the general claim submission process for either insurer?",,
+hl,Inference (Positive),"Since asthma is a pre-existing medical condition, the customer would need to consider the Add-On Coverages for Pre-Existing Conditions. For an adult (age 70 years and below), the Platinum plan offers the highest coverage for Overseas Medical Expenses (Pre-Existing Condition) at S$100,000.
+","If a customer is 68 years old and has asthma (a pre-existing medical condition), which HL Assurance Travel Protect360 plan would offer them the highest coverage for overseas medical expenses related to this condition?
+","HL Assurance Travel Protect360 offers up to SGD 300,000 for overseas medical expenses and emergency medical evacuation coverage due to pre-existing conditions, including asthma. This coverage is available across all plan types.
+
+For more detailed information, you may wish to contact HL Assurance directly.",,
+income,Inference (Negative),"No, you cannot infer that all these individuals would be covered under Income Travel Insurance's ""Family⁴"" coverage. The definition of ""Family⁴"" explicitly states it covers ""You and/or your spouse/partner and unlimited number of dependent children (below 21 years old)"" and ""does not cover your parents, siblings, helper or any other relatives"". Therefore, the 23-year-old son and the 70-year-old mother would not be covered under this specific family plan.","A customer has booked a family trip, including themselves (45 years old), their spouse (46 years old), their 23-year-old dependent son, and their 70-year-old mother. Can they infer that all these individuals would be covered under Income Travel Insurance's ""Family⁴"" coverage?","No, based on Income Travel Insurance's definition of ""Family"" coverage, not all individuals in the customer's group would be covered:
+
+Dependent Son (23 years old): Family cover is for dependent children below 21 years old. Therefore, the 23-year-old son would not be covered under the family plan.
+Mother (70 years old): Family cover does not cover parents, siblings, helper, or any other relatives. Therefore, the 70-year-old mother would not be covered under the family plan.
+The family cover provides coverage for 1 or 2 adults who are spouses or partners and any number of their children below 21 years old. For higher limits or to include other relatives, you may consider a Group cover.
+
+Do you want to know more about the Group cover options with Income Travel Insurance?",,
+hl,Calculation (Positive),"The HL Assurance Travel Protect360 Gold plan offers an Overseas Quarantine Allowance due to COVID-19 of S$100 for every 24 hours. For a 12-day (12 x 24 hours) quarantine, the policyholder would receive 12 days * S$100/day = S$1,200. This amount is within the Gold plan's total limit of S$1,000, which implies the daily rate is up to the total limit. Since $1200 exceeds the total limit of $1000, they would receive S$1,000, which is the total limit for the Gold plan for Overseas Quarantine Allowance due to COVID-19.
+","A policyholder on the HL Assurance Travel Protect360 Gold plan is placed into mandatory overseas quarantine for 12 days due to a positive COVID-19 test. How much will they receive as an Overseas Quarantine Allowance due to COVID-19?
+","For a policyholder on the HL Assurance Travel Protect360 Gold plan who is placed into mandatory overseas quarantine for 12 days due to a positive COVID-19 test, they will receive SGD 500 as an Overseas Quarantine Allowance due to COVID-19.
+
+You can find more details on the HL Assurance website: Travel Insurance SG with NCD | Pre-Ex, Miles & Flight Delay",,
+income,Calculation (Negative),"The documents state that for ""Family⁴"" cover, ""Family total means the maximum amount we will pay for each benefit section under the family cover during any one trip. Each insured person is only allowed the maximum benefit per insured person in the table of cover"". However, while ""Section 3: Shortening your trip"" (similar to curtailment) is listed as a benefit, the specific maximum benefit limit (either per person or family total) for this section under the Standard Plans (Classic, Deluxe, Preferred) is not provided in the excerpts of the ""Table of cover"". Therefore, a specific maximum ""Family total"" benefit for Trip Curtailment cannot be calculated from the given information.
+","If a family covered by an Income Travel Insurance ""Family⁴"" plan experiences a Trip Curtailment due to an unforeseen event, what is the maximum ""Family total"" benefit they can expect to receive?
+","I am unable to provide the exact ""Family total"" benefit for Trip Curtailment under Income Travel Insurance's ""Family⁴"" plan with the available information. The provided search results do not specify a ""Family total"" limit for Trip Curtailment for Income Travel Insurance.
+
+However, Income Travel Insurance does offer coverage for Transport, accommodation and unused prepaid expenses due to trip cancellation, postponement, shortening, disruption, and travel agency insolvency.
+
+To get the precise ""Family total"" benefit for Trip Curtailment, I recommend checking the official Income Travel Insurance policy wording or contacting Income directly.
+
+Do you need the Income Insurance 24-hour Emergency Assistance Hotline contact number?",,
+msig,Fact Recall (Positive),"The MSIG Travel Easy® Premier Plan offers $1,000,000 for Overseas Medical Expenses for an Adult below 70 years. MSIG also highlights that their medical and related benefits provide substantial coverage of up to $1 million in overseas medical expenses.
+","What is the maximum overseas medical expenses coverage for an Adult below 70 years under the MSIG Travel Easy® Premier Plan?
+","For an Adult below 70 years old under the MSIG Travel Easy® Premier Plan, the maximum overseas medical expenses coverage is up to SGD 1,000,000. This also includes an additional SGD 1,000,000 for emergency medical evacuation and repatriation services.
+
+Do you want to know more about other benefits under the MSIG Travel Easy® Premier Plan?",3,"The model response accurately states the overseas medical expenses coverage of SGD 1,000,000, which is supported by the reference. However, it fabricates information by adding 'This also includes an additional SGD 1,000,000 for emergency medical evacuation and repatriation services,' which is not present in the reference answer."
+tiq,Fact Recall (Negative),"The provided documents do not specify the exact premium rates for any of Tiq Travel Insurance's plans, including the Luxury Single Trip policy for an individual. While it states that the premium is calculated based on attained age and may be varied, no specific rates are given.
+","What are the specific premium rates for a Tiq Travel Insurance Luxury Single Trip policy for an individual aged 35?
+","I am sorry, but I cannot provide the specific premium rates for a Tiq Travel Insurance Luxury Single Trip policy for an individual aged 35. Premium rates are dynamic and depend on various factors such as the travel destination, duration of the trip, and current promotions.
+
+To get an accurate premium quote, please visit the Tiq by Etiqa Insurance website and input your specific travel details.",3,"The model correctly states that it cannot provide the specific premium rates, aligning with the reference. However, it fabricates reasons for this by stating that rates depend on 'travel destination, duration of the trip, and current promotions,' which are not mentioned in the reference. The reference only states that 'premium is calculated based on attained age and may be varied.' Additionally, the advice to 'visit the Tiq by Etiqa Insurance website' is also not supported by the reference."
