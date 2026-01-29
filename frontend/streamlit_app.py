@@ -787,7 +787,7 @@ def show_getting_started_page(config, db):
         
         st.markdown("#### Step 1: Configure API")
         st.markdown("""
-        1. Go to ** Settings** tab
+        1. Go to **Settings** tab
         2. Click on a provider button (currently only Groq is available)
         3. Select a model
         4. Enter your API key
@@ -813,7 +813,7 @@ def show_getting_started_page(config, db):
         
         st.markdown("#### Step 3: Upload & Configure")
         st.markdown("""
-        1. Go to ** New Evaluation** tab
+        1. Go to **New Evaluation** tab
         2. Upload your CSV file
         3. Verify column mappings are correct
         4. Select which metrics to evaluate (start with **Accuracy**)
@@ -823,7 +823,7 @@ def show_getting_started_page(config, db):
         
         st.markdown("#### Step 4: Run Evaluation")
         st.markdown("""
-        1. Click ** Run Evaluation**
+        1. Click **Run Evaluation**
         2. Wait for processing (typically 1-2 seconds per sample)
         3. View results in the tabs
         """)
