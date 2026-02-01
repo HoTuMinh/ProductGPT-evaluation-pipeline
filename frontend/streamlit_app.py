@@ -23,7 +23,7 @@ st.set_page_config(
     page_title="ProductGPT Evaluation Pipeline",
     page_icon="",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # Load CoverGo CSS Theme
@@ -34,7 +34,7 @@ def load_css():
         with open(css_file, 'r', encoding='utf-8') as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     except FileNotFoundError:
-        st.warning(" CSS theme file not found. Using default styling.")
+        st.warning("CSS theme file not found. Using default styling.")
 
 # Apply CSS theme
 load_css()
@@ -60,7 +60,7 @@ def check_authentication():
         st.session_state.authenticated = False
     
     if not st.session_state.authenticated:
-        st.markdown('<div class="main-header"> ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header">ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
         
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
@@ -68,12 +68,10 @@ def check_authentication():
             password = st.text_input("Password", type="password", key="login_password")
             
             if st.button("Login", use_container_width=True):
-                # Simple auth with test account
                 if (username == "123" and password == "123") or password == "covergo2024":
                     st.session_state.authenticated = True
                     st.session_state.username = username if username else "anonymous"
-                    # Show configuration popup after login
-                    st.session_state.show_config_popup = True
+                    st.session_state.step = 'settings'
                     st.rerun()
                 else:
                     st.error("Invalid credentials")
@@ -81,6 +79,7 @@ def check_authentication():
         return False
     
     return True
+
 
 def display_evaluation_results(config, db, eval_data):
     """Display evaluation results with report generation"""
@@ -97,16 +96,14 @@ def display_evaluation_results(config, db, eval_data):
             show_review_summary(config, db, eval_data)
             return
     
-    st.markdown("###  Evaluation Results")
+    st.markdown("### Evaluation Results")
     
-    # Use session state data which gets updated by Apply Changes
     all_results = st.session_state.last_evaluation['all_results']
     selected_metrics = eval_data['selected_metrics']
     questions = eval_data['questions']
     responses = eval_data['responses']
     benchmarks = eval_data['benchmarks']
     
-    # Check if human reviews have been applied
     review_applied = st.session_state.get('review_applied', False)
     review_metric = st.session_state.get('review_metric_updated', None)
     review_threshold = st.session_state.get('review_threshold_used', 0.7)
@@ -115,31 +112,24 @@ def display_evaluation_results(config, db, eval_data):
     cols = st.columns(len(selected_metrics))
     for idx, (metric, results_df) in enumerate(all_results.items()):
         with cols[idx]:
-            # Score column already contains human overrides if applied
             avg_score = results_df['score'].mean()
-            
-            # Calculate pass rate using threshold
             pass_count = sum(1 for score in results_df['score'] if score >= review_threshold)
             pass_rate = pass_count / len(results_df) * 100
-            
-            # Check if this metric has been reviewed
             has_reviews = review_applied and metric == review_metric
             
             if has_reviews and 'llm_score' in results_df.columns:
-                # Show comparison with original LLM scores
                 original_avg = results_df['llm_score'].mean()
                 original_pass_rate = (results_df['llm_score'] >= review_threshold).sum() / len(results_df) * 100
                 
                 st.markdown(f"""
                 <div class="metric-highlight-card">
-                    <div class="metric-highlight-label">{metric.capitalize()} ✓</div>
+                    <div class="metric-highlight-label">{metric.capitalize()}</div>
                     <div class="metric-highlight-value">{avg_score:.3f}</div>
                     <div class="metric-highlight-delta">{pass_rate:.1f}% pass rate</div>
                     <div class="metric-highlight-help">Original LLM: {original_avg:.3f} avg, {original_pass_rate:.1f}% pass rate</div>
                 </div>
                 """, unsafe_allow_html=True)
             else:
-                # Standard display with highlight
                 st.markdown(f"""
                 <div class="metric-highlight-card">
                     <div class="metric-highlight-label">{metric.capitalize()}</div>
@@ -152,38 +142,32 @@ def display_evaluation_results(config, db, eval_data):
     st.markdown("---")
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
-        if st.button(" Review Samples", type="primary", use_container_width=True):
+        if st.button("Review Samples", type="primary", use_container_width=True):
             st.session_state.review_mode = 'config'
-            st.session_state.review_metric = list(selected_metrics)[0]  # Default to first metric
+            st.session_state.review_metric = list(selected_metrics)[0]
             st.rerun()
     
     st.markdown("---")
     
-    # Detailed results tabs - with highlighted tab names
-    tab_names = [f"📊 {m.capitalize()}" for m in selected_metrics] + ["📄 Generate Report"]
+    # Detailed results tabs
+    tab_names = [f"{m.capitalize()}" for m in selected_metrics] + ["Generate Report"]
     tabs = st.tabs(tab_names)
     
     for idx, metric in enumerate(selected_metrics):
         with tabs[idx]:
             results_df = all_results[metric].copy()
-            
-            # Add original data for context
             results_df['question'] = questions
             results_df['response'] = responses
             results_df['benchmark'] = benchmarks
             
-            # Check if has human reviews
             has_reviews = 'llm_score' in results_df.columns and 'human_reviewed' in results_df.columns
             
             if has_reviews:
-                # Show LLM score, final score (overridden), LLM reasoning, human reasoning
                 display_cols = ['question', 'llm_score', 'score', 'llm_reasoning', 'human_reasoning']
-                # Only include columns that exist
                 display_cols = [col for col in display_cols if col in results_df.columns]
                 
-                st.info(" This metric has been reviewed. 'score' column shows final scores (human overrides where reviewed).")
+                st.info("This metric has been reviewed. 'score' column shows final scores (human overrides where reviewed).")
                 
-                # Rename columns for clarity in display
                 display_df = results_df[display_cols].copy()
                 display_df = display_df.rename(columns={
                     'llm_score': 'LLM Score',
@@ -192,22 +176,16 @@ def display_evaluation_results(config, db, eval_data):
                     'human_reasoning': 'Human Review'
                 })
                 
-                st.dataframe(
-                    display_df,
-                    use_container_width=True,
-                    height=400
-                )
+                st.dataframe(display_df, use_container_width=True, height=400)
             else:
-                # Standard display
                 st.dataframe(
                     results_df[['question', 'score', 'label', 'reasoning']],
                     use_container_width=True,
                     height=400
                 )
             
-            # Download button - CSV will have all columns including llm_score, score, human_reasoning
             csv = results_df.to_csv(index=False)
-            download_label = f" Download {metric} Results" + (" (with Human Reviews)" if has_reviews else " (CSV)")
+            download_label = f"Download {metric} Results" + (" (with Human Reviews)" if has_reviews else " (CSV)")
             st.download_button(
                 label=download_label,
                 data=csv,
@@ -220,22 +198,19 @@ def display_evaluation_results(config, db, eval_data):
     with tabs[-1]:
         st.markdown("""
         <div class="report-section-header">
-            <h3>📄 Generate Comprehensive Report</h3>
+            <h3>Generate Comprehensive Report</h3>
         </div>
         """, unsafe_allow_html=True)
         st.info("Generate a detailed PDF report with visualizations and analysis.")
         
-        # Use form to prevent rerun
         with st.form("pdf_generation_form"):
-            submit_button = st.form_submit_button(" Generate PDF Report", type="primary")
+            submit_button = st.form_submit_button("Generate PDF Report", type="primary")
             
             if submit_button:
                 with st.spinner("Generating report..."):
                     try:
-                        # Generate report
                         report_gen = ReportGenerator(eval_data['config'])
                         
-                        # Get API stats
                         api_stats = {
                             'total_calls': eval_data['total_api_calls'],
                             'total_tokens': sum(
@@ -245,7 +220,6 @@ def display_evaluation_results(config, db, eval_data):
                             )
                         }
                         
-                        # Run info
                         run_info = {
                             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                             'user': st.session_state.username,
@@ -255,18 +229,14 @@ def display_evaluation_results(config, db, eval_data):
                             'execution_time_seconds': eval_data['execution_time']
                         }
                         
-                        # Generate PDF
                         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
                         output_path = f"data/results/evaluation_report_{eval_data['run_id']}_{timestamp}.pdf"
                         
-                        # Ensure directory exists
                         os.makedirs("data/results", exist_ok=True)
                         
-                        # Add original data to results for PDF (use updated all_results which may have human reviews)
                         enriched_results = {}
-                        for metric, results_df in all_results.items():  # Use all_results from above (already has human reviews if applied)
+                        for metric, results_df in all_results.items():
                             df_copy = results_df.copy()
-                            # Ensure question/response/benchmark are included
                             if 'question' not in df_copy.columns:
                                 df_copy['question'] = eval_data['questions']
                             if 'response' not in df_copy.columns:
@@ -275,7 +245,6 @@ def display_evaluation_results(config, db, eval_data):
                                 df_copy['benchmark'] = eval_data['benchmarks']
                             enriched_results[metric] = df_copy
                         
-                        # Add note about human reviews if present
                         if review_applied and review_metric:
                             run_info['human_reviews'] = f"Human reviews applied to {review_metric} (threshold: {review_threshold})"
                         
@@ -286,23 +255,20 @@ def display_evaluation_results(config, db, eval_data):
                             api_stats=api_stats
                         )
                         
-                        st.success(" Report generated successfully!")
-                        
-                        # Store PDF path in session state
+                        st.success("Report generated successfully!")
                         st.session_state.last_pdf_path = output_path
                         
                     except Exception as e:
-                        st.error(f" Error generating report: {str(e)}")
+                        st.error(f"Error generating report: {str(e)}")
                         import traceback
                         st.code(traceback.format_exc())
         
-        # Show download button outside form if PDF was generated
         if 'last_pdf_path' in st.session_state and os.path.exists(st.session_state.last_pdf_path):
             st.markdown("---")
             with open(st.session_state.last_pdf_path, 'rb') as f:
                 pdf_data = f.read()
                 st.download_button(
-                    label=" Download PDF Report",
+                    label="Download PDF Report",
                     data=pdf_data,
                     file_name=f"evaluation_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
                     mime="application/pdf",
@@ -313,12 +279,11 @@ def display_evaluation_results(config, db, eval_data):
 def show_review_config(config, db, eval_data):
     """Show review configuration page"""
     
-    st.markdown("###  Review Configuration")
+    st.markdown("### Review Configuration")
     st.markdown("Configure your review settings before starting.")
     
     st.markdown("---")
     
-    # Metric selection
     selected_metrics = eval_data['selected_metrics']
     if len(selected_metrics) > 1:
         review_metric = st.selectbox(
@@ -330,17 +295,15 @@ def show_review_config(config, db, eval_data):
         st.session_state.review_metric = review_metric
     else:
         review_metric = selected_metrics[0]
-        st.info(f"**Reviewing Metric:** {review_metric.capitalize()}")
+        st.info(f"Reviewing Metric: {review_metric.capitalize()}")
     
     st.markdown("---")
     
-    # Get results for selected metric
     results_df = eval_data['all_results'][review_metric].copy()
     results_df['question'] = eval_data['questions']
     results_df['response'] = eval_data['responses']
     results_df['benchmark'] = eval_data['benchmarks']
     
-    # Threshold slider
     st.markdown("#### Set Threshold")
     threshold = st.slider(
         "Pass/Fail Threshold",
@@ -348,10 +311,9 @@ def show_review_config(config, db, eval_data):
         max_value=1.0,
         value=0.7,
         step=0.1,
-        help="Samples with score ≥ threshold are considered Pass"
+        help="Samples with score >= threshold are considered Pass"
     )
     
-    # Calculate counts dynamically
     below_threshold = results_df[results_df['score'] < threshold]
     above_threshold = results_df[results_df['score'] >= threshold]
     
@@ -363,7 +325,6 @@ def show_review_config(config, db, eval_data):
     
     st.markdown("---")
     
-    # Filter selection
     st.markdown("#### Select Samples to Review")
     filter_option = st.radio(
         "Review",
@@ -376,29 +337,25 @@ def show_review_config(config, db, eval_data):
     else:
         samples_to_review = results_df
     
-    st.info(f" You will review **{len(samples_to_review)}** samples")
+    st.info(f"You will review {len(samples_to_review)} samples")
     
-    # Current pass rate
     current_pass_rate = (len(above_threshold) / len(results_df) * 100) if len(results_df) > 0 else 0
     st.markdown(f"**Current Pass Rate:** {current_pass_rate:.1f}% ({len(above_threshold)}/{len(results_df)})")
     
     st.markdown("---")
     
-    # Action buttons
     col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button(" Cancel", use_container_width=True):
+        if st.button("Cancel", use_container_width=True):
             st.session_state.review_mode = None
             st.rerun()
     
     with col2:
-        if st.button(" Start Review", type="primary", use_container_width=True):
-            # Store review config in session state
+        if st.button("Start Review", type="primary", use_container_width=True):
             st.session_state.review_threshold = threshold
-            # IMPORTANT: Keep original index so we can map back to full results_df
-            st.session_state.review_samples = samples_to_review.reset_index()  # Keep 'index' column
+            st.session_state.review_samples = samples_to_review.reset_index()
             st.session_state.review_current_index = 0
-            st.session_state.review_changes = {}  # Track changes: {original_row_index: {score, label, comment}}
+            st.session_state.review_changes = {}
             st.session_state.review_mode = 'reviewing'
             st.rerun()
 
@@ -412,25 +369,19 @@ def show_review_interface(config, db, eval_data):
     metric = st.session_state.review_metric
     
     if current_index >= len(samples):
-        # All samples reviewed, show summary
         st.session_state.review_mode = 'summary'
         st.rerun()
         return
     
-    # Get current sample
     sample = samples.iloc[current_index]
-    
-    # Get ORIGINAL index from full dataframe (preserved in 'index' column)
     original_row_index = sample['index'] if 'index' in sample else current_index
     
-    # Progress
     st.progress((current_index) / len(samples))
     st.markdown(f"### Review Sample {current_index + 1}/{len(samples)}")
     
     st.markdown("---")
     
-    # LLM Judgment section
-    st.markdown("####  LLM Judgment")
+    st.markdown("#### LLM Judgment")
     
     llm_score = sample['score']
     llm_label = "Pass" if llm_score >= threshold else "Fail"
@@ -438,38 +389,34 @@ def show_review_interface(config, db, eval_data):
     col1, col2 = st.columns([2, 1])
     with col1:
         if llm_score >= threshold:
-            st.success(f" **{llm_label}** (Score: {llm_score:.3f} ≥ Threshold: {threshold})")
+            st.success(f"**{llm_label}** (Score: {llm_score:.3f} >= Threshold: {threshold})")
         else:
-            st.error(f" **{llm_label}** (Score: {llm_score:.3f} < Threshold: {threshold})")
+            st.error(f"**{llm_label}** (Score: {llm_score:.3f} < Threshold: {threshold})")
     with col2:
         st.metric("LLM Score", f"{llm_score:.3f}")
     
     st.markdown("---")
     
-    # Sample content
-    st.markdown("####  Sample Content")
+    st.markdown("#### Sample Content")
     
-    with st.expander(" Question", expanded=True):
+    with st.expander("Question", expanded=True):
         st.write(sample['question'])
     
-    with st.expander(" Response", expanded=True):
+    with st.expander("Response", expanded=True):
         st.write(sample['response'])
     
-    with st.expander(" Benchmark Answer", expanded=True):
+    with st.expander("Benchmark Answer", expanded=True):
         st.write(sample['benchmark'])
     
-    with st.expander(" LLM Reasoning", expanded=False):
+    with st.expander("LLM Reasoning", expanded=False):
         st.write(sample.get('reasoning', 'N/A'))
     
     st.markdown("---")
     
-    # Human review section
-    st.markdown("####  Your Review")
+    st.markdown("#### Your Review")
     
-    # Check if already reviewed (in current session) - use ORIGINAL index
     existing_review = st.session_state.review_changes.get(original_row_index, {})
     
-    # Score slider
     st.markdown("**Score:**")
     human_score = st.slider(
         "Your score for this sample",
@@ -483,7 +430,6 @@ def show_review_interface(config, db, eval_data):
     
     st.caption(f"Current: {human_score:.2f} | Threshold: {threshold}")
     
-    # Label radio
     st.markdown("**Label:**")
     human_label_pass = human_score >= threshold
     human_label = st.radio(
@@ -495,7 +441,6 @@ def show_review_interface(config, db, eval_data):
         label_visibility="collapsed"
     )
     
-    # Comment
     st.markdown("**Comment (Optional):**")
     human_comment = st.text_area(
         "Add your feedback or notes",
@@ -508,29 +453,26 @@ def show_review_interface(config, db, eval_data):
     
     st.markdown("---")
     
-    # Navigation buttons
     col1, col2, col3 = st.columns([1, 1, 1])
     
     with col1:
-        if st.button(" Previous", disabled=(current_index == 0), use_container_width=True):
+        if st.button("Previous", disabled=(current_index == 0), use_container_width=True):
             st.session_state.review_current_index -= 1
             st.rerun()
     
     with col2:
-        if st.button("⏭ Skip", use_container_width=True):
+        if st.button("Skip", use_container_width=True):
             st.session_state.review_current_index += 1
             st.rerun()
     
     with col3:
-        if st.button(" Save & Next", type="primary", use_container_width=True):
-            # Save review using ORIGINAL row index
+        if st.button("Save & Next", type="primary", use_container_width=True):
             st.session_state.review_changes[original_row_index] = {
                 'score': human_score,
                 'label': human_label,
                 'comment': human_comment
             }
             
-            # Save to database if we have result_id
             if 'id' in sample:
                 db.update_human_review(
                     result_id=int(sample['id']),
@@ -539,7 +481,6 @@ def show_review_interface(config, db, eval_data):
                     human_comment=human_comment if human_comment else None
                 )
             
-            # Move to next
             st.session_state.review_current_index += 1
             st.rerun()
 
@@ -547,42 +488,35 @@ def show_review_interface(config, db, eval_data):
 def show_review_summary(config, db, eval_data):
     """Show review summary and statistics"""
     
-    st.markdown("###  Review Complete!")
+    st.markdown("### Review Complete!")
     st.success("You have finished reviewing the selected samples.")
     
     st.markdown("---")
     
-    # Get review stats
     threshold = st.session_state.review_threshold
     metric = st.session_state.review_metric
     samples = st.session_state.review_samples
     changes = st.session_state.review_changes
     
-    # Calculate statistics
     total_samples = len(samples)
     reviewed_count = len(changes)
     
-    # Original LLM pass rate
     llm_passes = sum(1 for _, row in samples.iterrows() if row['score'] >= threshold)
     llm_pass_rate = (llm_passes / total_samples * 100) if total_samples > 0 else 0
     
-    # Human pass rate (combining human reviews + unchanged LLM scores)
     human_passes = 0
     agreements = 0
     
     for idx, row in samples.iterrows():
         row_index = row.get('row_index', idx)
         if row_index in changes:
-            # Use human score
             if changes[row_index]['score'] >= threshold:
                 human_passes += 1
-            # Check agreement
             llm_pass = row['score'] >= threshold
             human_pass = changes[row_index]['score'] >= threshold
             if llm_pass == human_pass:
                 agreements += 1
         else:
-            # Use LLM score
             if row['score'] >= threshold:
                 human_passes += 1
     
@@ -590,8 +524,7 @@ def show_review_summary(config, db, eval_data):
     agreement_rate = (agreements / reviewed_count * 100) if reviewed_count > 0 else 0
     pass_rate_change = human_pass_rate - llm_pass_rate
     
-    # Display statistics
-    st.markdown("###  Review Statistics")
+    st.markdown("### Review Statistics")
     
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -603,8 +536,7 @@ def show_review_summary(config, db, eval_data):
     
     st.markdown("---")
     
-    # Pass rate comparison
-    st.markdown("###  Pass Rate Comparison")
+    st.markdown("### Pass Rate Comparison")
     st.markdown(f"**Threshold:** {threshold}")
     
     col1, col2, col3 = st.columns(3)
@@ -618,13 +550,11 @@ def show_review_summary(config, db, eval_data):
     
     st.markdown("---")
     
-    # Review details table
     if reviewed_count > 0:
-        st.markdown("###  Review Details")
+        st.markdown("### Review Details")
         
         review_data = []
         for row_index, change in changes.items():
-            # Find original sample using the 'index' column (which preserves original index)
             matching_samples = samples[samples['index'] == row_index] if 'index' in samples.columns else samples[samples.index == row_index]
             
             if not matching_samples.empty:
@@ -644,36 +574,30 @@ def show_review_summary(config, db, eval_data):
     
     st.markdown("---")
     
-    # Action buttons
     col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button(" Discard All Changes", use_container_width=True):
-            # Clear all human reviews from database
+        if st.button("Discard All Changes", use_container_width=True):
             for row_index in changes.keys():
-                # Find sample with this row_index using 'index' column
                 matching_samples = samples[samples['index'] == row_index] if 'index' in samples.columns else samples[samples.index == row_index]
                 
                 if not matching_samples.empty and 'id' in matching_samples.iloc[0]:
                     db.clear_human_review(int(matching_samples.iloc[0]['id']))
             
-            # Clear session state
             st.session_state.review_mode = None
             for key in ['review_threshold', 'review_samples', 'review_current_index', 'review_changes', 'review_metric', 'review_applied']:
                 if key in st.session_state:
                     del st.session_state[key]
             
-            st.warning(" All changes discarded")
+            st.warning("All changes discarded")
             time.sleep(1)
             st.rerun()
     
     with col2:
-        if st.button(" Apply Changes", type="primary", use_container_width=True):
-            # Mark as applied - this will update results display
+        if st.button("Apply Changes", type="primary", use_container_width=True):
             st.session_state.review_applied = True
             st.session_state.review_metric_updated = metric
             st.session_state.review_threshold_used = threshold
             
-            # Store which samples were updated for results merging
             st.session_state.review_updated_samples = {
                 row_index: {
                     'human_score': change['score'],
@@ -683,34 +607,26 @@ def show_review_summary(config, db, eval_data):
                 for row_index, change in changes.items()
             }
             
-            # IMPORTANT: Update eval_data directly so PDF generation uses updated data
             if 'last_evaluation' in st.session_state:
                 results_df = st.session_state.last_evaluation['all_results'][metric].copy()
                 
-                # Save original LLM scores if not already saved
                 if 'llm_score' not in results_df.columns:
                     results_df['llm_score'] = results_df['score'].copy()
                     results_df['llm_label'] = results_df['label'].copy()
                     results_df['llm_reasoning'] = results_df['reasoning'].copy()
                 
-                # Apply human reviews - OVERRIDE the score/label, add human reasoning
                 for row_idx, update in st.session_state.review_updated_samples.items():
                     if row_idx < len(results_df):
-                        # Override main score/label with human values
                         results_df.at[row_idx, 'score'] = update['human_score']
                         results_df.at[row_idx, 'label'] = update['human_label'].lower()
-                        
-                        # Add human review info
                         results_df.at[row_idx, 'human_reviewed'] = True
                         results_df.at[row_idx, 'human_reasoning'] = update['human_comment'] if update['human_comment'] else 'Reviewed by human'
                 
-                # Update in session state so it persists
                 st.session_state.last_evaluation['all_results'][metric] = results_df
             
-            # Clear review mode
             st.session_state.review_mode = None
             
-            st.success(f" Applied {reviewed_count} reviews to {metric} results!")
+            st.success(f"Applied {reviewed_count} reviews to {metric} results!")
             time.sleep(1.5)
             st.rerun()
 
@@ -718,177 +634,125 @@ def show_review_summary(config, db, eval_data):
 def main():
     """Main application"""
     
-    # Check authentication
     if not check_authentication():
         return
     
-    # Initialize
     config = load_config()
     db = get_database()
     
-    # Initialize settings in session state if not exists
+    # Initialize session state
     if 'api_keys' not in st.session_state:
         st.session_state.api_keys = {}
     if 'selected_provider' not in st.session_state:
         st.session_state.selected_provider = None
     if 'selected_model' not in st.session_state:
         st.session_state.selected_model = None
+    if 'step' not in st.session_state:
+        st.session_state.step = 'settings'
     
-    # Sidebar
-    with st.sidebar:
-        st.markdown("###  User Information")
-        st.write(f"**Logged in as:** {st.session_state.username}")
-        
-        if st.button(" Logout"):
+    # Header with logout
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.markdown('<div class="main-header">ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
+    with col2:
+        st.write(f"User: {st.session_state.username}")
+        if st.button("Logout", use_container_width=True):
             st.session_state.authenticated = False
             st.rerun()
-        
+    
+    st.markdown("---")
+    
+    # Step 1: Settings
+    show_settings_section(config, db)
+    
+    # Step 2: New Evaluation (only if settings configured)
+    if st.session_state.get('config_saved') or (st.session_state.selected_provider and st.session_state.api_keys.get(st.session_state.selected_provider)):
         st.markdown("---")
-        
-        # Show API status
-        if st.session_state.selected_provider:
-            st.markdown("###  API Configuration")
-            provider_icon = {"groq": "", "gemini": "", "openai": ""}
-            st.success(f"{provider_icon.get(st.session_state.selected_provider, '')} {st.session_state.selected_provider.upper()} - {st.session_state.selected_model}")
-        else:
-            st.markdown("###  API Not Configured")
-            st.warning("Please configure API in Settings")
-        
-        st.markdown("---")
-        st.markdown("###  Navigation")
-        page = st.radio(
-            "Select Page",
-            [" Settings", " New Evaluation", " Evaluation History"],
-            label_visibility="collapsed"
-        )
+        show_evaluation_section(config, db)
     
-    # Main content
-    st.markdown('<div class="main-header"> ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
-    
-    # Show popup if just logged in
-    if st.session_state.get('show_config_popup', False):
-        st.info("👋 **Welcome!** Please configure your API provider, model and API key to get started.")
-        st.session_state.show_config_popup = False
-    
-    if page == " Settings":
-        show_settings_page(config, db)
-    elif page == " New Evaluation":
-        show_evaluation_page(config, db)
-    elif page == " Evaluation History":
-        show_history_page(db)
+    # Step 3: Evaluation History (toggle)
+    st.markdown("---")
+    show_history_section(db)
 
 
-def show_settings_page(config, db):
-    """Show settings page for API configuration"""
+def show_settings_section(config, db):
+    """Show settings section"""
     
-    st.markdown("###  API & Model Configuration")
-    
-    st.info(" Configure your API keys and model preferences here. Settings will be saved for your session.")
+    st.markdown("### Step 1: API & Model Configuration")
     
     # Provider selection
-    st.markdown("#### 1⃣ Select LLM Provider")
+    st.markdown("#### Select LLM Provider")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button(" Groq", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "groq" else "secondary"):
+        if st.button("Groq", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "groq" else "secondary"):
             st.session_state.selected_provider = "groq"
             st.rerun()
     
     with col2:
-        if st.button(" Gemini", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "gemini" else "secondary"):
+        if st.button("Gemini", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "gemini" else "secondary"):
             st.session_state.selected_provider = "gemini"
             st.rerun()
     
     with col3:
-        if st.button(" OpenAI", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "openai" else "secondary"):
+        if st.button("OpenAI", use_container_width=True, type="primary" if st.session_state.get('selected_provider') == "openai" else "secondary"):
             st.session_state.selected_provider = "openai"
             st.rerun()
     
     if not st.session_state.get('selected_provider'):
-        st.warning(" Please select a provider above")
+        st.warning("Please select a provider above")
         return
     
-    st.markdown("---")
-    
-    # Provider-specific configuration
     provider = st.session_state.selected_provider
     
-    st.markdown(f"#### 2⃣ Configure {provider.upper()}")
+    st.markdown(f"#### Configure {provider.upper()}")
     
-    # Model selection based on provider
+    # Model selection
     if provider == "groq":
-        st.markdown("**Available Models:**")
         models = {
             "llama-3.3-70b-versatile": "Llama 3.3 70B - Best quality, balanced speed",
             "llama-3.1-8b-instant": "Llama 3.1 8B - Fastest, good quality",
             "mixtral-8x7b-32768": "Mixtral 8x7B - Large context window",
             "gemma2-9b-it": "Gemma 2 9B - Efficient"
         }
-        selected_model = st.selectbox(
-            "Model",
-            options=list(models.keys()),
-            format_func=lambda x: models[x],
-            index=0 if not st.session_state.get('selected_model') else (list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0)
-        )
-        
         api_help = "Get your API key at: https://console.groq.com/keys"
         
     elif provider == "gemini":
-        st.markdown("**Available Models:**")
         models = {
             "gemini-1.5-flash": "Gemini 1.5 Flash - Fast & efficient",
             "gemini-1.5-pro": "Gemini 1.5 Pro - Best quality",
             "gemini-2.0-flash-exp": "Gemini 2.0 Flash (Experimental)"
         }
-        selected_model = st.selectbox(
-            "Model",
-            options=list(models.keys()),
-            format_func=lambda x: models[x],
-            index=0 if not st.session_state.get('selected_model') else (list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0)
-        )
-        
         api_help = "Get your API key at: https://makersuite.google.com/app/apikey"
         
-    else:  # openai
-        st.markdown("**Available Models:**")
+    else:
         models = {
             "gpt-4o": "GPT-4o - Latest, best quality",
             "gpt-4o-mini": "GPT-4o Mini - Fast & affordable",
             "gpt-4-turbo": "GPT-4 Turbo - Previous gen"
         }
-        selected_model = st.selectbox(
-            "Model",
-            options=list(models.keys()),
-            format_func=lambda x: models[x],
-            index=0 if not st.session_state.get('selected_model') else (list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0)
-        )
-        
         api_help = "Get your API key at: https://platform.openai.com/api-keys"
     
-    st.caption(f"ℹ {api_help}")
-    
-    # API Key input
-    current_key = st.session_state.api_keys.get(provider, "")
-    
-    api_key = st.text_input(
-        f" {provider.upper()} API Key",
-        value=current_key,
-        type="password",
-        help="Your API key is stored only in your session and never saved to disk"
+    selected_model = st.selectbox(
+        "Model",
+        options=list(models.keys()),
+        format_func=lambda x: models[x],
+        index=0 if not st.session_state.get('selected_model') else (list(models.keys()).index(st.session_state.selected_model) if st.session_state.selected_model in models else 0)
     )
     
-    st.markdown("---")
+    st.caption(api_help)
     
-    # Advanced settings with highlighted header
-    st.markdown("""
-    <div class="advanced-settings-header">
-        <span class="advanced-settings-icon">⚙️</span>
-        <span class="advanced-settings-text">Advanced Settings</span>
-    </div>
-    """, unsafe_allow_html=True)
+    current_key = st.session_state.api_keys.get(provider, "")
+    api_key = st.text_input(
+        f"{provider.upper()} API Key",
+        value=current_key,
+        type="password",
+        help="Your API key is stored only in your session"
+    )
     
-    with st.expander("Click to expand advanced options", expanded=False):
+    # Advanced settings
+    with st.expander("Advanced Settings"):
         temperature = st.slider(
             "Temperature",
             min_value=0.0,
@@ -903,36 +767,31 @@ def show_settings_page(config, db):
             min_value=256,
             max_value=4096,
             value=2048,
-            step=256,
-            help="Maximum length of model response"
+            step=256
         )
         
         batch_size = st.slider(
             "Batch Size",
             min_value=1,
             max_value=20,
-            value=5,
-            help="Number of rows to process in parallel"
+            value=5
         )
         
         max_concurrent = st.slider(
             "Max Concurrent Calls",
             min_value=1,
             max_value=10,
-            value=3,
-            help="Maximum simultaneous API calls"
+            value=3
         )
     
     # Save button
-    st.markdown("---")
     col1, col2 = st.columns([3, 1])
     
     with col1:
-        if st.button(" Save Configuration", type="primary", use_container_width=True):
+        if st.button("Save Configuration", type="primary", use_container_width=True):
             if not api_key:
-                st.error(" Please enter an API key")
+                st.error("Please enter an API key")
             else:
-                # Save to session state
                 st.session_state.api_keys[provider] = api_key
                 st.session_state.selected_provider = provider
                 st.session_state.selected_model = selected_model
@@ -940,154 +799,73 @@ def show_settings_page(config, db):
                 st.session_state.max_tokens = max_tokens
                 st.session_state.batch_size = batch_size
                 st.session_state.max_concurrent = max_concurrent
-                
-                # Show success with proceed button
                 st.session_state.config_saved = True
-                st.rerun()
+                st.success(f"Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
     
     with col2:
-        if st.button(" Test", use_container_width=True):
+        if st.button("Test", use_container_width=True):
             if not api_key:
-                st.error(" Please enter an API key")
+                st.error("Please enter an API key")
             else:
-                with st.spinner("Testing connection..."):
+                with st.spinner("Testing..."):
                     try:
-                        # Simple test
                         if provider == "groq":
-                            try:
-                                from groq import Groq
-                                client = Groq(api_key=api_key)
-                                response = client.chat.completions.create(
-                                    model=selected_model,
-                                    messages=[{"role": "user", "content": "Say 'test'"}],
-                                    max_tokens=10
-                                )
-                                st.success(" Connection successful!")
-                            except ImportError:
-                                st.warning(" Groq package not installed. Connection will be tested during evaluation.")
+                            from groq import Groq
+                            client = Groq(api_key=api_key)
+                            client.chat.completions.create(
+                                model=selected_model,
+                                messages=[{"role": "user", "content": "Say 'test'"}],
+                                max_tokens=10
+                            )
+                            st.success("Connection successful!")
                         elif provider == "gemini":
-                            try:
-                                import google.generativeai as genai
-                                genai.configure(api_key=api_key)
-                                model_obj = genai.GenerativeModel(selected_model)
-                                response = model_obj.generate_content("Say 'test'")
-                                st.success(" Connection successful!")
-                            except ImportError:
-                                st.warning(" Gemini package not installed. Connection will be tested during evaluation.")
+                            import google.generativeai as genai
+                            genai.configure(api_key=api_key)
+                            model_obj = genai.GenerativeModel(selected_model)
+                            model_obj.generate_content("Say 'test'")
+                            st.success("Connection successful!")
                         else:
-                            st.info("ℹ OpenAI test not implemented yet. Connection will be tested during evaluation.")
+                            st.info("OpenAI test not implemented yet.")
                     except Exception as e:
-                        st.error(f" Connection failed: {str(e)}")
-    
-    # Show success message and proceed button if config was saved
-    if st.session_state.get('config_saved', False):
-        st.success(f" Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
-        
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            if st.button("🚀 Proceed to Evaluation", type="primary", use_container_width=True):
-                st.session_state.config_saved = False
-                # Navigate to evaluation page by updating the radio selection
-                st.session_state.page = " New Evaluation"
-                st.rerun()
-        
-        st.session_state.config_saved = False
-    
-    # Show current configuration
-    if st.session_state.api_keys.get(provider):
-        st.markdown("---")
-        st.markdown("####  Current Configuration")
-        
-        config_data = {
-            "Provider": provider.upper(),
-            "Model": st.session_state.get('selected_model', selected_model),
-            "API Key": "•" * 20 + st.session_state.api_keys[provider][-4:] if len(st.session_state.api_keys[provider]) > 4 else "Set",
-            "Temperature": st.session_state.get('temperature', 0.2),
-            "Max Tokens": st.session_state.get('max_tokens', 2048),
-            "Batch Size": st.session_state.get('batch_size', 5),
-            "Max Concurrent": st.session_state.get('max_concurrent', 3)
-        }
-        
-        for key, value in config_data.items():
-            st.text(f"{key}: {value}")
-    
-    # Tips
-    st.markdown("---")
-    st.markdown("####  Tips")
-    st.markdown("""
-    - **Groq**: Best for speed & cost (free tier is generous)
-    - **Gemini**: Good balance of quality & speed
-    - **OpenAI**: Highest quality but more expensive
-    - **Temperature**: 0.1-0.3 recommended for evaluation tasks
-    - **Batch Size**: Increase for faster processing (watch rate limits)
-    """)
+                        st.error(f"Connection failed: {str(e)}")
 
 
-def show_evaluation_page(config, db):
-    """Show the main evaluation page"""
+def show_evaluation_section(config, db):
+    """Show evaluation section"""
     
-    # Check if API is configured
-    if not st.session_state.selected_provider or not st.session_state.api_keys.get(st.session_state.selected_provider):
-        st.warning(" API not configured. Please go to Settings first.")
-        if st.button(" Go to Settings"):
-            st.session_state.page = " Settings"
-            st.rerun()
-        return
-    
-    # Check if we have results to display
+    # Check if showing results
     if 'last_evaluation' in st.session_state and 'show_results' in st.session_state and st.session_state.show_results:
         display_evaluation_results(config, db, st.session_state.last_evaluation)
         
-        # Button to start new evaluation
-        st.markdown("---")
-        if st.button(" Start New Evaluation", type="secondary"):
+        if st.button("Start New Evaluation", type="secondary"):
             st.session_state.show_results = False
             st.session_state.pop('last_evaluation', None)
             st.rerun()
         return
     
-    # Otherwise show upload form
-    st.markdown("### Upload CSV Data File")
+    st.markdown("### Step 2: Upload & Evaluate")
     
-    # Show current API configuration
     provider = st.session_state.selected_provider
     model = st.session_state.selected_model
     
-    st.info(f"**Using**: {provider.upper()} - {model}")
+    st.info(f"Using: {provider.upper()} - {model}")
     
-    # File upload with enhanced styling
-    st.markdown("""
-    <div class="file-upload-container">
-        <div class="file-upload-icon">📁</div>
-        <div class="file-upload-text">Drag and drop your CSV file here</div>
-        <div class="file-upload-subtext">or click to browse</div>
-    </div>
-    """, unsafe_allow_html=True)
-    
+    # File upload
     uploaded_file = st.file_uploader(
         "Choose a CSV file",
         type=['csv'],
-        help="Upload a CSV file with columns: question, response, benchmark_answer",
-        label_visibility="collapsed"
+        help="Upload a CSV file with columns: question, response, benchmark_answer"
     )
     
     if uploaded_file is not None:
-        # Preview data
         try:
             df = pd.read_csv(uploaded_file)
+            st.success(f"File uploaded successfully! ({len(df)} rows)")
             
-            st.success(f" File uploaded successfully! ({len(df)} rows)")
-            
-            with st.expander(" Preview Data (first 5 rows)"):
+            with st.expander("Preview Data (first 5 rows)"):
                 st.dataframe(df.head(), use_container_width=True)
             
-            # Configure Evaluation section with highlighted header
-            st.markdown("""
-            <div class="configure-evaluation-header">
-                <span class="configure-icon">⚙️</span>
-                <span class="configure-text">Configure Evaluation</span>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown("#### Configure Evaluation")
             
             col1, col2 = st.columns(2)
             
@@ -1111,31 +889,18 @@ def show_evaluation_page(config, db):
                     index=df.columns.tolist().index('benchmark_answer') if 'benchmark_answer' in df.columns else 0
                 )
                 
-                # Metric selection
                 available_metrics = ['accuracy', 'comprehensiveness', 'faithfulness', 'toxicity']
                 selected_metrics = st.multiselect(
                     "Select Metrics to Evaluate",
                     options=available_metrics,
-                    default=['accuracy'],
-                    help="Choose which metrics to evaluate"
+                    default=['accuracy']
                 )
             
-            # Advanced settings with highlighted header
-            st.markdown("""
-            <div class="advanced-settings-header">
-                <span class="advanced-settings-icon">⚙️</span>
-                <span class="advanced-settings-text">Advanced Settings</span>
-            </div>
-            """, unsafe_allow_html=True)
+            with st.expander("Advanced Settings"):
+                batch_size = st.slider("Batch Size", 1, 20, config['batch']['size'])
+                max_concurrent = st.slider("Max Concurrent API Calls", 1, 10, config['batch']['max_concurrent'])
             
-            with st.expander("Click to expand advanced options", expanded=False):
-                batch_size = st.slider("Batch Size", 1, 20, config['batch']['size'], 
-                                      help="Number of rows to process in parallel")
-                max_concurrent = st.slider("Max Concurrent API Calls", 1, 10, config['batch']['max_concurrent'],
-                                          help="Maximum number of simultaneous API calls")
-            
-            # Run evaluation
-            if st.button(" Run Evaluation", type="primary", use_container_width=True):
+            if st.button("Run Evaluation", type="primary", use_container_width=True):
                 if not selected_metrics:
                     st.error("Please select at least one metric to evaluate.")
                     return
@@ -1157,7 +922,8 @@ def show_evaluation_page(config, db):
                 )
         
         except Exception as e:
-            st.error(f" Error reading file: {str(e)}")
+            st.error(f"Error reading file: {str(e)}")
+
 
 def run_evaluation(df, api_key, config, db, question_col, response_col, benchmark_col, 
                    selected_metrics, batch_size, max_concurrent, uploaded_file, provider=None, model=None):
@@ -1165,11 +931,9 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
     
     start_time = time.time()
     
-    # Update config with user settings and session state
     config['batch']['size'] = batch_size
     config['batch']['max_concurrent'] = max_concurrent
     
-    # Update LLM config from session state
     if provider:
         config['llm']['provider'] = provider
     if model:
@@ -1179,7 +943,6 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
     if 'max_tokens' in st.session_state:
         config['llm']['max_tokens'] = st.session_state.max_tokens
     
-    # Create evaluation run in database
     run_id = db.create_evaluation_run(
         user=st.session_state.username,
         input_file_name=uploaded_file.name,
@@ -1190,36 +953,30 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
         batch_size=batch_size
     )
     
-    # Initialize pipeline
     pipeline = EvaluationPipeline(
         api_key=api_key,
         config=config,
         database=db
     )
     
-    # Progress tracking
     progress_bar = st.progress(0)
     status_text = st.empty()
     
     all_results = {}
     
     try:
-        # Extract data
         questions = df[question_col].fillna("").tolist()
         responses = df[response_col].fillna("").tolist()
         benchmarks = df[benchmark_col].fillna("").tolist()
         
-        # Evaluate each metric
         for idx, metric in enumerate(selected_metrics):
             status_text.markdown(f"**Evaluating {metric}... ({idx+1}/{len(selected_metrics)})**")
             
-            # Progress callback
             def update_progress(progress, message):
                 overall_progress = (idx + progress) / len(selected_metrics)
                 progress_bar.progress(overall_progress)
                 status_text.markdown(f"**{message}**")
             
-            # Run evaluation
             results = asyncio.run(
                 pipeline.evaluate_dataset(
                     metric=metric,
@@ -1231,18 +988,14 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
                 )
             )
             
-            # Store results
             results_df = pd.DataFrame(results)
             all_results[metric] = results_df
         
-        # Calculate execution time
         execution_time = time.time() - start_time
         
-        # Calculate statistics
         avg_scores = {metric: results['score'].mean() for metric, results in all_results.items()}
         total_api_calls = sum(len(results) for results in all_results.values())
         
-        # Update database
         db.update_evaluation_run(
             run_id=run_id,
             status="completed",
@@ -1251,7 +1004,6 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
             execution_time_seconds=execution_time
         )
         
-        # Store results in session state to persist across reruns
         st.session_state.last_evaluation = {
             'all_results': all_results,
             'questions': questions,
@@ -1266,13 +1018,11 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
             'config': config
         }
         
-        # Set flag to show results
         st.session_state.show_results = True
         
         progress_bar.progress(1.0)
-        status_text.markdown("** Evaluation completed!**")
+        status_text.markdown("**Evaluation completed!**")
         
-        # Rerun to show results page
         st.rerun()
     
     except Exception as e:
@@ -1281,52 +1031,46 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
             status="failed",
             error_message=str(e)
         )
-        st.error(f" Evaluation failed: {str(e)}")
+        st.error(f"Evaluation failed: {str(e)}")
         raise
 
-def show_history_page(db):
-    """Show evaluation history"""
+
+def show_history_section(db):
+    """Show evaluation history as toggle"""
     
-    st.markdown("###  Evaluation History")
-    
-    # Get runs
-    runs = db.get_evaluation_runs(user=st.session_state.username)
-    
-    if not runs:
-        st.info("No evaluation history yet. Run your first evaluation to see results here.")
-        return
-    
-    # Convert to DataFrame
-    runs_df = pd.DataFrame(runs)
-    
-    # Display as table
-    st.dataframe(
-        runs_df[[
-            'id', 'timestamp', 'input_file_name', 'metrics_evaluated', 
-            'total_rows', 'status', 'average_scores', 'execution_time_seconds'
-        ]],
-        use_container_width=True,
-        height=400
-    )
-    
-    # Select run to view details
-    st.markdown("---")
-    st.markdown("###  View Run Details")
-    
-    run_id = st.selectbox(
-        "Select a run to view details",
-        options=runs_df['id'].tolist(),
-        format_func=lambda x: f"Run #{x} - {runs_df[runs_df['id']==x]['timestamp'].values[0]}"
-    )
-    
-    if run_id:
-        # Get results
-        results = db.get_evaluation_results(run_id)
-        if results:
-            results_df = pd.DataFrame(results)
-            
-            st.markdown(f"#### Results for Run #{run_id}")
-            st.dataframe(results_df, use_container_width=True, height=400)
+    with st.expander("Evaluation History", expanded=False):
+        runs = db.get_evaluation_runs(user=st.session_state.username)
+        
+        if not runs:
+            st.info("No evaluation history yet. Run your first evaluation to see results here.")
+            return
+        
+        runs_df = pd.DataFrame(runs)
+        
+        st.dataframe(
+            runs_df[[
+                'id', 'timestamp', 'input_file_name', 'metrics_evaluated', 
+                'total_rows', 'status', 'average_scores', 'execution_time_seconds'
+            ]],
+            use_container_width=True,
+            height=300
+        )
+        
+        st.markdown("#### View Run Details")
+        
+        run_id = st.selectbox(
+            "Select a run to view details",
+            options=runs_df['id'].tolist(),
+            format_func=lambda x: f"Run #{x} - {runs_df[runs_df['id']==x]['timestamp'].values[0]}"
+        )
+        
+        if run_id:
+            results = db.get_evaluation_results(run_id)
+            if results:
+                results_df = pd.DataFrame(results)
+                st.markdown(f"#### Results for Run #{run_id}")
+                st.dataframe(results_df, use_container_width=True, height=300)
+
 
 if __name__ == "__main__":
     main()
