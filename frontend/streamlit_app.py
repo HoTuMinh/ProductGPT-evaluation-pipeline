@@ -651,6 +651,14 @@ def main():
         st.session_state.step = 'settings'
     
     # User info and logout at top left
+    # Thay vì dùng st.columns trong main(), hãy dùng st.sidebar
+    with st.sidebar:
+        st.markdown(f'<div class="user-info-box">User: {st.session_state.username}</div>', unsafe_allow_html=True)
+        if st.button("Logout", use_container_width=True):
+            st.session_state.authenticated = False
+            st.rerun()
+        st.markdown("---") # Đường kẻ phân cách trong sidebar
+    '''
     col1, col2, col3 = st.columns([1.5, 1.5, 7]) 
     
     with col1:
@@ -664,6 +672,7 @@ def main():
         if st.button("Logout", use_container_width=True, key="logout_btn"):
             st.session_state.authenticated = False
             st.rerun()
+    '''
     # Step 1: Settings
     show_settings_section(config, db)
     
