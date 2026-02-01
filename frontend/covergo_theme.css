@@ -182,12 +182,13 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--covergo-primary-light) !important;
 }
 
-/* ===== File Uploader ===== */
+/* ===== File Uploader - LARGER ===== */
 .stFileUploader {
     background-color: var(--covergo-white) !important;
-    border: 2px dashed var(--covergo-gray-300) !important;
-    border-radius: 12px !important;
-    padding: 20px !important;
+    border: 3px dashed var(--covergo-gray-400) !important;
+    border-radius: 16px !important;
+    padding: 40px 30px !important;
+    min-height: 150px !important;
 }
 
 .stFileUploader:hover {
@@ -197,9 +198,85 @@ h1, h2, h3, h4, h5, h6 {
 
 .stFileUploader label {
     color: var(--covergo-gray-900) !important;
+    font-size: 1rem !important;
 }
 
-/* ===== Alerts ===== */
+/* Make the dropzone larger */
+.stFileUploader section {
+    padding: 30px !important;
+    min-height: 120px !important;
+}
+
+.stFileUploader [data-testid="stFileUploaderDropzone"] {
+    padding: 40px 20px !important;
+    min-height: 120px !important;
+}
+
+.stFileUploader [data-testid="stFileUploaderDropzoneInstructions"] {
+    font-size: 1.1rem !important;
+}
+
+.stFileUploader [data-testid="stFileUploaderDropzoneInstructions"] div {
+    margin-bottom: 10px !important;
+}
+
+.stFileUploader [data-testid="stFileUploaderDropzoneInstructions"] span {
+    font-size: 1rem !important;
+}
+
+/* ===== Selectbox / Multiselect - WHITE TEXT OPTIONS ===== */
+.stSelectbox > div > div,
+.stMultiSelect > div > div {
+    background-color: var(--covergo-primary) !important;
+    border: 2px solid var(--covergo-primary) !important;
+    border-radius: 0.5rem !important;
+    color: var(--covergo-white) !important;
+}
+
+.stSelectbox *,
+.stMultiSelect * {
+    color: var(--covergo-white) !important;
+}
+
+/* Dropdown container */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] *,
+ul[role="listbox"],
+ul[role="listbox"] *,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] * {
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
+}
+
+/* Dropdown options - ensure white text */
+li[role="option"] {
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
+}
+
+li[role="option"] * {
+    color: var(--covergo-white) !important;
+}
+
+li[role="option"]:hover {
+    background-color: var(--covergo-primary-light) !important;
+}
+
+li[role="option"]:hover * {
+    color: var(--covergo-white) !important;
+}
+
+/* Selected option text */
+.stSelectbox [data-baseweb="select"] span,
+.stSelectbox [data-baseweb="select"] div {
+    color: var(--covergo-white) !important;
+}
+
+.stMultiSelect span[data-baseweb="tag"] {
+    background-color: var(--covergo-error) !important;
+    color: var(--covergo-white) !important;
+}
 [class*="stAlert"] {
     background-color: var(--covergo-gray-100) !important;
     border: 1px solid var(--covergo-gray-300) !important;
@@ -307,42 +384,7 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
 }
 
-/* ===== Selectbox / Multiselect ===== */
-.stSelectbox > div > div,
-.stMultiSelect > div > div {
-    background-color: var(--covergo-primary) !important;
-    border: 2px solid var(--covergo-primary) !important;
-    border-radius: 0.5rem !important;
-    color: var(--covergo-white) !important;
-}
-
-.stSelectbox *,
-.stMultiSelect * {
-    color: var(--covergo-white) !important;
-}
-
-div[data-baseweb="popover"],
-ul[role="listbox"],
-div[data-baseweb="menu"] {
-    background-color: var(--covergo-primary) !important;
-    color: var(--covergo-white) !important;
-}
-
-li[role="option"] {
-    background-color: var(--covergo-primary) !important;
-    color: var(--covergo-white) !important;
-}
-
-li[role="option"]:hover {
-    background-color: var(--covergo-primary-light) !important;
-}
-
-.stMultiSelect span[data-baseweb="tag"] {
-    background-color: var(--covergo-error) !important;
-    color: var(--covergo-white) !important;
-}
-
-/* ===== SLIDER - CRITICAL FIXES ===== */
+/* ===== Divider ===== */
 
 /* Hide the red/colored track completely */
 .stSlider > div > div > div[data-baseweb="slider"] > div {
@@ -433,6 +475,92 @@ hr {
     border: none;
     border-top: 2px solid var(--covergo-gray-200);
     margin: 2rem 0;
+}
+
+/* ===== SLIDER FIXES ===== */
+
+/* Hide the red/colored track completely */
+.stSlider > div > div > div[data-baseweb="slider"] > div {
+    background-color: transparent !important;
+}
+
+/* The track background - make it simple gray */
+.stSlider [data-testid="stTickBar"] {
+    background: var(--covergo-gray-300) !important;
+}
+
+/* The filled portion of the track - hide it (no red) */
+.stSlider > div > div > div[data-baseweb="slider"] > div > div:first-child {
+    background-color: transparent !important;
+}
+
+/* Slider track - simple gray line */
+.stSlider > div > div > div > div[role="slider"] {
+    background-color: #000000 !important;
+    border: 2px solid #000000 !important;
+}
+
+/* The thumb/handle - BLACK */
+.stSlider [data-baseweb="slider"] [role="slider"] {
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+/* Thumb value display */
+.stSlider [data-testid="stThumbValue"] {
+    color: var(--covergo-white) !important;
+    background-color: #000000 !important;
+}
+
+/* Slider label at top */
+.stSlider label {
+    color: var(--covergo-gray-900) !important;
+}
+
+/* Min/Max values at both ends - WHITE text */
+.stSlider > div > div > div > div:first-child,
+.stSlider > div > div > div > div:last-child {
+    color: var(--covergo-white) !important;
+}
+
+/* All text in slider area should be white on dark background */
+.stSlider [data-testid="stTickBarMin"],
+.stSlider [data-testid="stTickBarMax"] {
+    color: var(--covergo-white) !important;
+}
+
+/* The actual track line */
+div[data-baseweb="slider"] > div:first-child {
+    background: var(--covergo-gray-400) !important;
+}
+
+/* Remove any red/colored fill */
+div[data-baseweb="slider"] > div:first-child > div {
+    background: transparent !important;
+}
+
+/* Thumb styling */
+div[data-baseweb="slider"] div[role="slider"] {
+    background-color: #000000 !important;
+    border: none !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* Value labels on the slider - ensure white */
+.stSlider span {
+    color: var(--covergo-white) !important;
+}
+
+/* Caption under slider */
+.stSlider + div small,
+.stSlider ~ small {
+    color: var(--covergo-gray-600) !important;
+}
+
+/* Specific fix for slider min/max display */
+[data-testid="stSlider"] > div > div > div > div:not([role="slider"]) {
+    color: var(--covergo-white) !important;
 }
 
 /* ===== Responsive ===== */
