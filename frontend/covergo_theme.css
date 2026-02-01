@@ -274,23 +274,22 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--covergo-white) !important;
 }
 
-/* ===== File Uploader - LARGER ===== */
 .stFileUploader {
     background-color: var(--covergo-white) !important;
     border: 3px dashed var(--covergo-gray-400) !important;
     border-radius: 16px !important;
-    padding: 40px 30px !important;
-    min-height: 150px !important;
+    padding: 50px 30px !important; /* Tăng padding trên dưới để ô to hơn */
+    min-height: 250px !important;  /* Tăng chiều cao tối thiểu */
 }
 
-.stFileUploader:hover {
-    border-color: var(--covergo-primary) !important;
-    background-color: var(--covergo-primary-lighter) !important;
+.stFileUploader section {
+    min-height: 200px !important;
 }
 
-.stFileUploader label {
-    color: var(--covergo-gray-900) !important;
-    font-size: 1rem !important;
+.stFileUploader [data-testid="stFileUploaderDropzone"] {
+    min-height: 200px !important;
+    align-items: center; /* Căn giữa nội dung */
+    justify-content: center;
 }
 
 /* Make the dropzone larger */
@@ -314,6 +313,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .stFileUploader [data-testid="stFileUploaderDropzoneInstructions"] span {
     font-size: 1rem !important;
+}
+
+/* Đổi màu chữ "Drag and drop file here" và các icon thành màu trắng */
+[data-testid="stFileUploaderDropzoneInstructions"],
+[data-testid="stFileUploaderDropzoneInstructions"] div,
+[data-testid="stFileUploaderDropzoneInstructions"] span,
+[data-testid="stFileUploaderDropzoneInstructions"] small,
+[data-testid="stFileUploaderDropzone"] svg {
+    color: #FFFFFF !important; /* Màu trắng bắt buộc */
+    fill: #FFFFFF !important;  /* Icon màu trắng */
 }
 
 /* ===== Selectbox / Multiselect - WHITE TEXT OPTIONS ===== */
@@ -429,13 +438,19 @@ li[role="option"]:hover * {
 
 /* ===== Expander ===== */
 .streamlit-expanderHeader {
-    background-color: var(--covergo-white);
-    border: 1px solid var(--covergo-gray-200);
-    border-radius: 0.5rem;
-    padding: 1rem;
-    font-weight: 600;
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 20px 24px !important;
+    font-weight: 600 !important;
+    font-size: 1.5rem !important; /* Tăng kích thước font lên 1.5rem (tương đương H3) */
+    box-shadow: 0 3px 10px rgba(6, 57, 112, 0.25);
+    font-family: 'Ubuntu', sans-serif;
 }
 
+.streamlit-expanderHeader p {
+    font-size: 1.5rem !important; /* Đảm bảo thẻ p bên trong cũng to lên */
+}
 /* ===== Metrics ===== */
 [data-testid="stMetricValue"] {
     font-size: 2rem;
