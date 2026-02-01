@@ -1,9 +1,8 @@
 /* ============================================
    COVERGO EVALUATION TOOL - CSS THEME
-   Minimalist White & Blue Design
+   Minimalist White & Blue Design - No Icons
    ============================================ */
 
-/* ===== Color Variables ===== */
 :root {
     --covergo-primary: #063970;
     --covergo-primary-light: #084C94;
@@ -55,52 +54,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 2rem;
     letter-spacing: -0.025em;
     font-family: 'Ubuntu', sans-serif;
-}
-
-/* ===== Advanced Settings Header ===== */
-.advanced-settings-header {
-    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
-    padding: 12px 20px;
-    border-radius: 8px;
-    margin: 20px 0 10px 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 2px 8px rgba(6, 57, 112, 0.2);
-}
-
-.advanced-settings-icon {
-    font-size: 1.3rem;
-}
-
-.advanced-settings-text {
-    color: var(--covergo-white) !important;
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-}
-
-/* ===== Configure Evaluation Header ===== */
-.configure-evaluation-header {
-    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
-    padding: 14px 24px;
-    border-radius: 10px;
-    margin: 24px 0 16px 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 3px 10px rgba(6, 57, 112, 0.25);
-}
-
-.configure-icon {
-    font-size: 1.4rem;
-}
-
-.configure-text {
-    color: var(--covergo-white) !important;
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
 }
 
 /* ===== Metric Highlight Cards ===== */
@@ -156,111 +109,10 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
 }
 
-/* ===== File Upload Container ===== */
-.file-upload-container {
-    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
-    border: 3px dashed rgba(255, 255, 255, 0.5);
-    border-radius: 16px;
-    padding: 40px 30px;
-    text-align: center;
-    margin: 20px 0;
-    transition: all 0.3s ease;
-}
-
-.file-upload-container:hover {
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 25px rgba(6, 57, 112, 0.3);
-}
-
-.file-upload-icon {
-    font-size: 3rem;
-    margin-bottom: 12px;
-}
-
-.file-upload-text {
-    color: var(--covergo-white) !important;
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.file-upload-subtext {
-    color: rgba(255, 255, 255, 0.8) !important;
-    font-size: 0.95rem;
-}
-
-/* Override Streamlit file uploader */
-.stFileUploader {
-    background-color: var(--covergo-primary) !important;
-    border: 3px dashed rgba(255, 255, 255, 0.5) !important;
-    border-radius: 16px !important;
-    padding: 30px !important;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.stFileUploader:hover {
-    border-color: rgba(255, 255, 255, 0.8) !important;
-    background-color: var(--covergo-primary-light) !important;
-}
-
-.stFileUploader label {
-    color: var(--covergo-white) !important;
-    font-size: 1.1rem !important;
-    font-weight: 500 !important;
-}
-
-.stFileUploader section {
-    background-color: transparent !important;
-}
-
-.stFileUploader section > div {
-    color: var(--covergo-white) !important;
-}
-
-.stFileUploader section small {
-    color: rgba(255, 255, 255, 0.8) !important;
-}
-
-.stFileUploader [data-testid="stFileUploaderDropzone"] {
-    background-color: var(--covergo-primary) !important;
-    border: none !important;
-}
-
-.stFileUploader [data-testid="stFileUploaderDropzone"] span {
-    color: var(--covergo-white) !important;
-    font-size: 1.1rem !important;
-}
-
-.stFileUploader [data-testid="stFileUploaderDropzone"] small {
-    color: rgba(255, 255, 255, 0.8) !important;
-}
-
 /* ===== Sidebar ===== */
 [data-testid="stSidebar"] {
     background-color: var(--covergo-white);
     border-right: 1px solid var(--covergo-gray-200);
-}
-
-[data-testid="stSidebar"] .stRadio > label {
-    font-weight: 600;
-    color: var(--covergo-gray-700);
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-}
-
-[data-testid="stSidebar"] [role="radiogroup"] label {
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 0.25rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-[data-testid="stSidebar"] [role="radiogroup"] label:hover {
-    background-color: var(--covergo-gray-100);
 }
 
 /* ===== Cards ===== */
@@ -328,6 +180,23 @@ h1, h2, h3, h4, h5, h6 {
 
 .stDownloadButton > button:hover {
     background-color: var(--covergo-primary-light) !important;
+}
+
+/* ===== File Uploader ===== */
+.stFileUploader {
+    background-color: var(--covergo-white) !important;
+    border: 2px dashed var(--covergo-gray-300) !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+}
+
+.stFileUploader:hover {
+    border-color: var(--covergo-primary) !important;
+    background-color: var(--covergo-primary-lighter) !important;
+}
+
+.stFileUploader label {
+    color: var(--covergo-gray-900) !important;
 }
 
 /* ===== Alerts ===== */
@@ -473,18 +342,90 @@ li[role="option"]:hover {
     color: var(--covergo-white) !important;
 }
 
-/* ===== Slider ===== */
-.stSlider > div > div > div {
-    background-color: var(--covergo-primary);
+/* ===== SLIDER - CRITICAL FIXES ===== */
+
+/* Hide the red/colored track completely */
+.stSlider > div > div > div[data-baseweb="slider"] > div {
+    background-color: transparent !important;
 }
 
+/* The track background - make it simple gray */
+.stSlider [data-testid="stTickBar"] {
+    background: var(--covergo-gray-300) !important;
+}
+
+/* The filled portion of the track - hide it (no red) */
+.stSlider > div > div > div[data-baseweb="slider"] > div > div:first-child {
+    background-color: transparent !important;
+}
+
+/* Slider track - simple gray line */
+.stSlider > div > div > div > div[role="slider"] {
+    background-color: #000000 !important;
+    border: 2px solid #000000 !important;
+}
+
+/* The thumb/handle - BLACK */
+.stSlider [data-baseweb="slider"] [role="slider"] {
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+/* Thumb value display */
 .stSlider [data-testid="stThumbValue"] {
     color: var(--covergo-white) !important;
-    background-color: var(--covergo-primary) !important;
+    background-color: #000000 !important;
 }
 
+/* Slider label at top */
 .stSlider label {
     color: var(--covergo-gray-900) !important;
+}
+
+/* Min/Max values at both ends - WHITE text */
+.stSlider > div > div > div > div:first-child,
+.stSlider > div > div > div > div:last-child {
+    color: var(--covergo-white) !important;
+}
+
+/* All text in slider area should be white on dark background */
+.stSlider [data-testid="stTickBarMin"],
+.stSlider [data-testid="stTickBarMax"] {
+    color: var(--covergo-white) !important;
+}
+
+/* The actual track line */
+div[data-baseweb="slider"] > div:first-child {
+    background: var(--covergo-gray-400) !important;
+}
+
+/* Remove any red/colored fill */
+div[data-baseweb="slider"] > div:first-child > div {
+    background: transparent !important;
+}
+
+/* Thumb styling */
+div[data-baseweb="slider"] div[role="slider"] {
+    background-color: #000000 !important;
+    border: none !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* Value labels on the slider - ensure white */
+.stSlider span {
+    color: var(--covergo-white) !important;
+}
+
+/* Caption under slider */
+.stSlider + div small,
+.stSlider ~ small {
+    color: var(--covergo-gray-600) !important;
+}
+
+/* Specific fix for slider min/max display */
+[data-testid="stSlider"] > div > div > div > div:not([role="slider"]) {
+    color: var(--covergo-white) !important;
 }
 
 /* ===== Divider ===== */
