@@ -865,20 +865,43 @@ def show_evaluation_section(config, db):
     # --- THÊM ĐOẠN NÀY ---
     st.markdown("""
     <style>
-        /* Force File Uploader Styling */
+        /* 1. KHUNG THẢ FILE */
         [data-testid="stFileUploader"] section {
             min-height: 250px !important;
-            padding: 3rem 0 !important;
-            background-color: #063970 !important; /* Màu Primary */
+            padding: 40px 0 !important;
+            background-color: #063970 !important; /* Màu nền xanh */
+            border: 2px dashed rgba(255,255,255,0.5) !important;
         }
-        [data-testid="stFileUploader"] section > div {
-            color: white !important; /* Chữ trắng */
+
+        /* 2. CHỮ 'Drag and drop file here' VÀ ICON */
+        /* Chọn tất cả các phần tử text bên trong vùng dropzone */
+        [data-testid="stFileUploaderDropzone"] div,
+        [data-testid="stFileUploaderDropzone"] span,
+        [data-testid="stFileUploaderDropzone"] small {
+            color: #FFFFFF !important;  /* Bắt buộc màu trắng */
+            font-size: 1.2rem !important; /* Tăng cỡ chữ lên (mặc định khoảng 1rem) */
+            font-weight: 500 !important;
         }
-        [data-testid="stFileUploader"] section svg {
-            fill: white !important; /* Icon trắng */
+        
+        /* Chỉnh riêng dòng "Limit 200MB..." cho nhỏ lại một chút nếu cần, nhưng vẫn màu trắng */
+        [data-testid="stFileUploaderDropzone"] small {
+            font-size: 0.9rem !important;
+            opacity: 0.8 !important;
         }
-        [data-testid="stFileUploader"] section small {
-            color: #E8F1F8 !important; /* Chữ nhỏ màu sáng */
+
+        /* Đổi màu Icon đám mây sang trắng */
+        [data-testid="stFileUploaderDropzone"] svg {
+            fill: #FFFFFF !important;
+            width: 50px !important; /* Icon to hơn */
+            height: 50px !important;
+            margin-bottom: 10px !important;
+        }
+        
+        /* Nút Browse files */
+        [data-testid="stFileUploaderDropzone"] button {
+            border-color: white !important;
+            color: white !important;
+            background: rgba(255,255,255,0.1) !important;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -1073,10 +1096,27 @@ def show_history_section(db):
     # --- THÊM ĐOẠN NÀY ---
     st.markdown("""
     <style>
-        /* Force Expander Header Size */
-        .streamlit-expanderHeader p {
-            font-size: 24px !important; /* 24px ~ 1.5rem (H3) */
-            font-weight: 600 !important;
+        /* Tăng kích thước tiêu đề Expander để giống Header H2/H3 */
+        .streamlit-expanderHeader p, 
+        .streamlit-expanderHeader span {
+            font-size: 1.75rem !important; /* Kích thước tương đương st.header */
+            font-weight: 700 !important;   /* In đậm */
+            color: #063970 !important;     /* Màu xanh chủ đạo */
+            font-family: 'Source Sans Pro', sans-serif !important;
+        }
+        
+        /* Tăng chiều cao của header để chứa chữ to */
+        .streamlit-expanderHeader {
+            background-color: transparent !important; /* Bỏ màu nền xám nếu muốn sạch hơn */
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+            border-bottom: 2px solid #E5E7EB !important; /* Thêm đường kẻ dưới cho giống tiêu đề section */
+        }
+        
+        /* Tăng kích thước mũi tên mở rộng */
+        .streamlit-expanderHeader svg {
+            width: 1.5rem !important;
+            height: 1.5rem !important;
         }
     </style>
     """, unsafe_allow_html=True)
