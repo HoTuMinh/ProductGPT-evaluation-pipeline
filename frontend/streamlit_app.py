@@ -861,6 +861,27 @@ def show_evaluation_section(config, db):
     model = st.session_state.selected_model
     
     st.info(f"Using: {provider.upper()} - {model}")
+
+    # --- THÊM ĐOẠN NÀY ---
+    st.markdown("""
+    <style>
+        /* Force File Uploader Styling */
+        [data-testid="stFileUploader"] section {
+            min-height: 250px !important;
+            padding: 3rem 0 !important;
+            background-color: #063970 !important; /* Màu Primary */
+        }
+        [data-testid="stFileUploader"] section > div {
+            color: white !important; /* Chữ trắng */
+        }
+        [data-testid="stFileUploader"] section svg {
+            fill: white !important; /* Icon trắng */
+        }
+        [data-testid="stFileUploader"] section small {
+            color: #E8F1F8 !important; /* Chữ nhỏ màu sáng */
+        }
+    </style>
+    """, unsafe_allow_html=True)
     
     # File upload
     uploaded_file = st.file_uploader(
@@ -1049,6 +1070,18 @@ def run_evaluation(df, api_key, config, db, question_col, response_col, benchmar
 
 def show_history_section(db):
     """Show evaluation history as toggle"""
+    # --- THÊM ĐOẠN NÀY ---
+    st.markdown("""
+    <style>
+        /* Force Expander Header Size */
+        .streamlit-expanderHeader p {
+            font-size: 24px !important; /* 24px ~ 1.5rem (H3) */
+            font-weight: 600 !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+    #-----
     
     with st.expander("Evaluation History", expanded=False):
         runs = db.get_evaluation_runs(user=st.session_state.username)
