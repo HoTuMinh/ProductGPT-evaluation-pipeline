@@ -653,3 +653,66 @@ div[data-baseweb="slider"] div[role="slider"] {
         padding: 1rem;
     }
 }
+
+/* ==============================================
+   FIX: FILE UPLOADER (DRAG & DROP)
+   ============================================== */
+
+/* 1. Tăng kích thước vùng thả file */
+[data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] {
+    min-height: 250px !important;    /* Chiều cao tối thiểu */
+    padding: 40px 20px !important;   /* Khoảng cách nội dung bên trong */
+    background-color: var(--covergo-primary) !important; /* Nền xanh để chữ trắng nổi bật */
+    border: 2px dashed rgba(255,255,255, 0.5) !important; /* Viền nét đứt màu trắng mờ */
+}
+
+/* 2. Chỉnh màu chữ và Icon thành màu trắng */
+[data-testid="stFileUploaderDropzoneInstructions"] div,
+[data-testid="stFileUploaderDropzoneInstructions"] span,
+[data-testid="stFileUploaderDropzoneInstructions"] small,
+[data-testid="stFileUploaderDropzoneInstructions"] p {
+    color: #FFFFFF !important;
+    font-size: 1.1rem !important; /* Tăng cỡ chữ hướng dẫn */
+}
+
+/* Chỉnh màu Icon đám mây/tải lên */
+[data-testid="stFileUploaderDropzone"] svg {
+    fill: #FFFFFF !important;
+    color: #FFFFFF !important;
+    width: 3rem !important;  /* Tăng kích thước icon */
+    height: 3rem !important;
+}
+
+/* Nút "Browse files" bên trong */
+[data-testid="stFileUploaderDropzone"] button {
+    background-color: var(--covergo-white) !important;
+    color: var(--covergo-primary) !important;
+    border: none !important;
+    font-weight: bold !important;
+}
+
+/* ==============================================
+   FIX: EXPANDER HEADER (EVALUATION HISTORY)
+   ============================================== */
+
+/* Làm tiêu đề Expander to giống thẻ H3 (Step 2) */
+.streamlit-expanderHeader {
+    background-color: var(--covergo-gray-100) !important; /* Màu nền nhẹ nhàng hơn */
+    border-radius: 8px !important;
+}
+
+/* Can thiệp sâu vào thẻ p hoặc span chứa text tiêu đề */
+.streamlit-expanderHeader p, 
+.streamlit-expanderHeader span {
+    font-size: 1.5rem !important; /* Tương đương H3 */
+    font-weight: 600 !important;  /* In đậm */
+    font-family: 'Ubuntu', sans-serif !important;
+    color: var(--covergo-primary) !important; /* Màu xanh chủ đạo */
+}
+
+/* Tăng kích thước icon mũi tên mở rộng */
+.streamlit-expanderHeader svg {
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+    fill: var(--covergo-primary) !important;
+}
