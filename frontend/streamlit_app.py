@@ -23,7 +23,7 @@ st.set_page_config(
     page_title="ProductGPT Evaluation Pipeline",
     page_icon="",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # Load CoverGo CSS Theme
@@ -655,12 +655,20 @@ def main():
     
     
 
+    # Thay thế đoạn code cũ trong with st.sidebar bằng đoạn này:
     with st.sidebar:
-        st.markdown(f'<div class="user-info-box">User: {st.session*state.username}</div>', unsafe*allow_html=True)
-        if st.button("Logout", use*container*width=True):
+        # Sửa lỗi: st.session*state -> st.session_state và unsafe*allow -> unsafe_allow_html
+        st.markdown(f'<div class="user-info-box">User: {st.session_state.username}</div>', unsafe_allow_html=True)
+        
+        # THÊM KHOẢNG CÁCH: Dùng st.write("") hoặc st.markdown("<br>", ...) để tách 2 phần tử ra
+        st.write("") 
+        st.write("") 
+        
+        # Sửa lỗi: use*container*width -> use_container_width
+        if st.button("Logout", use_container_width=True):
             st.session_state.authenticated = False
             st.rerun()
-        st.markdown("---") # Đường kẻ phân cách trong sidebar
+            
     
     # Step 1: Settings
     show_settings_section(config, db)
