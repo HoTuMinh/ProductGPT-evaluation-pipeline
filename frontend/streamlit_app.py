@@ -650,15 +650,17 @@ def main():
     if 'step' not in st.session_state:
         st.session_state.step = 'settings'
     
-    # Header with logout
-    col1, col2 = st.columns([4, 1])
+    # User info and logout at top left
+    col1, col2, col3 = st.columns([1, 1, 4])
     with col1:
-        st.markdown('<div class="main-header">ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="user-info-box">User: {st.session_state.username}</div>', unsafe_allow_html=True)
     with col2:
-        st.write(f"User: {st.session_state.username}")
-        if st.button("Logout", use_container_width=True):
+        if st.button("Logout", use_container_width=True, key="logout_btn"):
             st.session_state.authenticated = False
             st.rerun()
+    
+    # Main header
+    st.markdown('<div class="main-header">ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
     
     st.markdown("---")
     
