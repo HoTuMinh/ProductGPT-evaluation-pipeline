@@ -651,19 +651,19 @@ def main():
         st.session_state.step = 'settings'
     
     # User info and logout at top left
-    col1, col2, col3 = st.columns([1.5, 1.5, 7]) 
+    col1, col2, col3 = st.columns([2, 1, 15]) 
     
     with col1:
-        # User info box
-        st.markdown(f'<div class="user-info-box" style="margin-bottom: 0;">User: {st.session_state.username}</div>', unsafe_allow_html=True)
+        # User info box - thêm style để căn giữa theo chiều dọc với nút bấm
+        st.markdown(
+            f'<div class="user-info-box" style="margin-bottom: 0; padding-top: 5px;">User: {st.session_state.username}</div>', 
+            unsafe_allow_html=True
+        )
     with col2:
         # Logout button
         if st.button("Logout", use_container_width=True, key="logout_btn"):
             st.session_state.authenticated = False
             st.rerun()
-        
-    st.markdown("---")
-    
     # Step 1: Settings
     show_settings_section(config, db)
     
