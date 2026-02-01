@@ -29,7 +29,6 @@
     font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Main content area */
 .main .block-container {
     padding-top: 2rem;
     padding-bottom: 2rem;
@@ -43,7 +42,6 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Ubuntu', sans-serif;
 }
 
-/* Override Streamlit's default text colors */
 .stMarkdown, .stText, p, div, span, label {
     color: var(--covergo-gray-900);
     font-family: 'Ubuntu', sans-serif;
@@ -59,23 +57,183 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Ubuntu', sans-serif;
 }
 
-.page-title {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--covergo-primary);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 3px solid var(--covergo-primary);
-    font-family: 'Ubuntu', sans-serif;
+/* ===== Advanced Settings Header ===== */
+.advanced-settings-header {
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 20px 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(6, 57, 112, 0.2);
 }
 
-.section-header {
-    font-size: 1.5rem;
+.advanced-settings-icon {
+    font-size: 1.3rem;
+}
+
+.advanced-settings-text {
+    color: var(--covergo-white) !important;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+/* ===== Configure Evaluation Header ===== */
+.configure-evaluation-header {
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
+    padding: 14px 24px;
+    border-radius: 10px;
+    margin: 24px 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 3px 10px rgba(6, 57, 112, 0.25);
+}
+
+.configure-icon {
+    font-size: 1.4rem;
+}
+
+.configure-text {
+    color: var(--covergo-white) !important;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+/* ===== Metric Highlight Cards ===== */
+.metric-highlight-card {
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(6, 57, 112, 0.3);
+    margin: 10px 0;
+}
+
+.metric-highlight-label {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+}
+
+.metric-highlight-value {
+    color: var(--covergo-white) !important;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 8px 0;
+}
+
+.metric-highlight-delta {
+    color: #90EE90 !important;
+    font-size: 1rem;
     font-weight: 500;
-    color: var(--covergo-gray-900);
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-family: 'Ubuntu', sans-serif;
+}
+
+.metric-highlight-help {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 0.8rem;
+    margin-top: 8px;
+}
+
+/* ===== Report Section Header ===== */
+.report-section-header {
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
+    padding: 16px 24px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 10px rgba(6, 57, 112, 0.25);
+}
+
+.report-section-header h3 {
+    color: var(--covergo-white) !important;
+    margin: 0;
+    font-weight: 600;
+}
+
+/* ===== File Upload Container ===== */
+.file-upload-container {
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
+    border: 3px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    padding: 40px 30px;
+    text-align: center;
+    margin: 20px 0;
+    transition: all 0.3s ease;
+}
+
+.file-upload-container:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 25px rgba(6, 57, 112, 0.3);
+}
+
+.file-upload-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.file-upload-text {
+    color: var(--covergo-white) !important;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.file-upload-subtext {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 0.95rem;
+}
+
+/* Override Streamlit file uploader */
+.stFileUploader {
+    background-color: var(--covergo-primary) !important;
+    border: 3px dashed rgba(255, 255, 255, 0.5) !important;
+    border-radius: 16px !important;
+    padding: 30px !important;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stFileUploader:hover {
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    background-color: var(--covergo-primary-light) !important;
+}
+
+.stFileUploader label {
+    color: var(--covergo-white) !important;
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+}
+
+.stFileUploader section {
+    background-color: transparent !important;
+}
+
+.stFileUploader section > div {
+    color: var(--covergo-white) !important;
+}
+
+.stFileUploader section small {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.stFileUploader [data-testid="stFileUploaderDropzone"] {
+    background-color: var(--covergo-primary) !important;
+    border: none !important;
+}
+
+.stFileUploader [data-testid="stFileUploaderDropzone"] span {
+    color: var(--covergo-white) !important;
+    font-size: 1.1rem !important;
+}
+
+.stFileUploader [data-testid="stFileUploaderDropzone"] small {
+    color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* ===== Sidebar ===== */
@@ -105,33 +263,14 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--covergo-gray-100);
 }
 
-[data-testid="stSidebar"] [data-baseweb="radio"] [data-checked="true"] + div {
-    background-color: var(--covergo-primary-lighter);
-    border-left: 4px solid var(--covergo-primary);
-}
-
 /* ===== Cards ===== */
 .card {
     background-color: var(--covergo-white);
     border-radius: 0.75rem;
     padding: 1.5rem;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     margin-bottom: 1.5rem;
     border: 1px solid var(--covergo-gray-200);
-    transition: box-shadow 0.2s;
-}
-
-.card:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.card-header {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--covergo-gray-900);
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--covergo-gray-200);
 }
 
 .metric-card {
@@ -140,53 +279,12 @@ h1, h2, h3, h4, h5, h6 {
     padding: 1.25rem;
     border-radius: 0.75rem;
     margin: 0.75rem 0;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .metric-value {
     font-size: 2rem;
     font-weight: 700;
     color: var(--covergo-primary);
-    margin: 0.5rem 0;
-}
-
-.metric-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--covergo-gray-600);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* ===== Status Badges ===== */
-.badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.badge-pass {
-    background-color: #D1FAE5;
-    color: #065F46;
-}
-
-.badge-fail {
-    background-color: #FEE2E2;
-    color: #991B1B;
-}
-
-.badge-active {
-    background-color: var(--covergo-primary-lighter);
-    color: var(--covergo-primary);
-}
-
-.badge-inactive {
-    background-color: var(--covergo-gray-200);
-    color: var(--covergo-gray-600);
 }
 
 /* ===== Buttons ===== */
@@ -201,7 +299,6 @@ h1, h2, h3, h4, h5, h6 {
     transition: all 0.2s;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    font-family: 'Ubuntu', sans-serif;
 }
 
 .stButton > button p,
@@ -212,58 +309,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .stButton > button:hover {
     background-color: var(--covergo-primary-light) !important;
-    color: var(--covergo-white) !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
 }
 
-.stButton > button:active {
-    transform: translateY(0);
-}
-
-/* Primary button (explicitly white text) */
 .stButton > button[kind="primary"],
 .stButton > button[data-testid="baseButton-primary"] {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
-}
-
-.stButton > button[kind="primary"] p,
-.stButton > button[kind="primary"] span,
-.stButton > button[data-testid="baseButton-primary"] p,
-.stButton > button[data-testid="baseButton-primary"] span {
-    color: var(--covergo-white) !important;
-}
-
-/* Secondary button */
-.stButton.secondary > button {
-    background-color: var(--covergo-white) !important;
-    color: var(--covergo-primary) !important;
-    border: 2px solid var(--covergo-primary) !important;
-}
-
-.stButton.secondary > button:hover {
-    background-color: var(--covergo-primary-lighter) !important;
-}
-
-/* Danger button */
-.stButton.danger > button {
-    background-color: var(--covergo-error) !important;
-    color: var(--covergo-white) !important;
-}
-
-.stButton.danger > button:hover {
-    background-color: #DC2626 !important;
-}
-
-/* Success button */
-.stButton.success > button {
-    background-color: var(--covergo-success) !important;
-    color: var(--covergo-white) !important;
-}
-
-.stButton.success > button:hover {
-    background-color: #059669 !important;
 }
 
 /* ===== Download Button ===== */
@@ -273,23 +326,12 @@ h1, h2, h3, h4, h5, h6 {
     border: none !important;
 }
 
-.stDownloadButton > button p,
-.stDownloadButton > button span,
-.stDownloadButton > button div {
-    color: var(--covergo-white) !important;
-}
-
 .stDownloadButton > button:hover {
     background-color: var(--covergo-primary-light) !important;
-    color: var(--covergo-white) !important;
 }
 
-/* ===== Custom Alert Styling with !important ===== */
-/* Force gray background for ALL alerts by default */
-[class*="stAlert"],
-[class*="stNotification"],
-[data-testid*="stAlert"],
-[data-testid*="stNotification"] {
+/* ===== Alerts ===== */
+[class*="stAlert"] {
     background-color: var(--covergo-gray-100) !important;
     border: 1px solid var(--covergo-gray-300) !important;
     border-left: 4px solid var(--covergo-gray-400) !important;
@@ -298,19 +340,10 @@ h1, h2, h3, h4, h5, h6 {
     padding: 1rem !important;
 }
 
-/* Blue info box - for configuration hints */
-[data-baseweb="notification"][kind="info"] {
+.stInfo {
     background-color: var(--covergo-primary) !important;
-    border-left-color: var(--covergo-primary) !important;
+    border-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
-}
-
-/* Keep gray for success messages */
-[data-baseweb="notification"][kind="success"] {
-    background-color: var(--covergo-gray-100) !important;
-    border: 1px solid var(--covergo-gray-300) !important;
-    border-left: 4px solid var(--covergo-success) !important;
-    color: var(--covergo-gray-900) !important;
 }
 
 /* ===== Inputs ===== */
@@ -321,16 +354,7 @@ h1, h2, h3, h4, h5, h6 {
     border: 2px solid var(--covergo-gray-300);
     border-radius: 0.5rem;
     padding: 0.75rem;
-    font-size: 0.875rem;
     color: var(--covergo-gray-900);
-    transition: border-color 0.2s;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-.stTextInput > div > div > input::placeholder,
-.stNumberInput > div > div > input::placeholder,
-.stTextArea textarea::placeholder {
-    color: var(--covergo-gray-400);
 }
 
 .stTextInput > div > div > input:focus,
@@ -338,40 +362,13 @@ h1, h2, h3, h4, h5, h6 {
 .stTextArea textarea:focus {
     border-color: var(--covergo-primary);
     box-shadow: 0 0 0 3px var(--covergo-primary-lighter);
-    outline: none;
 }
 
-/* Password input eye icon */
-.stTextInput button {
-    background-color: var(--covergo-white);
-    border: none;
-    color: var(--covergo-gray-600);
-}
-
-/* ===== File Uploader ===== */
-.stFileUploader {
-    background-color: var(--covergo-white);
-    border: 2px dashed var(--covergo-gray-300);
-    border-radius: 0.75rem;
-    padding: 2rem;
-    text-align: center;
-    transition: all 0.2s;
-}
-
-.stFileUploader:hover {
-    border-color: var(--covergo-primary);
-    background-color: var(--covergo-primary-lighter);
-}
-
-/* ===== Tables / DataFrames ===== */
+/* ===== Tables ===== */
 .stDataFrame {
     border: 1px solid var(--covergo-gray-200);
     border-radius: 0.75rem;
     overflow: hidden;
-}
-
-.stDataFrame table {
-    font-size: 0.875rem;
 }
 
 .stDataFrame thead tr th {
@@ -380,112 +377,11 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.75rem;
-    letter-spacing: 0.05em;
     padding: 1rem;
-    border: none;
-}
-
-.stDataFrame tbody tr {
-    border-bottom: 1px solid var(--covergo-gray-200);
-    transition: background-color 0.2s;
 }
 
 .stDataFrame tbody tr:hover {
     background-color: var(--covergo-gray-50);
-}
-
-.stDataFrame tbody tr td {
-    padding: 0.875rem 1rem;
-}
-
-/* ===== Alerts / Messages ===== */
-.success-box {
-    background-color: var(--covergo-gray-100);
-    border: 2px solid var(--covergo-gray-300);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    margin: 1rem 0;
-    color: var(--covergo-gray-900);
-    font-family: 'Ubuntu', sans-serif;
-}
-
-.warning-box {
-    background-color: var(--covergo-gray-100);
-    border: 2px solid var(--covergo-gray-300);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    margin: 1rem 0;
-    color: var(--covergo-gray-900);
-    font-weight: 500;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-.error-box {
-    background-color: var(--covergo-gray-100);
-    border: 2px solid var(--covergo-gray-300);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    margin: 1rem 0;
-    color: var(--covergo-gray-900);
-    font-family: 'Ubuntu', sans-serif;
-}
-
-.info-box {
-    background-color: var(--covergo-gray-100);
-    border: 2px solid var(--covergo-gray-300);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    margin: 1rem 0;
-    color: var(--covergo-gray-900);
-    font-family: 'Ubuntu', sans-serif;
-}
-
-/* Streamlit's built-in st.info, st.warning, st.success, st.error */
-.stAlert {
-    background-color: var(--covergo-gray-100) !important;
-    border: 2px solid var(--covergo-gray-300) !important;
-    border-radius: 0.75rem !important;
-    color: var(--covergo-gray-900) !important;
-}
-
-/* Override specific alert types */
-div[data-testid="stNotification"],
-div[data-testid="stAlert"],
-.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stNotificationContentSuccess"],
-.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stNotificationContentInfo"],
-.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stNotificationContentWarning"],
-.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stNotificationContentError"] {
-    background-color: var(--covergo-gray-100) !important;
-    border: 2px solid var(--covergo-gray-300) !important;
-    color: var(--covergo-gray-900) !important;
-}
-
-/* Success messages - keep green for download button context, gray for notifications */
-.stSuccess {
-    background-color: var(--covergo-gray-100) !important;
-    border-color: var(--covergo-gray-300) !important;
-    color: var(--covergo-gray-900) !important;
-}
-
-/* Info messages - blue background with white text */
-.stInfo {
-    background-color: var(--covergo-primary) !important;
-    border-color: var(--covergo-primary) !important;
-    color: var(--covergo-white) !important;
-}
-
-/* Warning messages - gray */
-.stWarning {
-    background-color: var(--covergo-gray-100) !important;
-    border-color: var(--covergo-gray-300) !important;
-    color: var(--covergo-gray-900) !important;
-}
-
-/* Error messages - gray */
-.stError {
-    background-color: var(--covergo-gray-100) !important;
-    border-color: var(--covergo-gray-300) !important;
-    color: var(--covergo-gray-900) !important;
 }
 
 /* ===== Progress Bar ===== */
@@ -500,11 +396,6 @@ div[data-testid="stAlert"],
     border-radius: 0.5rem;
     padding: 1rem;
     font-weight: 600;
-    color: var(--covergo-gray-900);
-}
-
-.streamlit-expanderHeader:hover {
-    background-color: var(--covergo-gray-50);
 }
 
 /* ===== Tabs ===== */
@@ -519,35 +410,21 @@ div[data-testid="stAlert"],
     font-weight: 500;
     color: var(--covergo-gray-700);
     border-radius: 0.5rem 0.5rem 0 0;
-    transition: all 0.2s;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-.stTabs [data-baseweb="tab"]:hover {
-    background-color: var(--covergo-gray-100);
-    color: var(--covergo-gray-900);
 }
 
 .stTabs [aria-selected="true"] {
-    background-color: var(--covergo-white);
-    color: var(--covergo-primary);
-    border-bottom: 3px solid var(--covergo-primary);
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
     font-weight: 600;
 }
 
-/* Tab panels content */
 .stTabs [data-baseweb="tab-panel"] {
     background-color: var(--covergo-white);
     padding: 1.5rem;
     border-radius: 0 0 0.75rem 0.75rem;
 }
 
-.stTabs [data-baseweb="tab-panel"] p,
-.stTabs [data-baseweb="tab-panel"] div {
-    color: var(--covergo-gray-900);
-}
-
-/* ===== Metrics (st.metric) ===== */
+/* ===== Metrics ===== */
 [data-testid="stMetricValue"] {
     font-size: 2rem;
     font-weight: 700;
@@ -559,58 +436,30 @@ div[data-testid="stAlert"],
     font-weight: 600;
     color: var(--covergo-gray-600);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-[data-testid="stMetricDelta"] {
-    font-size: 0.875rem;
 }
 
 /* ===== Selectbox / Multiselect ===== */
-/* Main selectbox container */
-.stSelectbox,
-.stMultiSelect {
-    color: var(--covergo-white) !important;
-}
-
 .stSelectbox > div > div,
 .stMultiSelect > div > div {
     background-color: var(--covergo-primary) !important;
     border: 2px solid var(--covergo-primary) !important;
     border-radius: 0.5rem !important;
-    transition: border-color 0.2s;
     color: var(--covergo-white) !important;
 }
 
-/* FORCE WHITE TEXT on selected value - use wildcard */
 .stSelectbox *,
 .stMultiSelect * {
     color: var(--covergo-white) !important;
 }
 
-/* Selected value display container */
-.stSelectbox > div > div > div,
-.stMultiSelect > div > div > div,
-.stSelectbox div[data-baseweb="select"],
-.stSelectbox div[data-baseweb="select"] > div {
-    background-color: var(--covergo-primary) !important;
-    color: var(--covergo-white) !important;
-}
-
-/* Dropdown popover container */
 div[data-baseweb="popover"],
-div[data-baseweb="popover"] *,
 ul[role="listbox"],
-ul[role="listbox"] *,
-div[data-baseweb="menu"],
-div[data-baseweb="menu"] * {
+div[data-baseweb="menu"] {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
 }
 
-/* Dropdown options */
-li[role="option"],
-li[role="option"]:hover {
+li[role="option"] {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
 }
@@ -619,15 +468,7 @@ li[role="option"]:hover {
     background-color: var(--covergo-primary-light) !important;
 }
 
-.stSelectbox > div > div:focus-within,
-.stMultiSelect > div > div:focus-within {
-    border-color: var(--covergo-primary-light) !important;
-    box-shadow: 0 0 0 3px var(--covergo-primary-lighter) !important;
-}
-
-/* Multiselect tags */
-.stMultiSelect span[data-baseweb="tag"],
-.stMultiSelect span[data-baseweb="tag"] * {
+.stMultiSelect span[data-baseweb="tag"] {
     background-color: var(--covergo-error) !important;
     color: var(--covergo-white) !important;
 }
@@ -637,57 +478,13 @@ li[role="option"]:hover {
     background-color: var(--covergo-primary);
 }
 
-.stSlider > div > div > div > div {
-    background-color: var(--covergo-primary);
-}
-
-/* Slider value text */
-.stSlider > div > div[data-testid="stTickBar"] > div {
-    color: var(--covergo-white) !important;
-}
-
-.stSlider > div > div > div > div > div {
-    color: var(--covergo-white) !important;
-}
-
-/* Slider current value display */
-.stSlider [data-testid="stMarkdownContainer"] {
-    color: var(--covergo-white) !important;
-}
-
-.stSlider [data-testid="stMarkdownContainer"] p {
-    color: var(--covergo-white) !important;
-}
-
-/* Slider value label */
-.stSlider > div > div > div > div > div {
-    color: var(--covergo-white) !important;
-}
-
-.stSlider [data-testid="stTickBar"] div {
-    color: var(--covergo-white) !important;
-}
-
 .stSlider [data-testid="stThumbValue"] {
     color: var(--covergo-white) !important;
     background-color: var(--covergo-primary) !important;
 }
 
-/* Slider labels */
 .stSlider label {
     color: var(--covergo-gray-900) !important;
-}
-
-/* Slider current value display */
-.stSlider > div > div[data-testid="stTickBar"] ~ div {
-    color: var(--covergo-white) !important;
-}
-
-/* ===== Checkbox / Radio ===== */
-.stCheckbox > label,
-.stRadio > label {
-    font-weight: 500;
-    color: var(--covergo-gray-700);
 }
 
 /* ===== Divider ===== */
@@ -697,46 +494,11 @@ hr {
     margin: 2rem 0;
 }
 
-/* ===== Code Block ===== */
-.stCodeBlock {
-    background-color: var(--covergo-gray-900);
-    border-radius: 0.5rem;
-    border: 1px solid var(--covergo-gray-700);
-}
-
-/* ===== Spinner ===== */
-.stSpinner > div {
-    border-color: var(--covergo-primary);
-}
-
-/* ===== Toast Messages ===== */
-.stToast {
-    background-color: var(--covergo-white);
-    border: 2px solid var(--covergo-gray-200);
-    border-radius: 0.75rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
-/* ===== Download Button ===== */
-.stDownloadButton > button {
-    background-color: var(--covergo-success);
-    color: var(--covergo-white);
-}
-
-.stDownloadButton > button:hover {
-    background-color: #059669;
-}
-
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
     .main-header {
         font-size: 2rem;
     }
-    
-    .page-title {
-        font-size: 1.5rem;
-    }
-    
     .card {
         padding: 1rem;
     }
