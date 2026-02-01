@@ -72,6 +72,8 @@ def check_authentication():
                 if (username == "123" and password == "123") or password == "covergo2024":
                     st.session_state.authenticated = True
                     st.session_state.username = username if username else "anonymous"
+                    # Show configuration popup after login
+                    st.session_state.show_config_popup = True
                     st.rerun()
                 else:
                     st.error("Invalid credentials")
@@ -128,19 +130,23 @@ def display_evaluation_results(config, db, eval_data):
                 original_avg = results_df['llm_score'].mean()
                 original_pass_rate = (results_df['llm_score'] >= review_threshold).sum() / len(results_df) * 100
                 
-                st.metric(
-                    label=f"{metric.capitalize()} ",
-                    value=f"{avg_score:.3f}",
-                    delta=f"{pass_rate:.1f}% pass rate",
-                    help=f"Original LLM: {original_avg:.3f} avg, {original_pass_rate:.1f}% pass rate"
-                )
+                st.markdown(f"""
+                <div class="metric-highlight-card">
+                    <div class="metric-highlight-label">{metric.capitalize()} ✓</div>
+                    <div class="metric-highlight-value">{avg_score:.3f}</div>
+                    <div class="metric-highlight-delta">{pass_rate:.1f}% pass rate</div>
+                    <div class="metric-highlight-help">Original LLM: {original_avg:.3f} avg, {original_pass_rate:.1f}% pass rate</div>
+                </div>
+                """, unsafe_allow_html=True)
             else:
-                # Standard display
-                st.metric(
-                    label=f"{metric.capitalize()}",
-                    value=f"{avg_score:.3f}",
-                    delta=f"{pass_rate:.1f}% pass rate"
-                )
+                # Standard display with highlight
+                st.markdown(f"""
+                <div class="metric-highlight-card">
+                    <div class="metric-highlight-label">{metric.capitalize()}</div>
+                    <div class="metric-highlight-value">{avg_score:.3f}</div>
+                    <div class="metric-highlight-delta">{pass_rate:.1f}% pass rate</div>
+                </div>
+                """, unsafe_allow_html=True)
     
     # Review button
     st.markdown("---")
@@ -153,8 +159,9 @@ def display_evaluation_results(config, db, eval_data):
     
     st.markdown("---")
     
-    # Detailed results tabs
-    tabs = st.tabs([f" {m.capitalize()}" for m in selected_metrics] + [" Generate Report"])
+    # Detailed results tabs - with highlighted tab names
+    tab_names = [f"📊 {m.capitalize()}" for m in selected_metrics] + ["📄 Generate Report"]
+    tabs = st.tabs(tab_names)
     
     for idx, metric in enumerate(selected_metrics):
         with tabs[idx]:
@@ -211,7 +218,11 @@ def display_evaluation_results(config, db, eval_data):
     
     # Report generation tab
     with tabs[-1]:
-        st.markdown("###  Generate Comprehensive Report")
+        st.markdown("""
+        <div class="report-section-header">
+            <h3>📄 Generate Comprehensive Report</h3>
+        </div>
+        """, unsafe_allow_html=True)
         st.info("Generate a detailed PDF report with visualizations and analysis.")
         
         # Use form to prevent rerun
@@ -747,305 +758,25 @@ def main():
         st.markdown("###  Navigation")
         page = st.radio(
             "Select Page",
-            [" Getting Started", " Settings", " New Evaluation", " Evaluation History"],
+            [" Settings", " New Evaluation", " Evaluation History"],
             label_visibility="collapsed"
         )
     
     # Main content
     st.markdown('<div class="main-header"> ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
     
-    if page == " Getting Started":
-        show_getting_started_page(config, db)
-    elif page == " Settings":
+    # Show popup if just logged in
+    if st.session_state.get('show_config_popup', False):
+        st.info("👋 **Welcome!** Please configure your API provider, model and API key to get started.")
+        st.session_state.show_config_popup = False
+    
+    if page == " Settings":
         show_settings_page(config, db)
     elif page == " New Evaluation":
         show_evaluation_page(config, db)
     elif page == " Evaluation History":
         show_history_page(db)
 
-def show_getting_started_page(config, db):
-    """Show getting started guide for first-time users"""
-    
-    st.markdown("###  Getting Started Guide")
-    st.markdown("Welcome! This guide will help you get started with the ProductGPT Evaluation Pipeline.")
-    
-    # Create tabs for different sections
-    tabs = st.tabs([
-        " Quick Start",
-        " CSV Format", 
-        " Understanding Metrics",
-        " Reading Reports",
-        " Sample Dataset"
-    ])
-    
-    # Tab 1: Quick Start
-    with tabs[0]:
-        st.markdown("##  Quick Start")
-        st.markdown("""
-        Follow these 5 simple steps to run your first evaluation:
-        """)
-        
-        st.markdown("#### Step 1: Configure API")
-        st.markdown("""
-        1. Go to **Settings** tab
-        2. Click on a provider button (currently only Groq is available)
-        3. Select a model
-        4. Enter your API key
-        5. Click **Save Configuration**
-        
-         **Getting API Key:**
-        - **Groq**: https://console.groq.com/keys (Free tier available)
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("#### Step 2: Prepare Your Data")
-        st.markdown("""
-        Your CSV file must have these 3 columns:
-        - `question` - The question asked
-        - `response` - The AI's response
-        - `benchmark_answer` - The expected/correct answer
-        
-         Download our sample CSV below to see the format!
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("#### Step 3: Upload & Configure")
-        st.markdown("""
-        1. Go to **New Evaluation** tab
-        2. Upload your CSV file
-        3. Verify column mappings are correct
-        4. Select which metrics to evaluate (start with **Accuracy**)
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("#### Step 4: Run Evaluation")
-        st.markdown("""
-        1. Click **Run Evaluation**
-        2. Wait for processing (typically 1-2 seconds per sample)
-        3. View results in the tabs
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("#### Step 5: Review & Export")
-        st.markdown("""
-        1. Check the **Summary** metrics
-        2. Review individual results in each metric tab
-        3. Generate a **PDF Report** for sharing
-        4. Download results as **CSV** for further analysis
-        """)
-    
-    # Tab 2: CSV Format
-    with tabs[1]:
-        st.markdown("##  CSV Format Requirements")
-        
-        st.markdown("### Required Columns")
-        st.markdown("""
-        Your CSV file **must** contain these 3 columns:
-        
-        | Column Name | Description | Example |
-        |------------|-------------|---------|
-        | `question` | The question asked to the AI | "What is the premium plan price?" |
-        | `response` | The AI's actual response | "$99 per month" |
-        | `benchmark_answer` | The correct/expected answer | "$149 per month" |
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("### File Requirements")
-        st.markdown("""
-        - **Format**: CSV (comma-separated values)
-        - **Encoding**: UTF-8
-        - **Size**: Up to 10,000 rows recommended
-        - **File size**: No hard limit, but larger files take longer to process
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("### Example CSV Structure")
-        
-        # Show sample data preview
-        sample_path = Path(__file__).parent.parent / "data" / "uploads" / "sample.csv"
-        
-        if sample_path.exists():
-            try:
-                df_sample = pd.read_csv(sample_path)
-                st.markdown("**Preview of sample file:**")
-                st.dataframe(df_sample.head(3), use_container_width=True)
-            except Exception as e:
-                st.warning(f"Could not load sample file: {e}")
-        
-        st.markdown("---")
-        
-        st.markdown("### Common Issues")
-        st.markdown("""
-         **Column names don't match**
-        - Make sure columns are named exactly: `question`, `response`, `benchmark_answer`
-        - Column names are case-sensitive
-        
-         **Wrong file format**
-        - Save as CSV, not Excel (.xlsx) or Google Sheets
-        - Use "Save As" → "CSV (Comma delimited)"
-        
-         **Encoding issues**
-        - Save with UTF-8 encoding
-        - Avoid special characters or use Unicode properly
-        """)
-    
-    # Tab 3: Understanding Metrics
-    with tabs[2]:
-        st.markdown("##  Understanding Metrics")
-        
-        st.markdown("### Available Metrics")
-        
-        st.markdown("#### 1. Accuracy")
-        st.markdown("""
-        **What it measures:** Does the response correctly answer the question compared to the benchmark?
-        
-        **Scoring:**
-        - `1.0` = Perfect match, completely correct
-        - `0.7-0.9` = Mostly correct, minor differences
-        - `0.4-0.6` = Partially correct
-        - `0.0-0.3` = Incorrect or missing key information
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("#### 2. Comprehensiveness")
-        st.markdown("""
-        **What it measures:** Does the response cover all important points from the benchmark?
-        
-        **Scoring:**
-        - `1.0` = Covers all key points thoroughly
-        - `0.7-0.9` = Covers most key points
-        - `0.4-0.6` = Missing some important details
-        - `0.0-0.3` = Incomplete or superficial
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("#### 3. Faithfulness")
-        st.markdown("""
-        **What it measures:** Is the response consistent with the benchmark (no added/wrong info)?
-        
-        **Scoring:**
-        - `1.0` = Fully faithful, no incorrect additions
-        - `0.7-0.9` = Mostly faithful, minor extra details
-        - `0.4-0.6` = Some contradictions or wrong info
-        - `0.0-0.3` = Contains significant misinformation
-        """)
-    
-    # Tab 4: Reading Reports
-    with tabs[3]:
-        st.markdown("##  Reading Reports")
-        
-        st.markdown("### Summary Metrics")
-        st.markdown("""
-        At the top of your results, you'll see summary cards showing:
-        
-        - **Accuracy**: 0.550 (60% pass rate)
-        - **Comprehensiveness**: 0.780 (80% pass rate)
-        
-        **How to interpret:**
-        - **Score (0-1)**: Average across all samples
-        - **Pass Rate**: % of samples scoring ≥ 0.7
-        - Higher is better for both
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("### Detailed Results Tables")
-        st.markdown("""
-        Each metric tab shows a table with:
-        - **Question**: Original question
-        - **Score**: Individual score (0-1)
-        - **Label**: Positive (≥0.7) or Negative (<0.7)
-        - **Reasoning**: Why the LLM gave this score
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("### PDF Reports")
-        st.markdown("""
-        Generated reports include:
-        
-        **Page 1: Overview**
-        - Run information (date, user, file)
-        - Results summary table
-        - Metric comparison chart
-        
-        **Page 2+: Per Metric**
-        - Score distribution
-        - Label distribution (pass/fail)
-        - Top 3 lowest scoring samples with full details
-        """)
-    
-    # Tab 5: Sample Dataset
-    with tabs[4]:
-        st.markdown("##  Sample Dataset")
-        
-        st.markdown("""
-        Download our sample CSV to see the correct format and try your first evaluation!
-        
-        This sample contains 5 questions about a product (ProductGPT) with responses and benchmark answers.
-        """)
-        
-        # Load and show sample
-        sample_path = Path(__file__).parent.parent / "data" / "uploads" / "sample.csv"
-        
-        if sample_path.exists():
-            try:
-                df_sample = pd.read_csv(sample_path)
-                
-                # Preview
-                st.markdown("### Preview")
-                st.dataframe(df_sample, use_container_width=True)
-                
-                st.markdown("---")
-                
-                # Download button
-                st.markdown("### Download")
-                
-                csv_data = df_sample.to_csv(index=False).encode('utf-8')
-                
-                st.download_button(
-                    label=" Download Sample CSV",
-                    data=csv_data,
-                    file_name="sample_evaluation.csv",
-                    mime="text/csv",
-                    type="primary",
-                    use_container_width=True
-                )
-                
-                st.success(" Click the button above to download the sample file")
-                
-                st.markdown("---")
-                
-                st.markdown("### Next Steps")
-                st.markdown("""
-                1. Download the sample CSV
-                2. Go to **Settings** and configure your API
-                3. Go to **New Evaluation** and upload the sample
-                4. Select **Accuracy** metric
-                5. Click **Run Evaluation**
-                6. Review your first results!
-                """)
-                
-            except Exception as e:
-                st.error(f"Error loading sample file: {e}")
-                st.info("Please make sure the file exists at: data/uploads/productgpt_accuracy.csv")
-        else:
-            st.warning(" Sample file not found")
-            st.info(f"Expected location: {sample_path}")
-            st.markdown("""
-            To add the sample file:
-            1. Place your CSV at: `data/uploads/productgpt_accuracy.csv`
-            2. Commit to GitHub
-            3. Redeploy the app
-            """)
 
 def show_settings_page(config, db):
     """Show settings page for API configuration"""
@@ -1149,8 +880,15 @@ def show_settings_page(config, db):
     
     st.markdown("---")
     
-    # Advanced settings
-    with st.expander(" Advanced Settings"):
+    # Advanced settings with highlighted header
+    st.markdown("""
+    <div class="advanced-settings-header">
+        <span class="advanced-settings-icon">⚙️</span>
+        <span class="advanced-settings-text">Advanced Settings</span>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    with st.expander("Click to expand advanced options", expanded=False):
         temperature = st.slider(
             "Temperature",
             min_value=0.0,
@@ -1186,6 +924,7 @@ def show_settings_page(config, db):
         )
     
     # Save button
+    st.markdown("---")
     col1, col2 = st.columns([3, 1])
     
     with col1:
@@ -1202,8 +941,9 @@ def show_settings_page(config, db):
                 st.session_state.batch_size = batch_size
                 st.session_state.max_concurrent = max_concurrent
                 
-                # FIX: Changed provider.UPPER() to provider.upper()
-                st.success(f" Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
+                # Show success with proceed button
+                st.session_state.config_saved = True
+                st.rerun()
     
     with col2:
         if st.button(" Test", use_container_width=True):
@@ -1238,6 +978,20 @@ def show_settings_page(config, db):
                             st.info("ℹ OpenAI test not implemented yet. Connection will be tested during evaluation.")
                     except Exception as e:
                         st.error(f" Connection failed: {str(e)}")
+    
+    # Show success message and proceed button if config was saved
+    if st.session_state.get('config_saved', False):
+        st.success(f" Configuration saved! Provider: {provider.upper()}, Model: {selected_model}")
+        
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("🚀 Proceed to Evaluation", type="primary", use_container_width=True):
+                st.session_state.config_saved = False
+                # Navigate to evaluation page by updating the radio selection
+                st.session_state.page = " New Evaluation"
+                st.rerun()
+        
+        st.session_state.config_saved = False
     
     # Show current configuration
     if st.session_state.api_keys.get(provider):
@@ -1301,11 +1055,20 @@ def show_evaluation_page(config, db):
     
     st.info(f"**Using**: {provider.upper()} - {model}")
     
-    # File upload
+    # File upload with enhanced styling
+    st.markdown("""
+    <div class="file-upload-container">
+        <div class="file-upload-icon">📁</div>
+        <div class="file-upload-text">Drag and drop your CSV file here</div>
+        <div class="file-upload-subtext">or click to browse</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
     uploaded_file = st.file_uploader(
         "Choose a CSV file",
         type=['csv'],
-        help="Upload a CSV file with columns: question, response, benchmark_answer"
+        help="Upload a CSV file with columns: question, response, benchmark_answer",
+        label_visibility="collapsed"
     )
     
     if uploaded_file is not None:
@@ -1318,8 +1081,13 @@ def show_evaluation_page(config, db):
             with st.expander(" Preview Data (first 5 rows)"):
                 st.dataframe(df.head(), use_container_width=True)
             
-            # Detect columns
-            st.markdown("### Configure Evaluation")
+            # Configure Evaluation section with highlighted header
+            st.markdown("""
+            <div class="configure-evaluation-header">
+                <span class="configure-icon">⚙️</span>
+                <span class="configure-text">Configure Evaluation</span>
+            </div>
+            """, unsafe_allow_html=True)
             
             col1, col2 = st.columns(2)
             
@@ -1352,8 +1120,15 @@ def show_evaluation_page(config, db):
                     help="Choose which metrics to evaluate"
                 )
             
-            # Advanced settings
-            with st.expander(" Advanced Settings"):
+            # Advanced settings with highlighted header
+            st.markdown("""
+            <div class="advanced-settings-header">
+                <span class="advanced-settings-icon">⚙️</span>
+                <span class="advanced-settings-text">Advanced Settings</span>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            with st.expander("Click to expand advanced options", expanded=False):
                 batch_size = st.slider("Batch Size", 1, 20, config['batch']['size'], 
                                       help="Number of rows to process in parallel")
                 max_concurrent = st.slider("Max Concurrent API Calls", 1, 10, config['batch']['max_concurrent'],
