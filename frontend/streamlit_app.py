@@ -759,7 +759,8 @@ def show_settings_section(config, db):
             max_value=1.0,
             value=0.2,
             step=0.1,
-            help="Lower = more deterministic, Higher = more creative"
+            help="Lower = more deterministic, Higher = more creative",
+            key="settings_temperature"
         )
         
         max_tokens = st.number_input(
@@ -767,21 +768,24 @@ def show_settings_section(config, db):
             min_value=256,
             max_value=4096,
             value=2048,
-            step=256
+            step=256,
+            key="settings_max_tokens"
         )
         
         batch_size = st.slider(
             "Batch Size",
             min_value=1,
             max_value=20,
-            value=5
+            value=5,
+            key="settings_batch_size"
         )
         
         max_concurrent = st.slider(
             "Max Concurrent Calls",
             min_value=1,
             max_value=10,
-            value=3
+            value=3,
+            key="settings_max_concurrent"
         )
     
     # Save button
@@ -897,8 +901,8 @@ def show_evaluation_section(config, db):
                 )
             
             with st.expander("Advanced Settings"):
-                batch_size = st.slider("Batch Size", 1, 20, config['batch']['size'])
-                max_concurrent = st.slider("Max Concurrent API Calls", 1, 10, config['batch']['max_concurrent'])
+                batch_size = st.slider("Batch Size", 1, 20, config['batch']['size'], key="eval_batch_size")
+                max_concurrent = st.slider("Max Concurrent API Calls", 1, 10, config['batch']['max_concurrent'], key="eval_max_concurrent")
             
             if st.button("Run Evaluation", type="primary", use_container_width=True):
                 if not selected_metrics:
