@@ -630,6 +630,12 @@ def show_review_summary(config, db, eval_data):
             time.sleep(1.5)
             st.rerun()
 
+st.set_page_config(
+    page_title="ProductGPT Evaluation Pipeline",
+    page_icon="",
+    layout="wide",
+    initial_sidebar_state="expanded" # Đổi từ collapsed sang expanded
+)
 
 def main():
     """Main application"""
@@ -652,12 +658,20 @@ def main():
     
     # User info and logout at top left
     # Thay vì dùng st.columns trong main(), hãy dùng st.sidebar
-    with st.sidebar:
+    
+    
+
+    col1, spacer, col2, col3 = st.columns([1.5, 0.5, 1.2, 10]) 
+    
+    with col1:
         st.markdown(f'<div class="user-info-box">User: {st.session_state.username}</div>', unsafe_allow_html=True)
-        if st.button("Logout", use_container_width=True):
+    
+    # Cột 'spacer' bỏ trống để tạo khoảng cách
+    
+    with col2:
+        if st.button("Logout", use_container_width=True, key="logout_btn"):
             st.session_state.authenticated = False
             st.rerun()
-        st.markdown("---") # Đường kẻ phân cách trong sidebar
     
     # Step 1: Settings
     show_settings_section(config, db)
