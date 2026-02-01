@@ -651,7 +651,7 @@ def main():
         st.session_state.step = 'settings'
     
     # User info and logout at top left
-    col1, col2, col3 = st.columns([2, 1, 15]) 
+    col1, col2, col3 = st.columns([1.5, 1.5, 7]) 
     
     with col1:
         # User info box - thêm style để căn giữa theo chiều dọc với nút bấm
