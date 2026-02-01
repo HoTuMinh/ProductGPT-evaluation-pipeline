@@ -94,7 +94,74 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 8px;
 }
 
-/* ===== Report Section Header ===== */
+/* ===== User Info Box ===== */
+.user-info-box {
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
+    color: var(--covergo-white) !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(6, 57, 112, 0.2);
+}
+
+/* ===== Tabs - WHITE TEXT ===== */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--covergo-gray-200);
+    background-color: var(--covergo-white);
+}
+
+.stTabs [data-baseweb="tab"] {
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    color: var(--covergo-gray-700);
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.stTabs [data-baseweb="tab"] p,
+.stTabs [data-baseweb="tab"] span,
+.stTabs [data-baseweb="tab"] div {
+    color: var(--covergo-gray-700) !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
+    font-weight: 600;
+}
+
+.stTabs [aria-selected="true"] p,
+.stTabs [aria-selected="true"] span,
+.stTabs [aria-selected="true"] div {
+    color: var(--covergo-white) !important;
+}
+
+.stTabs [data-baseweb="tab-panel"] {
+    background-color: var(--covergo-white);
+    padding: 1.5rem;
+    border-radius: 0 0 0.75rem 0.75rem;
+}
+
+/* ===== Download Button - WHITE TEXT ===== */
+.stDownloadButton > button {
+    background-color: var(--covergo-primary) !important;
+    color: var(--covergo-white) !important;
+    border: none !important;
+}
+
+.stDownloadButton > button p,
+.stDownloadButton > button span,
+.stDownloadButton > button div {
+    color: var(--covergo-white) !important;
+}
+
+.stDownloadButton > button:hover {
+    background-color: var(--covergo-primary-light) !important;
+}
+
+/* ===== Report Section Header - WHITE TEXT ===== */
 .report-section-header {
     background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%);
     padding: 16px 24px;
@@ -107,6 +174,42 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--covergo-white) !important;
     margin: 0;
     font-weight: 600;
+}
+
+/* ===== Expander / Evaluation History - PROMINENT ===== */
+.streamlit-expanderHeader {
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 16px 20px !important;
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    box-shadow: 0 3px 10px rgba(6, 57, 112, 0.25);
+}
+
+.streamlit-expanderHeader:hover {
+    background: linear-gradient(135deg, var(--covergo-primary-light) 0%, var(--covergo-primary) 100%) !important;
+}
+
+.streamlit-expanderHeader p,
+.streamlit-expanderHeader span,
+.streamlit-expanderHeader div {
+    color: var(--covergo-white) !important;
+}
+
+/* Expander icon color */
+.streamlit-expanderHeader svg {
+    fill: var(--covergo-white) !important;
+    stroke: var(--covergo-white) !important;
+}
+
+[data-testid="stExpander"] > div:first-child {
+    background: linear-gradient(135deg, var(--covergo-primary) 0%, var(--covergo-primary-light) 100%) !important;
+    border-radius: 10px !important;
+}
+
+[data-testid="stExpander"] > div:first-child * {
+    color: var(--covergo-white) !important;
 }
 
 /* ===== Sidebar ===== */
@@ -169,17 +272,6 @@ h1, h2, h3, h4, h5, h6 {
 .stButton > button[data-testid="baseButton-primary"] {
     background-color: var(--covergo-primary) !important;
     color: var(--covergo-white) !important;
-}
-
-/* ===== Download Button ===== */
-.stDownloadButton > button {
-    background-color: var(--covergo-primary) !important;
-    color: var(--covergo-white) !important;
-    border: none !important;
-}
-
-.stDownloadButton > button:hover {
-    background-color: var(--covergo-primary-light) !important;
 }
 
 /* ===== File Uploader - LARGER ===== */
@@ -342,32 +434,6 @@ li[role="option"]:hover * {
     border-radius: 0.5rem;
     padding: 1rem;
     font-weight: 600;
-}
-
-/* ===== Tabs ===== */
-.stTabs [data-baseweb="tab-list"] {
-    gap: 0.5rem;
-    border-bottom: 2px solid var(--covergo-gray-200);
-    background-color: var(--covergo-white);
-}
-
-.stTabs [data-baseweb="tab"] {
-    padding: 0.75rem 1.5rem;
-    font-weight: 500;
-    color: var(--covergo-gray-700);
-    border-radius: 0.5rem 0.5rem 0 0;
-}
-
-.stTabs [aria-selected="true"] {
-    background-color: var(--covergo-primary) !important;
-    color: var(--covergo-white) !important;
-    font-weight: 600;
-}
-
-.stTabs [data-baseweb="tab-panel"] {
-    background-color: var(--covergo-white);
-    padding: 1.5rem;
-    border-radius: 0 0 0.75rem 0.75rem;
 }
 
 /* ===== Metrics ===== */
