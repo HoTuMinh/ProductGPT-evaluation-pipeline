@@ -651,17 +651,17 @@ def main():
         st.session_state.step = 'settings'
     
     # User info and logout at top left
-    col1, col2, col3 = st.columns([1, 1, 4])
+    col1, col2, col3 = st.columns([1.5, 1.5, 7]) 
+    
     with col1:
-        st.markdown(f'<div class="user-info-box">User: {st.session_state.username}</div>', unsafe_allow_html=True)
+        # User info box
+        st.markdown(f'<div class="user-info-box" style="margin-bottom: 0;">User: {st.session_state.username}</div>', unsafe_allow_html=True)
     with col2:
+        # Logout button
         if st.button("Logout", use_container_width=True, key="logout_btn"):
             st.session_state.authenticated = False
             st.rerun()
-    
-    # Main header
-    st.markdown('<div class="main-header">ProductGPT Evaluation Pipeline</div>', unsafe_allow_html=True)
-    
+        
     st.markdown("---")
     
     # Step 1: Settings
